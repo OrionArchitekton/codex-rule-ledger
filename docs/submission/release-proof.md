@@ -51,7 +51,9 @@
   `6f2a600c105aec6a257b745a4b8931e4faf4c60e` at
   `2026-07-14T21:12:49Z`.
 - Estate managed-web identity follow-up:
-  `https://github.com/OrionArchitekton/orion-estate-audit/pull/588`.
+  `https://github.com/OrionArchitekton/orion-estate-audit/pull/588` merged as
+  `b250f23b0b112ea6679884af51c55860309c890e` at
+  `2026-07-14T22:08:31Z`.
 - Vercel project ID: `prj_rARPEaSAbfGZ59anhwcpKaROMMQg`.
 - Verified preview deployment: `dpl_BTp2oWpNJY4qN1eCXaqBk9E4csP4`.
 - Production deployment: `dpl_6vE9ioGXiVswok1iut3V4hbvWbJX` (`READY`).
