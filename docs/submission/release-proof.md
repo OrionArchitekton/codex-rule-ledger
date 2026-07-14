@@ -3,7 +3,7 @@
 ## Immutable source
 
 - Product PR: `https://github.com/OrionArchitekton/codex-rule-ledger/pull/1`
-- Reviewed head SHA: `[LATEST_GREEN_REVIEWED_HEAD_SHA]`
+- Reviewed head SHA: `83e2dcbd2ea9bafad02c8be1dc53b91da1bdee42`
 - Merge SHA: `NOT_MERGED — independent approval required`
 - License: MIT
 - Repository visibility/API proof: public GitHub repository verified through the
@@ -11,14 +11,16 @@
 
 ## Automated verification
 
-- Local `npm audit`: zero known vulnerabilities on `2026-07-14T04:51:41Z`.
+- Local `npm audit --audit-level=low`: zero known vulnerabilities on
+  `2026-07-14T20:22:14Z`.
 - Lint: pass — `npm run lint`.
 - Typecheck: pass — `npm run typecheck`.
 - Unit/contract: 40/40 pass — `npm test`.
 - Production build: pass — static `/` and `/api/audit` routes.
-- Browser acceptance: 1/1 Chromium flow pass; 497 ms browser flow.
-- Gitleaks: `[LATEST_COMMITTED_HISTORY_SCAN]`
-- CI run: `[CI_RUN_URL]`
+- Browser acceptance: 1/1 Chromium flow pass; 553 ms browser flow.
+- Gitleaks: `gitleaks git --redact --no-banner .` scanned five commits and
+  532.79 KB with no leaks on `2026-07-14T20:22:06Z`.
+- CI run: `https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29346277494`
 
 ## GPT-5.6 proof
 
@@ -33,7 +35,11 @@
 
 ## Public deployment
 
-- Estate deploy-target/secret-scope admission: `[ADMISSION_PR_AND_MERGE]`
+- Estate deploy-target/secret-scope admission:
+  `https://github.com/OrionArchitekton/orion-estate-audit/pull/586` is green,
+  thread-free, and mergeable at
+  `4b1491201e86590945e9ee3830af88ff8ca560f1`; `NOT_MERGED — exact merge
+  disposition required`.
 - Vercel project and deployment ID: `[VERCEL_IDS]`
 - Public URL: `[PUBLIC_VERCEL_URL]`
 - Deployed Git SHA: `[DEPLOYED_SHA]`
