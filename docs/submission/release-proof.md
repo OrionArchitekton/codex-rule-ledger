@@ -2,7 +2,7 @@
 
 ## Immutable source
 
-- Product PR: `https://github.com/OrionArchitekton/codex-rule-ledger/pull/1`
+- Product PR: https://github.com/OrionArchitekton/codex-rule-ledger/pull/1
 - Merged PR head SHA: `7058c9f1e7439159d5a9beeff2d053e7cfa8c14e`
 - Merge SHA: `72b0fb3dd174162cd2450f14ed3a7434a4398b4f`
 - Merge time: `2026-07-14T21:14:20Z`
@@ -27,12 +27,10 @@
 - Local browser acceptance: 1/1 Chromium flow pass on merged source.
 - Public browser acceptance: desktop and mobile evaluator flows pass, including
   evidence inspection, exception filtering, and digest-bound ledger export.
-- Main CI run:
-  `https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393`;
+- [Main CI run](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393):
   lint, typecheck, unit, boundary, build, and browser checks are green on
   `251ef31cda0615a5438c4061943bce689535a05b`.
-- Main Gitleaks run:
-  `https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378365`;
+- [Main Gitleaks run](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378365):
   the upgraded Gitleaks action passed on the same release SHA. Dependency
   review and the required-checks fail-closed gate also passed on the PR #13
   current-base merge before the release baseline was merged.
@@ -43,8 +41,8 @@
 - Prompt contract: `semantic-obligations-v2`
 - Prompt SHA-256: `8d9c6eea9279e1fb9d4bbd2999271178de66f7e1b36327e0737da6812b909236`
 - Fixture digest: `1b2d24559d4fa8cee0a1f46d13a6d2ee7fc58a4c605d2fe9caf234d371870752`
-- Call status: `PENDING — no dedicated OpenAI key has been injected and no
-  billable proof command has been attempted`.
+- Call status: PENDING — no dedicated OpenAI key has been injected and no
+  billable proof command has been attempted.
 - Response ID: `[LIVE_GPT_RESPONSE_ID]`
 - Input/output tokens: `[TOKEN_COUNTS]`
 - Cost ledger: `no proof call attempted / $20 maximum`
@@ -56,11 +54,11 @@
 ## Public deployment
 
 - Estate deploy-target/secret-scope admission:
-  `https://github.com/OrionArchitekton/orion-estate-audit/pull/586` merged as
+  https://github.com/OrionArchitekton/orion-estate-audit/pull/586 merged as
   `6f2a600c105aec6a257b745a4b8931e4faf4c60e` at
   `2026-07-14T21:12:49Z`.
 - Estate managed-web identity follow-up:
-  `https://github.com/OrionArchitekton/orion-estate-audit/pull/588` merged as
+  https://github.com/OrionArchitekton/orion-estate-audit/pull/588 merged as
   `b250f23b0b112ea6679884af51c55860309c890e` at
   `2026-07-14T22:08:31Z`.
 - Vercel project ID: `prj_rARPEaSAbfGZ59anhwcpKaROMMQg`.
