@@ -1,0 +1,217 @@
+name: required-checks-fail-closed
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  statuses: read
+  checks: read
+
+env:
+  REQUIRED_CHECKS: "lint,typecheck,unit,boundary-test,build,e2e,gitleaks,dependency-review"
+  MAX_ATTEMPTS: "40"
+  SLEEP_SECONDS: "15"
+
+jobs:
+  required-checks-fail-closed:
+    name: required-checks-fail-closed
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Require every named check to report success
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const requiredChecks = (process.env.REQUIRED_CHECKS || "")
+              .split(",")
+              .map((value) => value.trim())
+              .filter(Boolean);
+            const maxAttempts = Number(process.env.MAX_ATTEMPTS || "40");
+            const sleepSeconds = Number(process.env.SLEEP_SECONDS || "15");
+
+            if (requiredChecks.length === 0) {
+              core.setFailed("required checks list must not be empty");
+              return;
+            }
+            if (!Number.isInteger(maxAttempts) || maxAttempts <= 0) {
+              core.setFailed("MAX_ATTEMPTS must be a positive integer");
+              return;
+            }
+            if (!Number.isInteger(sleepSeconds) || sleepSeconds <= 0) {
+              core.setFailed("SLEEP_SECONDS must be a positive integer");
+              return;
+            }
+
+            const pullRequest = context.payload.pull_request;
+            const primarySha =
+              pullRequest?.merge_commit_sha ||
+              context.sha ||
+              pullRequest?.head?.sha ||
+              null;
+            const fallbackSha =
+              pullRequest?.head?.sha && pullRequest.head.sha !== primarySha
+                ? pullRequest.head.sha
+                : null;
+            const passingConclusions = new Set(["success", "neutral", "skipped"]);
+
+            function sleep(ms) {
+              return new Promise((resolve) => setTimeout(resolve, ms));
+            }
+
+            function latestMatchingItem(items, key, value) {
+              const matches = items.filter((item) => item?.[key] === value);
+              if (matches.length === 0) return null;
+              matches.sort((left, right) => {
+                const leftId = Number(left.id || 0);
+                const rightId = Number(right.id || 0);
+                if (leftId !== rightId) return leftId - rightId;
+                const leftTime =
+                  left.completed_at || left.updated_at || left.created_at || "";
+                const rightTime =
+                  right.completed_at || right.updated_at || right.created_at || "";
+                return leftTime.localeCompare(rightTime);
+              });
+              return matches[matches.length - 1];
+            }
+
+            function checkState(name, checkRuns, statuses) {
+              const checkRun = latestMatchingItem(checkRuns, "name", name);
+              if (checkRun) {
+                if (checkRun.status !== "completed") return "PENDING";
+                const conclusion = (checkRun.conclusion || "missing").toLowerCase();
+                return passingConclusions.has(conclusion)
+                  ? "SUCCESS"
+                  : conclusion.toUpperCase();
+              }
+
+              const status = latestMatchingItem(statuses, "context", name);
+              if (!status) return "MISSING";
+              const state = (status.state || "missing").toLowerCase();
+              if (state === "success") return "SUCCESS";
+              if (state === "pending") return "PENDING";
+              return state.toUpperCase();
+            }
+
+            function stateWithFallback(
+              name,
+              primaryCheckRuns,
+              primaryStatuses,
+              fallbackCheckRuns,
+              fallbackStatuses,
+            ) {
+              const primary = checkState(name, primaryCheckRuns, primaryStatuses);
+              if (primary !== "MISSING" || !fallbackSha) return primary;
+              return checkState(name, fallbackCheckRuns, fallbackStatuses);
+            }
+
+            function isRetryable(error) {
+              const status = error.status || error.response?.status;
+              const retryAfter = error.response?.headers?.["retry-after"];
+              const remaining = error.response?.headers?.["x-ratelimit-remaining"];
+              const message = String(error.message || "").toLowerCase();
+              if (status === 429 || status >= 500) return true;
+              if (status !== 403) return false;
+              return Boolean(retryAfter) || remaining === "0" || message.includes("rate limit");
+            }
+
+            async function listCheckRuns(ref) {
+              const items = [];
+              for (let page = 1; ; page += 1) {
+                const response = await github.request(
+                  "GET /repos/{owner}/{repo}/commits/{ref}/check-runs",
+                  {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref,
+                    filter: "latest",
+                    per_page: 100,
+                    page,
+                  },
+                );
+                const pageItems = response.data.check_runs || [];
+                items.push(...pageItems);
+                if (pageItems.length < 100) break;
+              }
+              return items;
+            }
+
+            async function listStatuses(ref) {
+              const items = [];
+              for (let page = 1; ; page += 1) {
+                const response = await github.request(
+                  "GET /repos/{owner}/{repo}/commits/{ref}/statuses",
+                  {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref,
+                    per_page: 100,
+                    page,
+                  },
+                );
+                const pageItems = response.data || [];
+                items.push(...pageItems);
+                if (pageItems.length < 100) break;
+              }
+              return items;
+            }
+
+            const lastStates = new Map();
+            for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+              try {
+                if (!primarySha) {
+                  core.setFailed("unable to determine a commit SHA to evaluate");
+                  return;
+                }
+
+                const primaryCheckRuns = await listCheckRuns(primarySha);
+                const primaryStatuses = await listStatuses(primarySha);
+                const fallbackCheckRuns = fallbackSha
+                  ? await listCheckRuns(fallbackSha)
+                  : [];
+                const fallbackStatuses = fallbackSha
+                  ? await listStatuses(fallbackSha)
+                  : [];
+
+                let pending = false;
+                let failed = false;
+                for (const name of requiredChecks) {
+                  const state = stateWithFallback(
+                    name,
+                    primaryCheckRuns,
+                    primaryStatuses,
+                    fallbackCheckRuns,
+                    fallbackStatuses,
+                  );
+                  if (state === "SUCCESS") {
+                    lastStates.delete(name);
+                    core.info(`check '${name}' OK`);
+                  } else if (state === "PENDING" || state === "MISSING") {
+                    pending = true;
+                    lastStates.set(name, state);
+                    core.info(`check '${name}' not ready (${state})`);
+                  } else {
+                    failed = true;
+                    lastStates.set(name, state);
+                    core.warning(`check '${name}' is ${state}`);
+                  }
+                }
+
+                if (!pending && !failed) return;
+              } catch (error) {
+                if (!isRetryable(error) || attempt === maxAttempts) throw error;
+                core.warning(`transient GitHub API error: ${error.message}`);
+              }
+
+              if (attempt === maxAttempts) {
+                const details = Array.from(lastStates.entries())
+                  .map(([name, state]) => `${name}: ${state}`)
+                  .join("; ");
+                core.setFailed(
+                  `required checks did not reach success before timeout (${details})`,
+                );
+                return;
+              }
+
+              await sleep(sleepSeconds * 1000);
+            }

@@ -1,0 +1,112 @@
+{
+  "proposals": [
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "docs-conditional",
+      "sourceIds": ["root-agents"],
+      "normalizedRule": "When README.md changes, run npm run docs:check successfully before completion.",
+      "trigger": {
+        "kind": "CHANGED_PATH_MATCHES",
+        "exactPath": "README.md"
+      },
+      "assertion": {
+        "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+        "exactCommand": "npm run docs:check"
+      }
+    },
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "test-required",
+      "sourceIds": ["global-agents"],
+      "normalizedRule": "Run npm test successfully before completion.",
+      "trigger": { "kind": "ALWAYS" },
+      "assertion": {
+        "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+        "exactCommand": "npm test"
+      }
+    },
+    {
+      "kind": "DECLINE",
+      "proposalId": "delightful-subjective",
+      "sourceIds": ["web-override"],
+      "reason": "SUBJECTIVE"
+    },
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "typecheck-no-completion",
+      "sourceIds": ["apps-fallback"],
+      "normalizedRule": "Do not claim completion after npm run typecheck fails.",
+      "trigger": { "kind": "ALWAYS" },
+      "assertion": {
+        "kind": "NO_COMPLETION_AFTER_COMMAND_FAILED",
+        "exactCommand": "npm run typecheck"
+      }
+    },
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "build-required",
+      "sourceIds": ["root-agents"],
+      "normalizedRule": "Run npm run build successfully before completion.",
+      "trigger": { "kind": "ALWAYS" },
+      "assertion": {
+        "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+        "exactCommand": "npm run build"
+      }
+    }
+  ],
+  "sourceCoverage": [
+    {
+      "sourceId": "global-agents",
+      "contentSha256": "b0f6739048736d269d0496af3c6e7993d095ce5c4f8f6a26e310746ce5663e5c",
+      "proposalIds": ["test-required"],
+      "quotes": [
+        {
+          "proposalId": "test-required",
+          "quote": "Run `npm test` successfully before completion."
+        }
+      ]
+    },
+    {
+      "sourceId": "root-agents",
+      "contentSha256": "d988e30a6a73b0e2f0d5221ca6b69ce887a5223b4053a0da80de3c86d7eb5471",
+      "proposalIds": ["build-required", "docs-conditional"],
+      "quotes": [
+        {
+          "proposalId": "build-required",
+          "quote": "Run `npm run build` successfully before completion."
+        },
+        {
+          "proposalId": "docs-conditional",
+          "quote": "Run `npm run docs:check` successfully before completion when `README.md` changes."
+        }
+      ]
+    },
+    {
+      "sourceId": "apps-fallback",
+      "contentSha256": "05034d535cb92dfbe9e6cd26a86847aee95954262befc13617b7c2f8f7f686ca",
+      "proposalIds": ["typecheck-no-completion"],
+      "quotes": [
+        {
+          "proposalId": "typecheck-no-completion",
+          "quote": "Do not claim completion after `npm run typecheck` fails."
+        }
+      ]
+    },
+    {
+      "sourceId": "web-override",
+      "contentSha256": "c1cb10d7cea84fef7ff6a367a28f2af56d34b5e8cc74fc83e4153ae67a5053dd",
+      "proposalIds": ["delightful-subjective"],
+      "quotes": [
+        {
+          "proposalId": "delightful-subjective",
+          "quote": "Make the interface delightful."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "mode": "RECORDED",
+    "promptVersion": "semantic-obligations-v2",
+    "inputDigest": "1b2d24559d4fa8cee0a1f46d13a6d2ee7fc58a4c605d2fe9caf234d371870752"
+  }
+}
