@@ -132,19 +132,26 @@ export function semanticCoverageIssues(
       .map((line) => line.trim())
       .filter(isStrictObservableDirective);
     for (const directive of strictDirectives) {
-      const matchingProposalCount = analysis.proposals.filter(
+      const matchingProposals = analysis.proposals.filter(
         (proposal) =>
-          proposal.kind === "EVALUABLE" &&
           proposal.sourceIds.includes(source.sourceId) &&
           coverage.quotes.some(
             (quote) =>
               quote.proposalId === proposal.proposalId &&
               quote.quote === directive,
           ),
-      ).length;
-      if (matchingProposalCount !== 1) {
+      );
+      if (matchingProposals.length === 0) {
         issues.push(
           `Semantic analysis omits strict observable directive: ${source.sourceId}/${directive}`,
+        );
+      } else if (matchingProposals.length > 1) {
+        issues.push(
+          `Semantic analysis assigns multiple semantic dispositions to a strict observable directive: ${source.sourceId}/${directive}`,
+        );
+      } else if (matchingProposals[0]?.kind !== "EVALUABLE") {
+        issues.push(
+          `Semantic analysis assigns a non-evaluable disposition to a strict observable directive: ${source.sourceId}/${directive}`,
         );
       }
     }
@@ -166,6 +173,12 @@ export function semanticCoverageIssues(
     if (coverage.contentSha256 !== source.contentSha256) {
       issues.push(`Semantic source coverage digest does not match: ${sourceId}`);
     }
+    const completeSourceLines = new Set(
+      source.content
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter((line) => line !== ""),
+    );
 
     const expectedProposalIds = analysis.proposals
       .filter((proposal) => proposal.sourceIds.includes(sourceId))
@@ -179,11 +192,21 @@ export function semanticCoverageIssues(
     const quoteByProposal = new Map(
       coverage.quotes.map((quote) => [quote.proposalId, quote.quote]),
     );
+    const dispositionsByLine = new Map<string, number>();
     for (const proposalId of expectedProposalIds) {
       const quote = quoteByProposal.get(proposalId);
-      if (!quote || quote.trim() === "" || !source.content.includes(quote)) {
+      if (!quote || !completeSourceLines.has(quote)) {
         issues.push(
-          `Semantic source quote is not an exact source span: ${sourceId}/${proposalId}`,
+          `Semantic source quote is not one complete source line: ${sourceId}/${proposalId}`,
+        );
+        continue;
+      }
+      dispositionsByLine.set(quote, (dispositionsByLine.get(quote) ?? 0) + 1);
+    }
+    for (const [line, dispositionCount] of dispositionsByLine) {
+      if (dispositionCount > 1) {
+        issues.push(
+          `Semantic analysis assigns multiple semantic dispositions to one source line: ${sourceId}/${line}`,
         );
       }
     }

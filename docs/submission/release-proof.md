@@ -14,9 +14,9 @@
 - Local `npm audit`: zero known vulnerabilities on `2026-07-14T04:51:41Z`.
 - Lint: pass — `npm run lint`.
 - Typecheck: pass — `npm run typecheck`.
-- Unit/contract: 36/36 pass — `npm test`.
+- Unit/contract: 39/39 pass — `npm test`.
 - Production build: pass — static `/` and `/api/audit` routes.
-- Browser acceptance: 1/1 Chromium flow pass; 629 ms browser flow.
+- Browser acceptance: 1/1 Chromium flow pass; 497 ms browser flow.
 - Gitleaks: `[LATEST_COMMITTED_HISTORY_SCAN]`
 - CI run: `[CI_RUN_URL]`
 
@@ -24,7 +24,7 @@
 
 - Model: `gpt-5.6`
 - Prompt contract: `semantic-obligations-v2`
-- Prompt SHA-256: `f71293602e50d59a38c31f575a71695f85f0800e83ecca74faba5ed236980420`
+- Prompt SHA-256: `8d9c6eea9279e1fb9d4bbd2999271178de66f7e1b36327e0737da6812b909236`
 - Fixture digest: `1b2d24559d4fa8cee0a1f46d13a6d2ee7fc58a4c605d2fe9caf234d371870752`
 - Response ID: `[LIVE_GPT_RESPONSE_ID]`
 - Input/output tokens: `[TOKEN_COUNTS]`

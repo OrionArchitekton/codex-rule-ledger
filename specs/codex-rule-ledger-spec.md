@@ -59,10 +59,12 @@ receipt” are not synonyms and must not be used for these concepts.
   observation and cannot change a historical Ledger Result.
 - GPT-5.6 may extract obligations and propose evidence candidates. Every
   selected source requires an input-digest-bound coverage receipt containing
-  its content hash, exact proposal IDs, and a verbatim quote for each proposal.
+  its content hash, exact proposal IDs, and exactly one complete trimmed source
+  line for each proposal. A line cannot receive more than one disposition.
   Each complete source line matching one of the four strict v0.1 forms must
-  produce exactly one evaluable proposal and cannot be erased by a declined or
-  human-review disposition. An evaluable proposal is accepted only when its
+  receive exactly one total disposition, that disposition must be evaluable,
+  and it cannot also be declined or assigned to human review. An evaluable
+  proposal is accepted only when its
   exact command, conditional path, polarity, trigger, and canonical normalized
   rule are deterministically entailed by that one cited line. Deterministic
   code owns discovery, semantic completeness and entailment checks,

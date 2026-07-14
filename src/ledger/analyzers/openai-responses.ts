@@ -25,7 +25,7 @@ export const GPT_SEMANTIC_SYSTEM_PROMPT = [
   "Only emit EVALUABLE when every exact command and conditional path appears verbatim in the cited quote. Use ALWAYS only for unconditional instructions. Use CHANGED_PATH_MATCHES only when the quote explicitly conditions the rule on that exact path.",
   "Canonicalize normalizedRule exactly as one of these forms: Run <exactCommand> successfully before completion. Do not claim completion after <exactCommand> fails. When <exactPath> changes, run <exactCommand> successfully before completion. When <exactPath> changes, do not claim completion after <exactCommand> fails.",
   "For EVALUABLE output, cite exactly one complete source line in one of these forms, preserving backticks: Run `<exactCommand>` successfully before completion. Do not claim completion after `<exactCommand>` fails. Run `<exactCommand>` successfully before completion when `<exactPath>` changes. Do not claim completion after `<exactCommand>` fails when `<exactPath>` changes.",
-  "For every source, return its supplied contentSha256, the exact proposal IDs that cite it, and one nonempty verbatim quote contained in that source for each proposal. Never emit pass/fail or ledger results.",
+  "For every source, return its supplied contentSha256, the exact proposal IDs that cite it, and exactly one complete trimmed source line for each proposal. Never cite a fragment or multi-line span, and never assign more than one proposal or disposition to the same source line. Never emit pass/fail or ledger results.",
 ].join(" ");
 const MAX_OUTPUT_TOKENS = 4_096;
 const MAX_REQUEST_BYTES = 32_768;

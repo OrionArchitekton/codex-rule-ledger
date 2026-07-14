@@ -327,7 +327,7 @@ seconds.
 
 ## Current regression state
 
-- `npm test`: 4 files, 36 tests passed after the hardening slices.
+- `npm test`: 4 files, 39 tests passed after the hardening slices.
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
 - `npm run build`: passed; `/` and `/api/audit` are static.
@@ -380,3 +380,17 @@ seconds.
   produce a ready audit with misleading relative scopes.
 - GREEN: structural validation rejects either empty root before reconstruction
   or semantic analysis.
+
+## Slice 27 — One disposition per strict directive
+
+- RED: a correct evaluable proposal and a contradictory declined proposal could
+  cite the same strict source line while the audit remained ready.
+- GREEN: every strict directive must have exactly one total proposal anchored
+  to its complete line, and that sole disposition must be evaluable.
+
+## Slice 28 — Atomic anchors for every disposition
+
+- RED: a declined proposal could cite a contained fragment such as `Run`, and
+  subjective prose could receive both declined and human-review dispositions.
+- GREEN: every proposal now cites exactly one complete trimmed source line, and
+  no source line may receive more than one total semantic disposition.

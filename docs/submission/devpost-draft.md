@@ -66,9 +66,9 @@ evidence queries, final result states, path redaction, and canonical export.
 GPT-5.6, through the Responses API structured-output path, performs the
 indispensable semantic job: it maps complete instruction lines in the four
 strict v0.1 forms into source-linked observable proposals and declines
-subjective or ambiguous rules. Deterministic code requires every supported
-directive exactly once. GPT-5.6 cannot emit a final ledger verdict or invent a
-source anchor.
+subjective or ambiguous rules. Deterministic code requires exactly one total,
+evaluable disposition for every supported directive. GPT-5.6 cannot emit a
+final ledger verdict or invent a source anchor.
 
 For safe and unrestricted judging, the public site serves a repository-owned
 recording from the same typed analyzer contract. The live GPT-5.6 proof uses the

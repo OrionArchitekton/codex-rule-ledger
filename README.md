@@ -108,9 +108,10 @@ spec and witnessed build ledger in [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md
 GPT-5.6 performs the indispensable semantic step: it maps complete instruction
 lines in the four strict v0.1 forms into source-linked observable proposals and
 declines subjective or ambiguous language. Deterministic code proves that every
-supported directive is represented exactly once and remains the authority for
-all final evidence states. The public demo serves a recorded result from the
-same typed contract so judging does not consume API budget or expose a key.
+supported directive has exactly one total disposition—and that disposition is
+evaluable—and remains the authority for all final evidence states. The public
+demo serves a recorded result from the same typed contract so judging does not
+consume API budget or expose a key.
 
 ## Input, privacy, and trust boundary
 

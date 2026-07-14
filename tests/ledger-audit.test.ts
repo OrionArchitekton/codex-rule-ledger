@@ -908,47 +908,57 @@ describe("runLedgerAudit", () => {
   });
 
   it("keeps subjective and ambiguous instructions outside the result state machine", async () => {
-    const analyzer = recordedTestAnalyzer([
-          {
+    const cases = [
+      {
+        proposal: {
             kind: "DECLINE",
             proposalId: "proposal-delightful",
             sourceIds: ["web-override"],
             reason: "SUBJECTIVE",
-          },
-          {
-            kind: "HUMAN_REVIEW",
-            proposalId: "proposal-ambiguous",
-            sourceIds: ["root-agents", "web-override"],
-            reason: "CONFLICTING",
-          },
-    ]);
-
-    const execution = await runLedgerAudit(completeBundle(), analyzer);
-
-    expect(execution.execution).toBe("COMPLETED");
-    if (
-      execution.execution !== "COMPLETED" ||
-      execution.audit.inputState !== "READY"
-    ) {
-      throw new Error("Expected a ready audit");
-    }
-    expect(execution.audit.records).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
+        } as const,
+        expected: {
           disposition: "DECLINED_NON_OBSERVABLE",
           proposalId: "proposal-delightful",
           reason: "SUBJECTIVE",
-        }),
-        expect.objectContaining({
+        },
+      },
+      {
+        proposal: {
+            kind: "HUMAN_REVIEW",
+            proposalId: "proposal-ambiguous",
+            sourceIds: ["web-override"],
+            reason: "CONFLICTING",
+        } as const,
+        expected: {
           disposition: "HUMAN_REVIEW_REQUIRED",
           proposalId: "proposal-ambiguous",
           reason: "CONFLICTING",
-        }),
-      ]),
-    );
-    for (const record of execution.audit.records) {
-      if (record.disposition !== "EVALUATED") {
-        expect("finding" in record).toBe(false);
+        },
+      },
+    ] as const;
+
+    for (const testCase of cases) {
+      const execution = await runLedgerAudit(
+        completeBundle(),
+        recordedTestAnalyzer([testCase.proposal]),
+      );
+
+      expect(execution.execution).toBe("COMPLETED");
+      if (
+        execution.execution !== "COMPLETED" ||
+        execution.audit.inputState !== "READY"
+      ) {
+        throw new Error("Expected a ready audit");
+      }
+      expect(execution.audit.records).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining(testCase.expected),
+        ]),
+      );
+      for (const record of execution.audit.records) {
+        if (record.disposition !== "EVALUATED") {
+          expect("finding" in record).toBe(false);
+        }
       }
     }
   });
@@ -1128,6 +1138,144 @@ describe("runLedgerAudit", () => {
       error: expect.objectContaining({
         code: "INVALID_ANALYZER_OUTPUT",
         message: expect.stringContaining("omits strict observable directive"),
+      }),
+    });
+  });
+
+  it("rejects contradictory dispositions for one strict observable directive", async () => {
+    const fixture = loadBuildWeekDemoFixture();
+    const rootSource = fixture.bundle.instructionScopes
+      .flatMap((scope) => scope.candidates)
+      .find((candidate) => candidate.candidateId === "root-agents");
+    if (!rootSource || rootSource.status !== "PRESENT") {
+      throw new Error("Expected the fixture root instruction source");
+    }
+    const strictDirective = rootSource.content.split("\n")[0];
+    if (!strictDirective) {
+      throw new Error("Expected a strict root instruction directive");
+    }
+    const contradictoryDecline = {
+      kind: "DECLINE" as const,
+      proposalId: "root-rule-also-declined",
+      sourceIds: ["root-agents"] as const,
+      reason: "NON_OBSERVABLE" as const,
+    };
+    const analysis = {
+      ...fixture.analysis,
+      proposals: [...fixture.analysis.proposals, contradictoryDecline],
+      sourceCoverage: fixture.analysis.sourceCoverage.map((coverage) =>
+        coverage.sourceId === "root-agents"
+          ? {
+              ...coverage,
+              proposalIds: [
+                ...coverage.proposalIds,
+                contradictoryDecline.proposalId,
+              ],
+              quotes: [
+                ...coverage.quotes,
+                {
+                  proposalId: contradictoryDecline.proposalId,
+                  quote: strictDirective,
+                },
+              ],
+            }
+          : coverage,
+      ),
+    };
+
+    const execution = await runLedgerAudit(
+      fixture.bundle,
+      new RecordedFixtureAnalyzer(analysis),
+    );
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining("multiple semantic dispositions"),
+      }),
+    });
+  });
+
+  it("rejects a semantic disposition anchored to a source fragment", async () => {
+    const fixture = loadBuildWeekDemoFixture();
+    const fragmentDecline = {
+      kind: "DECLINE" as const,
+      proposalId: "root-fragment-declined",
+      sourceIds: ["root-agents"] as const,
+      reason: "NON_OBSERVABLE" as const,
+    };
+    const analysis = {
+      ...fixture.analysis,
+      proposals: [...fixture.analysis.proposals, fragmentDecline],
+      sourceCoverage: fixture.analysis.sourceCoverage.map((coverage) =>
+        coverage.sourceId === "root-agents"
+          ? {
+              ...coverage,
+              proposalIds: [...coverage.proposalIds, fragmentDecline.proposalId],
+              quotes: [
+                ...coverage.quotes,
+                { proposalId: fragmentDecline.proposalId, quote: "Run" },
+              ],
+            }
+          : coverage,
+      ),
+    };
+
+    const execution = await runLedgerAudit(
+      fixture.bundle,
+      new RecordedFixtureAnalyzer(analysis),
+    );
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining("one complete source line"),
+      }),
+    });
+  });
+
+  it("rejects multiple dispositions anchored to one subjective source line", async () => {
+    const fixture = loadBuildWeekDemoFixture();
+    const duplicateReview = {
+      kind: "HUMAN_REVIEW" as const,
+      proposalId: "delightful-also-reviewed",
+      sourceIds: ["web-override"] as const,
+      reason: "AMBIGUOUS" as const,
+    };
+    const analysis = {
+      ...fixture.analysis,
+      proposals: [...fixture.analysis.proposals, duplicateReview],
+      sourceCoverage: fixture.analysis.sourceCoverage.map((coverage) =>
+        coverage.sourceId === "web-override"
+          ? {
+              ...coverage,
+              proposalIds: [...coverage.proposalIds, duplicateReview.proposalId],
+              quotes: [
+                ...coverage.quotes,
+                {
+                  proposalId: duplicateReview.proposalId,
+                  quote: "Make the interface delightful.",
+                },
+              ],
+            }
+          : coverage,
+      ),
+    };
+
+    const execution = await runLedgerAudit(
+      fixture.bundle,
+      new RecordedFixtureAnalyzer(analysis),
+    );
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining(
+          "multiple semantic dispositions to one source line",
+        ),
       }),
     });
   });
