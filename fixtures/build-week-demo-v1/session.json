@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "eventId": "event-test-success",
+      "sequence": 10,
+      "kind": "COMMAND_FINISHED",
+      "command": "npm test",
+      "exitCode": 0
+    },
+    {
+      "eventId": "event-typecheck-failure",
+      "sequence": 20,
+      "kind": "COMMAND_FINISHED",
+      "command": "npm run typecheck",
+      "exitCode": 1
+    },
+    {
+      "eventId": "event-completion",
+      "sequence": 30,
+      "kind": "COMPLETION_CLAIM",
+      "text": "The fixture implementation is complete."
+    }
+  ]
+}

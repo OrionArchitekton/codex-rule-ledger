@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1",
+  "captureId": "build-week-validation-drift-v1",
+  "provenance": {
+    "level": "LOCAL_CAPTURE_UNATTESTED",
+    "capturedAt": "2026-07-13T12:00:00.000Z"
+  },
+  "codex": {
+    "version": "0.144.0",
+    "home": "/fixture/home/.codex",
+    "projectRoot": "/fixture/workspace/codex-rule-ledger",
+    "launchWorkingDirectory": "/fixture/workspace/codex-rule-ledger/apps/web/demo",
+    "fallbackFilenames": ["CODEX.md"],
+    "projectDocMaxBytes": 164
+  },
+  "instructionScopes": [
+    {
+      "kind": "GLOBAL",
+      "directory": "/fixture/home/.codex",
+      "candidates": [
+        {
+          "candidateId": "global-override",
+          "filename": "AGENTS.override.md",
+          "status": "EMPTY",
+          "content": ""
+        },
+        {
+          "candidateId": "global-agents",
+          "filename": "AGENTS.md",
+          "status": "PRESENT",
+          "content": "Run `npm test` successfully before completion.",
+          "sha256": "b0f6739048736d269d0496af3c6e7993d095ce5c4f8f6a26e310746ce5663e5c"
+        }
+      ]
+    },
+    {
+      "kind": "PROJECT",
+      "directory": "/fixture/workspace/codex-rule-ledger",
+      "candidates": [
+        {
+          "candidateId": "root-override",
+          "filename": "AGENTS.override.md",
+          "status": "ABSENT"
+        },
+        {
+          "candidateId": "root-agents",
+          "filename": "AGENTS.md",
+          "status": "PRESENT",
+          "content": "Run `npm run build` after source changes.\nCheck docs when `README.md` changes.",
+          "sha256": "4a2baec12c7573dfcc7479a1113735bd98e4001d2984e8b201e58db5a2c1a1f1"
+        },
+        {
+          "candidateId": "root-fallback",
+          "filename": "CODEX.md",
+          "status": "ABSENT"
+        }
+      ]
+    },
+    {
+      "kind": "PROJECT",
+      "directory": "/fixture/workspace/codex-rule-ledger/apps",
+      "candidates": [
+        {
+          "candidateId": "apps-override",
+          "filename": "AGENTS.override.md",
+          "status": "ABSENT"
+        },
+        {
+          "candidateId": "apps-agents",
+          "filename": "AGENTS.md",
+          "status": "ABSENT"
+        },
+        {
+          "candidateId": "apps-fallback",
+          "filename": "CODEX.md",
+          "status": "PRESENT",
+          "content": "Do not claim completion after `npm run typecheck` fails.",
+          "sha256": "05034d535cb92dfbe9e6cd26a86847aee95954262befc13617b7c2f8f7f686ca"
+        }
+      ]
+    },
+    {
+      "kind": "PROJECT",
+      "directory": "/fixture/workspace/codex-rule-ledger/apps/web",
+      "candidates": [
+        {
+          "candidateId": "web-override",
+          "filename": "AGENTS.override.md",
+          "status": "PRESENT",
+          "content": "Make the interface delightful.",
+          "sha256": "c1cb10d7cea84fef7ff6a367a28f2af56d34b5e8cc74fc83e4153ae67a5053dd"
+        },
+        {
+          "candidateId": "web-agents",
+          "filename": "AGENTS.md",
+          "status": "PRESENT",
+          "content": "This lower-precedence instruction must not be selected.",
+          "sha256": "8c5016476d0ffb3159ad2f80181477ac28fb65af222b0368429e0edc64fc7db7"
+        },
+        {
+          "candidateId": "web-fallback",
+          "filename": "CODEX.md",
+          "status": "ABSENT"
+        }
+      ]
+    },
+    {
+      "kind": "PROJECT",
+      "directory": "/fixture/workspace/codex-rule-ledger/apps/web/demo",
+      "candidates": [
+        {
+          "candidateId": "demo-override",
+          "filename": "AGENTS.override.md",
+          "status": "ABSENT"
+        },
+        {
+          "candidateId": "demo-agents",
+          "filename": "AGENTS.md",
+          "status": "PRESENT",
+          "content": "Run `npm run sentinel` before completion.",
+          "sha256": "bfa52461dd2105fba9248d1d52e9a08136431f87ce707c90aba20ed439283d99"
+        },
+        {
+          "candidateId": "demo-fallback",
+          "filename": "CODEX.md",
+          "status": "ABSENT"
+        }
+      ]
+    }
+  ],
+  "task": {
+    "text": "Implement the validation-drift fixture and report completion."
+  }
+}
