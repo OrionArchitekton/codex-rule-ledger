@@ -14,7 +14,7 @@
 - Local `npm audit`: zero known vulnerabilities on `2026-07-14T04:51:41Z`.
 - Lint: pass — `npm run lint`.
 - Typecheck: pass — `npm run typecheck`.
-- Unit/contract: 39/39 pass — `npm test`.
+- Unit/contract: 40/40 pass — `npm test`.
 - Production build: pass — static `/` and `/api/audit` routes.
 - Browser acceptance: 1/1 Chromium flow pass; 497 ms browser flow.
 - Gitleaks: `[LATEST_COMMITTED_HISTORY_SCAN]`

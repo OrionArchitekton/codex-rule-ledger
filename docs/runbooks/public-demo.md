@@ -72,7 +72,7 @@ npm run build
 npm run test:e2e
 ```
 
-Expected contract evidence: 39 unit/contract tests pass, the production build
+Expected contract evidence: 40 unit/contract tests pass, the production build
 contains `/` and `/api/audit`, and the Playwright flow completes with the
 `LOCAL_CAPTURE_UNATTESTED` warning visible.
 

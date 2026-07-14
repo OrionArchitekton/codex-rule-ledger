@@ -87,6 +87,9 @@ export function semanticCoverageIssues(
   const sourceById = new Map(
     input.chain.map((source) => [source.sourceId, source]),
   );
+  const sourcePositionById = new Map(
+    input.chain.map((source, index) => [source.sourceId, index + 1]),
+  );
   const coverageBySource = new Map<string, SemanticAnalysis["sourceCoverage"][number]>();
 
   for (const coverage of analysis.sourceCoverage) {
@@ -124,14 +127,15 @@ export function semanticCoverageIssues(
     }
   }
 
-  for (const source of input.chain) {
+  for (const [sourceIndex, source] of input.chain.entries()) {
     const coverage = coverageBySource.get(source.sourceId);
     if (!coverage) continue;
     const strictDirectives = source.content
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(isStrictObservableDirective);
-    for (const directive of strictDirectives) {
+    for (const [directiveIndex, directive] of strictDirectives.entries()) {
+      const location = `selected source ${sourceIndex + 1}, directive ${directiveIndex + 1}`;
       const matchingProposals = analysis.proposals.filter(
         (proposal) =>
           proposal.sourceIds.includes(source.sourceId) &&
@@ -143,15 +147,15 @@ export function semanticCoverageIssues(
       );
       if (matchingProposals.length === 0) {
         issues.push(
-          `Semantic analysis omits strict observable directive: ${source.sourceId}/${directive}`,
+          `Semantic analysis omits strict observable directive at ${location}`,
         );
       } else if (matchingProposals.length > 1) {
         issues.push(
-          `Semantic analysis assigns multiple semantic dispositions to a strict observable directive: ${source.sourceId}/${directive}`,
+          `Semantic analysis assigns multiple semantic dispositions to a strict observable directive at ${location}`,
         );
       } else if (matchingProposals[0]?.kind !== "EVALUABLE") {
         issues.push(
-          `Semantic analysis assigns a non-evaluable disposition to a strict observable directive: ${source.sourceId}/${directive}`,
+          `Semantic analysis assigns a non-evaluable disposition to a strict observable directive at ${location}`,
         );
       }
     }
@@ -173,12 +177,17 @@ export function semanticCoverageIssues(
     if (coverage.contentSha256 !== source.contentSha256) {
       issues.push(`Semantic source coverage digest does not match: ${sourceId}`);
     }
-    const completeSourceLines = new Set(
-      source.content
-        .split(/\r?\n/)
-        .map((line) => line.trim())
-        .filter((line) => line !== ""),
-    );
+    const completeSourceLines = source.content
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line !== "");
+    const completeSourceLineSet = new Set(completeSourceLines);
+    const linePositionByContent = new Map<string, number>();
+    for (const [lineIndex, line] of completeSourceLines.entries()) {
+      if (!linePositionByContent.has(line)) {
+        linePositionByContent.set(line, lineIndex + 1);
+      }
+    }
 
     const expectedProposalIds = analysis.proposals
       .filter((proposal) => proposal.sourceIds.includes(sourceId))
@@ -195,7 +204,7 @@ export function semanticCoverageIssues(
     const dispositionsByLine = new Map<string, number>();
     for (const proposalId of expectedProposalIds) {
       const quote = quoteByProposal.get(proposalId);
-      if (!quote || !completeSourceLines.has(quote)) {
+      if (!quote || !completeSourceLineSet.has(quote)) {
         issues.push(
           `Semantic source quote is not one complete source line: ${sourceId}/${proposalId}`,
         );
@@ -205,8 +214,10 @@ export function semanticCoverageIssues(
     }
     for (const [line, dispositionCount] of dispositionsByLine) {
       if (dispositionCount > 1) {
+        const sourcePosition = sourcePositionById.get(sourceId) ?? 0;
+        const linePosition = linePositionByContent.get(line) ?? 0;
         issues.push(
-          `Semantic analysis assigns multiple semantic dispositions to one source line: ${sourceId}/${line}`,
+          `Semantic analysis assigns multiple semantic dispositions to one source line at selected source ${sourcePosition}, line ${linePosition}`,
         );
       }
     }

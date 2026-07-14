@@ -1100,6 +1100,10 @@ describe("runLedgerAudit", () => {
     if (!rootSource || rootSource.status !== "PRESENT") {
       throw new Error("Expected the fixture root instruction source");
     }
+    const strictDirective = rootSource.content.split(/\r?\n/)[0]?.trim();
+    if (!strictDirective) {
+      throw new Error("Expected a strict root instruction directive");
+    }
     const retained = fixture.analysis.proposals.filter(
       (proposal) => !proposal.sourceIds.includes("root-agents"),
     );
@@ -1140,6 +1144,68 @@ describe("runLedgerAudit", () => {
         message: expect.stringContaining("omits strict observable directive"),
       }),
     });
+    if (execution.execution !== "FAILED") {
+      throw new Error("Expected invalid analyzer output");
+    }
+    expect(execution.error.message).not.toContain(strictDirective);
+  });
+
+  it("keeps raw directives out of non-evaluable semantic errors", async () => {
+    const fixture = loadBuildWeekDemoFixture();
+    const rootSource = fixture.bundle.instructionScopes
+      .flatMap((scope) => scope.candidates)
+      .find((candidate) => candidate.candidateId === "root-agents");
+    if (!rootSource || rootSource.status !== "PRESENT") {
+      throw new Error("Expected the fixture root instruction source");
+    }
+    const strictDirective = rootSource.content.split(/\r?\n/)[0]?.trim();
+    if (!strictDirective) {
+      throw new Error("Expected a strict root instruction directive");
+    }
+    const retained = fixture.analysis.proposals.filter(
+      (proposal) => !proposal.sourceIds.includes("root-agents"),
+    );
+    const declinedRoot = {
+      kind: "DECLINE" as const,
+      proposalId: "root-rule-declined-exactly",
+      sourceIds: ["root-agents"] as const,
+      reason: "NON_OBSERVABLE" as const,
+    };
+    const analysis = {
+      ...fixture.analysis,
+      proposals: [...retained, declinedRoot],
+      sourceCoverage: fixture.analysis.sourceCoverage.map((coverage) =>
+        coverage.sourceId === "root-agents"
+          ? {
+              ...coverage,
+              proposalIds: [declinedRoot.proposalId],
+              quotes: [
+                {
+                  proposalId: declinedRoot.proposalId,
+                  quote: strictDirective,
+                },
+              ],
+            }
+          : coverage,
+      ),
+    };
+
+    const execution = await runLedgerAudit(
+      fixture.bundle,
+      new RecordedFixtureAnalyzer(analysis),
+    );
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining("non-evaluable disposition"),
+      }),
+    });
+    if (execution.execution !== "FAILED") {
+      throw new Error("Expected invalid analyzer output");
+    }
+    expect(execution.error.message).not.toContain(strictDirective);
   });
 
   it("rejects contradictory dispositions for one strict observable directive", async () => {
@@ -1195,6 +1261,10 @@ describe("runLedgerAudit", () => {
         message: expect.stringContaining("multiple semantic dispositions"),
       }),
     });
+    if (execution.execution !== "FAILED") {
+      throw new Error("Expected invalid analyzer output");
+    }
+    expect(execution.error.message).not.toContain(strictDirective);
   });
 
   it("rejects a semantic disposition anchored to a source fragment", async () => {
@@ -1238,6 +1308,7 @@ describe("runLedgerAudit", () => {
 
   it("rejects multiple dispositions anchored to one subjective source line", async () => {
     const fixture = loadBuildWeekDemoFixture();
+    const subjectiveLine = "Make the interface delightful.";
     const duplicateReview = {
       kind: "HUMAN_REVIEW" as const,
       proposalId: "delightful-also-reviewed",
@@ -1256,7 +1327,7 @@ describe("runLedgerAudit", () => {
                 ...coverage.quotes,
                 {
                   proposalId: duplicateReview.proposalId,
-                  quote: "Make the interface delightful.",
+                  quote: subjectiveLine,
                 },
               ],
             }
@@ -1278,6 +1349,10 @@ describe("runLedgerAudit", () => {
         ),
       }),
     });
+    if (execution.execution !== "FAILED") {
+      throw new Error("Expected invalid analyzer output");
+    }
+    expect(execution.error.message).not.toContain(subjectiveLine);
   });
 
   it("reports every missing candidate slot and hash mismatch before analysis", async () => {

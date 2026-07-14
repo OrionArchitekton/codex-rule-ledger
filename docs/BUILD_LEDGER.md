@@ -327,7 +327,7 @@ seconds.
 
 ## Current regression state
 
-- `npm test`: 4 files, 39 tests passed after the hardening slices.
+- `npm test`: 4 files, 40 tests passed after the hardening slices.
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
 - `npm run build`: passed; `/` and `/api/audit` are static.
@@ -394,3 +394,12 @@ seconds.
   subjective prose could receive both declined and human-review dispositions.
 - GREEN: every proposal now cites exactly one complete trimmed source line, and
   no source line may receive more than one total semantic disposition.
+
+## Slice 29 — Opaque semantic-validation locations
+
+- RED: strict-directive and duplicate-line validation errors copied complete
+  source lines, including command arguments and paths, into caller-visible
+  analyzer failures.
+- GREEN: all four line-bearing error paths use deterministic selected-source,
+  directive, or line positions while preserving the failure category for
+  diagnosis.
