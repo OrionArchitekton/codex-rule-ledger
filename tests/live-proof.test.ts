@@ -28,7 +28,8 @@ describe("executeBuildWeekLiveProof", () => {
         schemaVersion: "1",
         generatedAt: "2026-07-13T21:00:00.000Z",
         model: "gpt-5.6",
-        promptVersion: "semantic-obligations-v1",
+        promptVersion: "semantic-obligations-v2",
+        promptSha256: expect.stringMatching(/^[a-f0-9]{64}$/),
         inputDigest: fixture.analysis.metadata.inputDigest,
         responseId: "resp_live_build_week_proof",
         inputTokens: 777,
@@ -42,6 +43,7 @@ describe("executeBuildWeekLiveProof", () => {
     const serialized = JSON.stringify(proof);
     expect(serialized).not.toContain("test-only-not-sent");
     expect(serialized).not.toContain("/fixture/");
+    expect(serialized).not.toContain("/fixtures/");
     expect(serialized).not.toContain('"proposals"');
   });
 });

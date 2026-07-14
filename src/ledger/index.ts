@@ -79,6 +79,7 @@ export async function runLedgerAudit(
         chain: reconstruction.chain,
         discovery: reconstruction.discovery,
         records,
+        semanticCoverageCount: analysis.sourceCoverage.length,
         analyzer: analyzerMetadata,
         ledger,
         ledgerDigest,

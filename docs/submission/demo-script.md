@@ -24,7 +24,7 @@ Move down the numbered instruction-chain panel and pause on the byte-limit row.
 ## 0:48–1:32 — Evidence states
 
 > The trace contains a successful test, so that rule is supported. Typecheck
-> failed and the session later claimed completion, so this rule is contradicted
+> failed, had no successful retry, and the session later claimed completion, so this rule is contradicted
 > by affirmative evidence. A required build has no matching event, so the
 > result is not evidenced—not failed. README did not change in the captured
 > path set, so the docs-only rule is not applicable. Subjective prose is
@@ -44,11 +44,12 @@ Click Export and briefly show the filename/digest.
 ## 1:54–2:23 — Codex + GPT-5.6 architecture
 
 > Codex was the primary builder across research, specification, test-driven
-> implementation, design, review, and release proof. At runtime, GPT-5.6 turns
-> instruction prose into closed, source-linked semantic proposals. It cannot
-> emit final verdicts. Deterministic TypeScript owns discovery, hashes, evidence
-> sufficiency, and all terminal states. The public demo uses a recorded result
-> from that same typed contract, so judges need no key and cannot spend ours.
+> implementation, design, review, and release proof. At runtime, GPT-5.6 maps
+> complete instructions in four strict forms into source-linked semantic
+> proposals. It cannot emit final verdicts. Deterministic TypeScript proves
+> complete coverage and owns discovery, hashes, evidence sufficiency, and all
+> terminal states. The public demo uses a recorded result from that same typed
+> contract, so judges need no key and cannot spend ours.
 
 Show the architecture card or a concise source diagram, then the live GPT proof
 metadata with any response ID shortened.

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 
 const SECRET_LIKE_MARKER =
-  /\b(?:SECRET|TOKEN|PASSWORD|PASSWD|API[_-]?KEY|PRIVATE[_-]?KEY)(?:[_:=.-][A-Za-z0-9_./+=:-]+)*\b/gi;
+  /\b(?:[A-Za-z][A-Za-z0-9]*[_-])*(?:SECRET|TOKEN|PASSWORD|PASSWD|API[_-]?KEY|PRIVATE[_-]?KEY)(?:[_:=.-][A-Za-z0-9_./+=:-]+)*\b/gi;
 const CREDENTIAL_LIKE_VALUE =
   /\b(?:sk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]{8,}\b/g;
 const BEARER_VALUE = /\bBearer\s+[A-Za-z0-9._~+\/-]+=*\b/gi;

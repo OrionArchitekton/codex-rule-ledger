@@ -114,7 +114,7 @@ export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
     anchor.href = url;
     anchor.download = `codex-rule-ledger-${audit.ledgerDigest.slice(0, 12)}.json`;
     anchor.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 100);
   }
 
   return (

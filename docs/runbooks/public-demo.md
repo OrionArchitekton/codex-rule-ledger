@@ -31,7 +31,7 @@ is a separately controlled proof path and is not required for public judging.
 1. Confirm the deploy commit is the reviewed PR head or merged `main` SHA.
 2. Confirm estate deploy-target and secret-scope admission are landed before
    creating or changing the hosted target.
-3. Run `npm ci`, `npm audit --audit-level=high`, and `npm run verify`.
+3. Run `npm ci`, full `npm audit`, and `npm run verify`.
 4. Run `gitleaks git --redact --no-banner .` on the commit history.
 5. Confirm `GET /api/audit` contains only fixture data and no absolute home
    path, environment value, token, or raw private trace.
@@ -72,7 +72,7 @@ npm run build
 npm run test:e2e
 ```
 
-Expected contract evidence: 15 unit/contract tests pass, the production build
+Expected contract evidence: 36 unit/contract tests pass, the production build
 contains `/` and `/api/audit`, and the Playwright flow completes with the
 `LOCAL_CAPTURE_UNATTESTED` warning visible.
 

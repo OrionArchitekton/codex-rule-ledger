@@ -7,6 +7,7 @@ import type {
   SemanticAnalysis,
   SourceLink,
 } from "./contracts";
+import { canonicalNormalizedRule } from "./semantic-coverage";
 
 export class InvalidSemanticAnalysisError extends Error {}
 
@@ -97,7 +98,7 @@ export function adjudicate(
 
       const obligation = {
         proposalId: proposal.proposalId,
-        normalizedRule: proposal.normalizedRule,
+        normalizedRule: canonicalNormalizedRule(proposal),
         source,
         trigger: proposal.trigger,
         assertion: proposal.assertion,
@@ -129,10 +130,27 @@ export function adjudicate(
           ): event is Extract<
             (typeof bundle.events)[number],
             { kind: "COMMAND_FINISHED" }
-          > =>
-            event.kind === "COMMAND_FINISHED" &&
-            event.command === proposal.assertion.exactCommand &&
-            event.exitCode !== 0,
+          > => {
+            if (
+              event.kind !== "COMMAND_FINISHED" ||
+              event.command !== proposal.assertion.exactCommand ||
+              event.exitCode === 0
+            ) {
+              return false;
+            }
+            const nextCompletion = completions.find(
+              (completion) => completion.sequence > event.sequence,
+            );
+            if (!nextCompletion) return false;
+            return !orderedEvents.some(
+              (candidate) =>
+                candidate.kind === "COMMAND_FINISHED" &&
+                candidate.command === proposal.assertion.exactCommand &&
+                candidate.exitCode === 0 &&
+                candidate.sequence > event.sequence &&
+                candidate.sequence < nextCompletion.sequence,
+            );
+          },
         );
         const completion = failure
           ? completions.find((event) => event.sequence > failure.sequence)
@@ -175,7 +193,7 @@ export function adjudicate(
                 "COMMAND_FINISHED",
                 "COMPLETION_CLAIM",
               ],
-              explanation: `The supplied events do not affirm both a failed ${proposal.assertion.exactCommand} command and a later completion claim.`,
+              explanation: `The supplied events do not affirm a failed ${proposal.assertion.exactCommand} command followed by completion without an intervening successful retry.`,
               limitation: "ABSENCE_IS_NOT_PROOF_OF_NON_ACTION",
             },
           },

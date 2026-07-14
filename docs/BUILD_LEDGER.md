@@ -232,7 +232,7 @@ recorded fixture and no credential-driven or user-supplied execution surface.
 - Command: `npm run typecheck && npm test -- tests/audit-route.test.ts`
 - Result: exit 0 on 2026-07-13 18:54 PDT; typecheck and the route test passed.
 - Implementation: a static GET route runs the disclosed recorded analyzer,
-  fails closed on fixture drift, returns immutable/nosniff headers, and has no
+  fails closed on fixture drift, returns bounded-cache/nosniff headers, and has no
   upload, command, URL, request-body, or API-secret input.
 
 ## Slice 12 — Judge-facing forensic evidence desk
@@ -327,7 +327,7 @@ seconds.
 
 ## Current regression state
 
-- `npm test`: 4 files, 26 tests passed after the hardening slices.
+- `npm test`: 4 files, 36 tests passed after the hardening slices.
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
 - `npm run build`: passed; `/` and `/api/audit` are static.
@@ -335,3 +335,48 @@ seconds.
   inspected the contradiction and verified the downloaded bytes against the
   displayed digest. The default filesystem/network sandbox correctly rejected
   the local server bind before this runner-only escalation.
+
+## Slice 21 — Candidate filename uniqueness
+
+- RED: two unique candidate IDs with the same filename in one scope passed
+  structural validation and the later entry silently shadowed the first.
+- GREEN: structural validation reports `DUPLICATE_CANDIDATE_FILENAME` before
+  reconstruction or model analysis.
+
+## Slice 22 — Recovered validation failures
+
+- RED: a failed command followed by a successful retry and then completion was
+  still labeled `CONTRADICTED`.
+- GREEN: only a failure whose next completion has no intervening successful run
+  of the same exact command becomes affirmative contradiction evidence.
+
+## Slice 23 — Source-entailment and prompt-injection boundary
+
+- RED: a source-linked proposal could invent a command, turn a conditional
+  instruction into `ALWAYS`, or emit arbitrary normalized prose.
+- GREEN: prompt v2 treats every payload field as untrusted inert data, while
+  deterministic validation enforces exact command/path anchors, polarity,
+  conditionality, and four canonical normalized rule forms before adjudication.
+
+## Slice 24 — Public alias and cross-browser export lifecycle
+
+- RED: `/api/audit` used year-long immutable caching at an unversioned alias,
+  and the browser revoked the export object URL synchronously after clicking it.
+- GREEN: alias caching is bounded to five minutes with revalidation, and object
+  URL cleanup is deferred until the browser has initiated the download.
+
+## Slice 25 — Atomic directive entailment and completeness
+
+- RED: substring command matching accepted `npm test` from `npm test:e2e`, a
+  multi-line quote could splice a trigger from one directive onto another, and
+  model dispositions could decline away every supported observable directive.
+- GREEN: evaluable proposals cite exactly one complete strict-form source line;
+  exact backtick-wrapped commands and paths are parsed atomically, and each
+  supported directive must appear as exactly one evaluable proposal.
+
+## Slice 26 — Nonempty launch roots
+
+- RED: empty Codex-home and project-root values normalized to `.` and could
+  produce a ready audit with misleading relative scopes.
+- GREEN: structural validation rejects either empty root before reconstruction
+  or semantic analysis.

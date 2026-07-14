@@ -1,9 +1,12 @@
+import { createHash } from "node:crypto";
+
 import { loadBuildWeekDemoFixture } from "../fixtures/build-week-demo";
 import { runLedgerAudit } from "./index";
 import { reconstructInstructionChain } from "./reconstruct-chain";
 import {
   OpenAIResponsesAnalyzer,
   createOpenAIResponsesAnalyzer,
+  GPT_SEMANTIC_SYSTEM_PROMPT,
   type ResponsesParseClient,
 } from "./analyzers/openai-responses";
 import {
@@ -17,6 +20,7 @@ export interface LiveGptProof {
   fixtureId: "build-week-demo-v1";
   model: "gpt-5.6";
   promptVersion: string;
+  promptSha256: string;
   inputDigest: string;
   responseId: string;
   inputTokens: number;
@@ -81,12 +85,15 @@ export async function executeBuildWeekLiveProof(options: {
     fixtureId: "build-week-demo-v1",
     model: metadata.model,
     promptVersion: metadata.promptVersion,
+    promptSha256: createHash("sha256")
+      .update(GPT_SEMANTIC_SYSTEM_PROMPT, "utf8")
+      .digest("hex"),
     inputDigest,
     responseId: metadata.responseId,
     inputTokens: metadata.inputTokens,
     outputTokens: metadata.outputTokens,
     proposalCount: execution.audit.records.length,
-    sourceCoverageCount: execution.audit.ledger.chain.length,
+    sourceCoverageCount: execution.audit.semanticCoverageCount,
     semanticAnalysisDigest:
       execution.audit.ledger.inputHashes.semanticAnalysis,
     ledgerDigest: execution.audit.ledgerDigest,

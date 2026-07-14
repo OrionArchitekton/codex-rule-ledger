@@ -25,6 +25,9 @@ triaged; no response-time guarantee is implied for this hackathon v0.1.
   project/config admitted for this product.
 - Live analysis is restricted to an exact fixture digest and bounded request;
   it has no tools, retries, arbitrary input, or raw path transmission.
+- Every model payload field is treated as untrusted inert data. Evaluable
+  proposals must pass deterministic exact-quote and closed-rule entailment
+  checks before they can reach adjudication.
 - Logs and proof artifacts must retain response metadata only, never secrets or
   raw private trace content.
 - A content digest is integrity binding, not proof of source authenticity or

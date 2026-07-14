@@ -11,7 +11,7 @@
     "projectRoot": "/fixture/workspace/codex-rule-ledger",
     "launchWorkingDirectory": "/fixture/workspace/codex-rule-ledger/apps/web/demo",
     "fallbackFilenames": ["CODEX.md"],
-    "projectDocMaxBytes": 164
+    "projectDocMaxBytes": 219
   },
   "instructionScopes": [
     {
@@ -46,8 +46,8 @@
           "candidateId": "root-agents",
           "filename": "AGENTS.md",
           "status": "PRESENT",
-          "content": "Run `npm run build` after source changes.\nCheck docs when `README.md` changes.",
-          "sha256": "4a2baec12c7573dfcc7479a1113735bd98e4001d2984e8b201e58db5a2c1a1f1"
+          "content": "Run `npm run build` successfully before completion.\nRun `npm run docs:check` successfully before completion when `README.md` changes.",
+          "sha256": "d988e30a6a73b0e2f0d5221ca6b69ce887a5223b4053a0da80de3c86d7eb5471"
         },
         {
           "candidateId": "root-fallback",

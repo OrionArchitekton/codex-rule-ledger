@@ -1,20 +1,12 @@
-import { loadBuildWeekDemoFixture } from "../../../src/fixtures/build-week-demo";
-import { runLedgerAudit } from "../../../src/ledger";
-import { RecordedFixtureAnalyzer } from "../../../src/ledger/analyzers/recorded-fixture";
+import { loadReadyBuildWeekDemoAudit } from "../../../src/fixtures/ready-build-week-demo";
 
 export const dynamic = "force-static";
 
 export async function GET(): Promise<Response> {
-  const fixture = loadBuildWeekDemoFixture();
-  const execution = await runLedgerAudit(
-    fixture.bundle,
-    new RecordedFixtureAnalyzer(fixture.analysis),
-  );
-
-  if (
-    execution.execution !== "COMPLETED" ||
-    execution.audit.inputState !== "READY"
-  ) {
+  let audit;
+  try {
+    audit = await loadReadyBuildWeekDemoAudit();
+  } catch {
     return Response.json(
       { error: "The repository-owned audit fixture failed closed." },
       { status: 500 },
@@ -23,13 +15,13 @@ export async function GET(): Promise<Response> {
 
   const publicAudit = {
     inputState: "READY" as const,
-    provenance: execution.audit.provenance,
-    chain: execution.audit.ledger.chain,
-    discovery: execution.audit.ledger.discovery,
-    records: execution.audit.ledger.records,
-    analyzer: execution.audit.ledger.analyzer,
-    ledger: execution.audit.ledger,
-    ledgerDigest: execution.audit.ledgerDigest,
+    provenance: audit.provenance,
+    chain: audit.ledger.chain,
+    discovery: audit.ledger.discovery,
+    records: audit.ledger.records,
+    analyzer: audit.ledger.analyzer,
+    ledger: audit.ledger,
+    ledgerDigest: audit.ledgerDigest,
   };
 
   return Response.json(
@@ -43,7 +35,8 @@ export async function GET(): Promise<Response> {
     },
     {
       headers: {
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control":
+          "public, max-age=0, s-maxage=300, stale-while-revalidate=60",
         "X-Content-Type-Options": "nosniff",
       },
     },

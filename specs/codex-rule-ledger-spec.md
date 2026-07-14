@@ -47,8 +47,9 @@ receipt” are not synonyms and must not be used for these concepts.
   closed.
 - Instruction discovery supports the global location plus project root through
   launch working directory, with `AGENTS.override.md`, `AGENTS.md`, configured
-  fallback names, one existing candidate per directory, trim-empty content
-  omission after candidate selection, and the configured combined byte limit.
+  fallback names, exactly one inventory entry per candidate filename in each
+  scope, one existing candidate per directory, trim-empty content omission
+  after candidate selection, and the configured combined byte limit.
 - The current filesystem is not substituted for a missing historical Launch
   Capture.
 - A complete Launch Capture is still untrusted input and is labeled accordingly.
@@ -59,8 +60,14 @@ receipt” are not synonyms and must not be used for these concepts.
 - GPT-5.6 may extract obligations and propose evidence candidates. Every
   selected source requires an input-digest-bound coverage receipt containing
   its content hash, exact proposal IDs, and a verbatim quote for each proposal.
-  Deterministic code owns discovery, source/quote validation, state transitions,
-  evidence sufficiency, hashes, and final mechanically decidable results.
+  Each complete source line matching one of the four strict v0.1 forms must
+  produce exactly one evaluable proposal and cannot be erased by a declined or
+  human-review disposition. An evaluable proposal is accepted only when its
+  exact command, conditional path, polarity, trigger, and canonical normalized
+  rule are deterministically entailed by that one cited line. Deterministic
+  code owns discovery, semantic completeness and entailment checks,
+  source/quote validation, state transitions, evidence sufficiency, hashes, and
+  final mechanically decidable results.
 - The public demo operates on sanitized, repository-owned fixtures only. It does
   not accept arbitrary source archives, traces, URLs, or commands.
 - Hosted model calls are allowlisted by fixture identifier and content hash and
@@ -131,8 +138,12 @@ eligible results, and marks the ledger with the model identifier and input hash.
 - Stale input digests, missing source coverage, duplicate proposal IDs,
   mismatched source hashes, and quotes not contained in the selected source fail
   closed without partial success.
+- Commands, conditional paths, triggers, polarity, or normalized rules not
+  explicitly entailed by the cited quote fail closed without partial success.
 - Deterministic adjudication produces the same Ledger Results for the same
   normalized evidence regardless of candidate ordering.
+- A successful retry between a failed command and completion prevents that
+  earlier failure from becoming affirmative contradiction evidence.
 - The model cannot change discovery order, hashes, provenance, or a deterministic
   mechanical result.
 - Repeating the public hosted fixture analysis reuses the immutable,
@@ -203,6 +214,8 @@ outcome is legible and navigable in the judge-facing flow.
 - Claude, Cursor, Copilot, or arbitrary agent trace formats;
 - arbitrary repository or trace upload in the hosted demo;
 - replaying or executing commands from a trace;
+- command working-directory, repository-tree, commit-identity, or edit-timing
+  attestation;
 - cryptographic or trusted-time attestation;
 - validation-outcome, task-condition, or arbitrary event evidence types beyond
   the v0.1 command/completion and changed-path contracts;

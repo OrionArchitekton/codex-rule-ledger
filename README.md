@@ -59,10 +59,10 @@ and the configured byte limit. Its normalized events yield:
 
 | Rule | Result | Required evidence |
 |---|---|---|
-| Run `npm test` before completion | `SUPPORTED` | An exit-zero command event before completion |
-| Do not complete after `npm run typecheck` fails | `CONTRADICTED` | A failed command followed by a completion event |
-| Run `npm run build` after source changes | `NOT_EVIDENCED` | The source trigger is present; the required command is absent from the capture |
-| Check docs only when `README.md` changes | `NOT_APPLICABLE` | The captured changed-path set affirmatively excludes `README.md` |
+| Run `npm test` successfully before completion | `SUPPORTED` | An exit-zero command event before completion |
+| Do not complete after `npm run typecheck` fails | `CONTRADICTED` | A failed command, no successful retry, then a completion event |
+| Run `npm run build` successfully before completion | `NOT_EVIDENCED` | The required command is absent from the capture |
+| Run `npm run docs:check` when `README.md` changes | `NOT_APPLICABLE` | The captured changed-path set affirmatively excludes `README.md` |
 | “Make the interface delightful” | `DECLINED_NON_OBSERVABLE` | Subjective prose never receives a mechanical pass/fail result |
 
 `NOT_EVIDENCED` means only that the supplied capture lacks sufficient evidence.
@@ -88,11 +88,15 @@ Semantic analysis is replaceable:
   source-linked proposals.
 
 GPT-5.6 cannot emit a ledger verdict, reorder instruction discovery, alter
-hashes, or cite an unknown source. Refusal, malformed output, an unallowlisted
-fixture digest, or a timeout fails closed. The live adapter has no tools,
-  stores no response through the API request, redacts absolute paths and common
-  credential-like markers before transmission, has no automatic retry, and
-  applies strict input/output bounds.
+hashes, or cite an unknown source. Its source text is explicitly treated as
+untrusted data. Evaluable output must use one of four canonical v0.1 rule forms,
+and deterministic code verifies that every exact command, conditional path,
+polarity, and trigger is explicitly entailed by the cited quote. Refusal,
+malformed or fabricated semantics, an unallowlisted fixture digest, or a
+timeout fails closed. The live adapter has no tools, stores no response through
+the API request, redacts absolute paths and common credential-like markers
+before transmission, has no automatic retry, and applies strict input/output
+bounds.
 
 ## Codex and GPT-5.6
 
@@ -101,9 +105,10 @@ specification, vertical RED-to-GREEN implementation, visual iteration,
 adversarial review, and release proof. The repository preserves the living
 spec and witnessed build ledger in [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
 
-GPT-5.6 performs the indispensable semantic step: it converts instruction
-prose into a closed set of source-linked observable proposals while declining
-subjective or ambiguous language. Deterministic code remains the authority for
+GPT-5.6 performs the indispensable semantic step: it maps complete instruction
+lines in the four strict v0.1 forms into source-linked observable proposals and
+declines subjective or ambiguous language. Deterministic code proves that every
+supported directive is represented exactly once and remains the authority for
 all final evidence states. The public demo serves a recorded result from the
 same typed contract so judging does not consume API budget or expose a key.
 
@@ -117,6 +122,8 @@ The included fixture is synthetic and contains no private code or credentials.
 Hashes bind the supplied bytes after capture; they do not establish
 authenticity, trusted time, or what a model actually received. Read
 [`SECURITY.md`](SECURITY.md) before adapting the analyzer to real traces.
+Command events in v0.1 also do not attest the command working directory,
+repository tree, commit identity, or edit timing.
 
 ## Project map
 

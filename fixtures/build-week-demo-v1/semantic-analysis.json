@@ -4,7 +4,7 @@
       "kind": "EVALUABLE",
       "proposalId": "docs-conditional",
       "sourceIds": ["root-agents"],
-      "normalizedRule": "Check docs when README.md changes.",
+      "normalizedRule": "When README.md changes, run npm run docs:check successfully before completion.",
       "trigger": {
         "kind": "CHANGED_PATH_MATCHES",
         "exactPath": "README.md"
@@ -46,7 +46,7 @@
       "kind": "EVALUABLE",
       "proposalId": "build-required",
       "sourceIds": ["root-agents"],
-      "normalizedRule": "Run npm run build after source changes.",
+      "normalizedRule": "Run npm run build successfully before completion.",
       "trigger": { "kind": "ALWAYS" },
       "assertion": {
         "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
@@ -68,16 +68,16 @@
     },
     {
       "sourceId": "root-agents",
-      "contentSha256": "4a2baec12c7573dfcc7479a1113735bd98e4001d2984e8b201e58db5a2c1a1f1",
+      "contentSha256": "d988e30a6a73b0e2f0d5221ca6b69ce887a5223b4053a0da80de3c86d7eb5471",
       "proposalIds": ["build-required", "docs-conditional"],
       "quotes": [
         {
           "proposalId": "build-required",
-          "quote": "Run `npm run build` after source changes."
+          "quote": "Run `npm run build` successfully before completion."
         },
         {
           "proposalId": "docs-conditional",
-          "quote": "Check docs when `README.md` changes."
+          "quote": "Run `npm run docs:check` successfully before completion when `README.md` changes."
         }
       ]
     },
@@ -106,7 +106,7 @@
   ],
   "metadata": {
     "mode": "RECORDED",
-    "promptVersion": "semantic-obligations-v1",
-    "inputDigest": "fd6caba81f3a7511e3029ab3325645515abb64d8f6fcc31c0b28909d8450101e"
+    "promptVersion": "semantic-obligations-v2",
+    "inputDigest": "1b2d24559d4fa8cee0a1f46d13a6d2ee7fc58a4c605d2fe9caf234d371870752"
   }
 }

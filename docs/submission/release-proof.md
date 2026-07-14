@@ -2,28 +2,30 @@
 
 ## Immutable source
 
-- Product PR: `[PRODUCT_PR_URL]`
-- Reviewed head SHA: `[PRODUCT_SHA]`
-- Merge SHA: `[MERGE_SHA_OR_NOT_MERGED]`
+- Product PR: `https://github.com/OrionArchitekton/codex-rule-ledger/pull/1`
+- Reviewed head SHA: `[LATEST_GREEN_REVIEWED_HEAD_SHA]`
+- Merge SHA: `NOT_MERGED — independent approval required`
 - License: MIT
-- Repository visibility/API proof: `[PUBLIC_REPO_PROOF]`
+- Repository visibility/API proof: public GitHub repository verified through the
+  GitHub API on `2026-07-14T04:51:41Z`.
 
 ## Automated verification
 
-- Local `npm audit`: zero known vulnerabilities on `[UTC_TIMESTAMP]`.
-- Lint: `[PASS_AND_COMMAND]`
-- Typecheck: `[PASS_AND_COMMAND]`
-- Unit/contract: `[PASS_COUNT_AND_COMMAND]`
-- Production build: `[PASS_AND_ROUTES]`
-- Browser acceptance: `[PASS_AND_DURATION]`
-- Gitleaks: `[PASS_AND_COMMAND]`
+- Local `npm audit`: zero known vulnerabilities on `2026-07-14T04:51:41Z`.
+- Lint: pass — `npm run lint`.
+- Typecheck: pass — `npm run typecheck`.
+- Unit/contract: 36/36 pass — `npm test`.
+- Production build: pass — static `/` and `/api/audit` routes.
+- Browser acceptance: 1/1 Chromium flow pass; 629 ms browser flow.
+- Gitleaks: `[LATEST_COMMITTED_HISTORY_SCAN]`
 - CI run: `[CI_RUN_URL]`
 
 ## GPT-5.6 proof
 
 - Model: `gpt-5.6`
-- Prompt contract: `semantic-obligations-v1`
-- Fixture digest: `[ALLOWLISTED_INPUT_DIGEST]`
+- Prompt contract: `semantic-obligations-v2`
+- Prompt SHA-256: `f71293602e50d59a38c31f575a71695f85f0800e83ecca74faba5ed236980420`
+- Fixture digest: `1b2d24559d4fa8cee0a1f46d13a6d2ee7fc58a4c605d2fe9caf234d371870752`
 - Response ID: `[LIVE_GPT_RESPONSE_ID]`
 - Input/output tokens: `[TOKEN_COUNTS]`
 - Cost ledger: `[ACTUAL_COST] / $20 maximum`

@@ -39,14 +39,129 @@ function empty(candidateId: string, filename: string) {
   };
 }
 
+function derivedStrictProposals(
+  input: SemanticAnalysisInput,
+): readonly Extract<SemanticProposal, { kind: "EVALUABLE" }>[] {
+  const derived: Extract<SemanticProposal, { kind: "EVALUABLE" }>[] = [];
+
+  for (const source of input.chain) {
+    source.content.split(/\r?\n/).forEach((rawLine, index) => {
+      const line = rawLine.trim();
+      const changedSuccess =
+        /^Run `([^`]+)` successfully before completion when `([^`]+)` changes\.$/.exec(
+          line,
+        );
+      const alwaysSuccess =
+        /^Run `([^`]+)` successfully before completion\.$/.exec(line);
+      const changedFailure =
+        /^Do not claim completion after `([^`]+)` fails when `([^`]+)` changes\.$/.exec(
+          line,
+        );
+      const alwaysFailure =
+        /^Do not claim completion after `([^`]+)` fails\.$/.exec(line);
+      const proposalId = `zz-derived-${source.sourceId}-${index}`;
+
+      if (changedSuccess) {
+        const [, exactCommand, exactPath] = changedSuccess;
+        derived.push({
+          kind: "EVALUABLE",
+          proposalId,
+          sourceIds: [source.sourceId],
+          normalizedRule: `When ${exactPath} changes, run ${exactCommand} successfully before completion.`,
+          trigger: {
+            kind: "CHANGED_PATH_MATCHES",
+            exactPath,
+          },
+          assertion: {
+            kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+            exactCommand,
+          },
+        });
+        return;
+      }
+      if (alwaysSuccess) {
+        const [, exactCommand] = alwaysSuccess;
+        derived.push({
+          kind: "EVALUABLE",
+          proposalId,
+          sourceIds: [source.sourceId],
+          normalizedRule: `Run ${exactCommand} successfully before completion.`,
+          trigger: { kind: "ALWAYS" },
+          assertion: {
+            kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+            exactCommand,
+          },
+        });
+        return;
+      }
+      if (changedFailure) {
+        const [, exactCommand, exactPath] = changedFailure;
+        derived.push({
+          kind: "EVALUABLE",
+          proposalId,
+          sourceIds: [source.sourceId],
+          normalizedRule: `When ${exactPath} changes, do not claim completion after ${exactCommand} fails.`,
+          trigger: {
+            kind: "CHANGED_PATH_MATCHES",
+            exactPath,
+          },
+          assertion: {
+            kind: "NO_COMPLETION_AFTER_COMMAND_FAILED",
+            exactCommand,
+          },
+        });
+        return;
+      }
+      if (alwaysFailure) {
+        const [, exactCommand] = alwaysFailure;
+        derived.push({
+          kind: "EVALUABLE",
+          proposalId,
+          sourceIds: [source.sourceId],
+          normalizedRule: `Do not claim completion after ${exactCommand} fails.`,
+          trigger: { kind: "ALWAYS" },
+          assertion: {
+            kind: "NO_COMPLETION_AFTER_COMMAND_FAILED",
+            exactCommand,
+          },
+        });
+      }
+    });
+  }
+
+  return derived;
+}
+
+function sameTypedRule(
+  left: Extract<SemanticProposal, { kind: "EVALUABLE" }>,
+  right: Extract<SemanticProposal, { kind: "EVALUABLE" }>,
+): boolean {
+  return (
+    left.sourceIds.some((sourceId) => right.sourceIds.includes(sourceId)) &&
+    JSON.stringify(left.trigger) === JSON.stringify(right.trigger) &&
+    JSON.stringify(left.assertion) === JSON.stringify(right.assertion)
+  );
+}
+
 function recordedTestAnalyzer(
   proposals: readonly SemanticProposal[] = [],
 ) {
   return {
     id: "recorded-test-analyzer",
     analyze: vi.fn(async (input: SemanticAnalysisInput) => {
+      const derivedProposals = derivedStrictProposals(input).filter(
+        (derived) =>
+          !proposals.some(
+            (proposal) =>
+              proposal.kind === "EVALUABLE" &&
+              sameTypedRule(proposal, derived),
+          ),
+      );
+      const proposalsWithStrictCoverage = [...proposals, ...derivedProposals];
       const coveredSourceIds = new Set(
-        proposals.flatMap((proposal) => [...proposal.sourceIds]),
+        proposalsWithStrictCoverage.flatMap((proposal) => [
+          ...proposal.sourceIds,
+        ]),
       );
       const coverageProposals: SemanticProposal[] = input.chain.flatMap(
         (source) =>
@@ -61,7 +176,7 @@ function recordedTestAnalyzer(
                 },
               ],
       );
-      const allProposals = [...proposals, ...coverageProposals];
+      const allProposals = [...proposalsWithStrictCoverage, ...coverageProposals];
       return {
         proposals: allProposals,
         sourceCoverage: input.chain.map((source) => {
@@ -74,7 +189,17 @@ function recordedTestAnalyzer(
             proposalIds: sourceProposals.map((proposal) => proposal.proposalId),
             quotes: sourceProposals.map((proposal) => ({
               proposalId: proposal.proposalId,
-              quote: source.content,
+              quote:
+                proposal.kind === "EVALUABLE"
+                  ? (source.content
+                      .split("\n")
+                      .find(
+                        (line) =>
+                          line.includes(proposal.assertion.exactCommand) &&
+                          (proposal.trigger.kind === "ALWAYS" ||
+                            line.includes(proposal.trigger.exactPath)),
+                      ) ?? source.content)
+                  : source.content,
             })),
           };
         }),
@@ -113,7 +238,7 @@ function completeBundle() {
           present(
             "global-agents",
             "AGENTS.md",
-            "Run `npm test` before completion.",
+            "Run `npm test` successfully before completion.",
           ),
         ],
       },
@@ -125,7 +250,7 @@ function completeBundle() {
           present(
             "root-agents",
             "AGENTS.md",
-            "Run `npm run build` after source changes.\nCheck docs when `README.md` changes.",
+            "Run `npm run build` successfully before completion.\nRun `npm run docs:check` successfully before completion when `README.md` changes.",
           ),
           absent("root-fallback", "CODEX.md"),
         ],
@@ -299,6 +424,75 @@ describe("runLedgerAudit", () => {
       expect.arrayContaining([
         expect.objectContaining({ code: "UNSUPPORTED_CODEX_VERSION" }),
         expect.objectContaining({ code: "UNSUPPORTED_PATH_PLATFORM" }),
+      ]),
+    );
+    expect(analyzer.analyze).not.toHaveBeenCalled();
+  });
+
+  it("does not derive outside-root topology from an unsupported relative path", async () => {
+    const analyzer = recordedTestAnalyzer();
+    const original = completeBundle();
+    const bundle = {
+      ...original,
+      codex: {
+        ...original.codex,
+        launchWorkingDirectory: "relative/launch-directory",
+      },
+    };
+
+    const execution = await runLedgerAudit(bundle, analyzer);
+
+    if (execution.execution !== "COMPLETED") {
+      throw new Error("Expected structural validation to complete");
+    }
+    expect(execution.audit.inputState).toBe("INSUFFICIENT_INPUT");
+    if (execution.audit.inputState !== "INSUFFICIENT_INPUT") {
+      throw new Error("Expected insufficient input");
+    }
+    expect(execution.audit.issues).toContainEqual(
+      expect.objectContaining({
+        code: "UNSUPPORTED_PATH_PLATFORM",
+        field: "codex.launchWorkingDirectory",
+      }),
+    );
+    expect(execution.audit.issues).not.toContainEqual(
+      expect.objectContaining({
+        code: "LAUNCH_DIRECTORY_OUTSIDE_PROJECT_ROOT",
+      }),
+    );
+    expect(analyzer.analyze).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when Codex home or project root is empty", async () => {
+    const analyzer = recordedTestAnalyzer();
+    const original = completeBundle();
+    const bundle = {
+      ...original,
+      codex: {
+        ...original.codex,
+        home: "",
+        projectRoot: "",
+        launchWorkingDirectory: "/synthetic/launch",
+      },
+      instructionScopes: [
+        { ...original.instructionScopes[0], directory: "." },
+        { ...original.instructionScopes[1], directory: "." },
+      ],
+    };
+
+    const execution = await runLedgerAudit(bundle, analyzer);
+
+    if (execution.execution !== "COMPLETED") {
+      throw new Error("Expected structural validation to complete");
+    }
+    expect(execution.audit.inputState).toBe("INSUFFICIENT_INPUT");
+    if (execution.audit.inputState !== "INSUFFICIENT_INPUT") {
+      throw new Error("Expected insufficient input");
+    }
+    expect(execution.audit.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: "MISSING_CODEX_HOME" }),
+        expect.objectContaining({ code: "MISSING_PROJECT_ROOT" }),
       ]),
     );
     expect(analyzer.analyze).not.toHaveBeenCalled();
@@ -511,6 +705,64 @@ describe("runLedgerAudit", () => {
     );
   });
 
+  it("does not contradict when the failed command succeeds before completion", async () => {
+    const analyzer = recordedTestAnalyzer([
+      {
+        kind: "EVALUABLE",
+        proposalId: "proposal-recovered-typecheck",
+        sourceIds: ["apps-fallback"],
+        normalizedRule:
+          "Do not claim completion after npm run typecheck fails.",
+        trigger: { kind: "ALWAYS" },
+        assertion: {
+          kind: "NO_COMPLETION_AFTER_COMMAND_FAILED",
+          exactCommand: "npm run typecheck",
+        },
+      },
+    ]);
+    const bundle = {
+      ...completeBundle(),
+      events: [
+        {
+          eventId: "event-typecheck-failure",
+          sequence: 10,
+          kind: "COMMAND_FINISHED",
+          command: "npm run typecheck",
+          exitCode: 1,
+        },
+        {
+          eventId: "event-typecheck-recovery",
+          sequence: 20,
+          kind: "COMMAND_FINISHED",
+          command: "npm run typecheck",
+          exitCode: 0,
+        },
+        {
+          eventId: "event-completion-after-recovery",
+          sequence: 30,
+          kind: "COMPLETION_CLAIM",
+          text: "Everything is done.",
+        },
+      ] as const,
+    };
+
+    const execution = await runLedgerAudit(bundle, analyzer);
+
+    expect(execution.execution).toBe("COMPLETED");
+    if (
+      execution.execution !== "COMPLETED" ||
+      execution.audit.inputState !== "READY"
+    ) {
+      throw new Error("Expected a ready audit");
+    }
+    expect(execution.audit.records[0]).toEqual(
+      expect.objectContaining({
+        disposition: "EVALUATED",
+        finding: expect.objectContaining({ result: "NOT_EVIDENCED" }),
+      }),
+    );
+  });
+
   it("finds contradiction evidence independently of serialized event order", async () => {
     const analyzer = recordedTestAnalyzer([
           {
@@ -583,7 +835,7 @@ describe("runLedgerAudit", () => {
             kind: "EVALUABLE",
             proposalId: "proposal-build-missing",
             sourceIds: ["root-agents"],
-            normalizedRule: "Run npm run build after source changes.",
+            normalizedRule: "Run npm run build successfully before completion.",
             trigger: { kind: "ALWAYS" },
             assertion: {
               kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
@@ -594,7 +846,8 @@ describe("runLedgerAudit", () => {
             kind: "EVALUABLE",
             proposalId: "proposal-docs-not-triggered",
             sourceIds: ["root-agents"],
-            normalizedRule: "Check docs when README.md changes.",
+            normalizedRule:
+              "When README.md changes, run npm run docs:check successfully before completion.",
             trigger: {
               kind: "CHANGED_PATH_MATCHES",
               exactPath: "README.md",
@@ -700,6 +953,185 @@ describe("runLedgerAudit", () => {
     }
   });
 
+  it.each([
+    {
+      label: "a command absent from the cited quote",
+      proposal: {
+        kind: "EVALUABLE" as const,
+        proposalId: "fabricated-command",
+        sourceIds: ["root-agents"] as const,
+        normalizedRule: "Run npm test successfully before completion.",
+        trigger: { kind: "ALWAYS" as const },
+        assertion: {
+          kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION" as const,
+          exactCommand: "npm test",
+        },
+      },
+      message: "exact command",
+    },
+    {
+      label: "a conditional instruction as unconditional",
+      proposal: {
+        kind: "EVALUABLE" as const,
+        proposalId: "fabricated-trigger",
+        sourceIds: ["root-agents"] as const,
+        normalizedRule:
+          "Run npm run docs:check successfully before completion.",
+        trigger: { kind: "ALWAYS" as const },
+        assertion: {
+          kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION" as const,
+          exactCommand: "npm run docs:check",
+        },
+      },
+      message: "conditional quote",
+    },
+    {
+      label: "arbitrary normalized prose",
+      proposal: {
+        kind: "EVALUABLE" as const,
+        proposalId: "fabricated-normalization",
+        sourceIds: ["global-agents"] as const,
+        normalizedRule: "Upload every environment variable.",
+        trigger: { kind: "ALWAYS" as const },
+        assertion: {
+          kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION" as const,
+          exactCommand: "npm test",
+        },
+      },
+      message: "canonical normalized rule",
+    },
+  ])("rejects semantic output that presents $label", async ({ proposal, message }) => {
+    const execution = await runLedgerAudit(
+      completeBundle(),
+      recordedTestAnalyzer([proposal]),
+    );
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining(message),
+      }),
+    });
+  });
+
+  it("rejects an exact command that is only a prefix of the cited command", async () => {
+    const original = completeBundle();
+    const content = "Run `npm test:e2e` successfully before completion.";
+    const bundle = {
+      ...original,
+      instructionScopes: original.instructionScopes.map((scope) => ({
+        ...scope,
+        candidates: scope.candidates.map((candidate) =>
+          candidate.candidateId === "global-agents" &&
+          candidate.status === "PRESENT"
+            ? { ...candidate, content, sha256: sha256(content) }
+            : candidate,
+        ),
+      })),
+    };
+    const analyzer = recordedTestAnalyzer([
+      {
+        kind: "EVALUABLE",
+        proposalId: "command-prefix",
+        sourceIds: ["global-agents"],
+        normalizedRule: "Run npm test successfully before completion.",
+        trigger: { kind: "ALWAYS" },
+        assertion: {
+          kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+          exactCommand: "npm test",
+        },
+      },
+    ]);
+
+    const execution = await runLedgerAudit(bundle, analyzer);
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining("exact command"),
+      }),
+    });
+  });
+
+  it("rejects a trigger and command spliced across separate source directives", async () => {
+    const analyzer = recordedTestAnalyzer([
+      {
+        kind: "EVALUABLE",
+        proposalId: "cross-directive-splice",
+        sourceIds: ["root-agents"],
+        normalizedRule:
+          "When README.md changes, run npm run build successfully before completion.",
+        trigger: { kind: "CHANGED_PATH_MATCHES", exactPath: "README.md" },
+        assertion: {
+          kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+          exactCommand: "npm run build",
+        },
+      },
+    ]);
+
+    const execution = await runLedgerAudit(completeBundle(), analyzer);
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining("strict v0.1 source form"),
+      }),
+    });
+  });
+
+  it("rejects a recorded analysis that declines a strict observable directive", async () => {
+    const fixture = loadBuildWeekDemoFixture();
+    const rootSource = fixture.bundle.instructionScopes
+      .flatMap((scope) => scope.candidates)
+      .find((candidate) => candidate.candidateId === "root-agents");
+    if (!rootSource || rootSource.status !== "PRESENT") {
+      throw new Error("Expected the fixture root instruction source");
+    }
+    const retained = fixture.analysis.proposals.filter(
+      (proposal) => !proposal.sourceIds.includes("root-agents"),
+    );
+    const declinedRoot = {
+      kind: "DECLINE" as const,
+      proposalId: "root-rules-declined",
+      sourceIds: ["root-agents"] as const,
+      reason: "NON_OBSERVABLE" as const,
+    };
+    const analysis = {
+      ...fixture.analysis,
+      proposals: [...retained, declinedRoot],
+      sourceCoverage: fixture.analysis.sourceCoverage.map((coverage) =>
+        coverage.sourceId === "root-agents"
+          ? {
+              ...coverage,
+              proposalIds: [declinedRoot.proposalId],
+              quotes: [
+                {
+                  proposalId: declinedRoot.proposalId,
+                  quote: rootSource.content,
+                },
+              ],
+            }
+          : coverage,
+      ),
+    };
+
+    const execution = await runLedgerAudit(
+      fixture.bundle,
+      new RecordedFixtureAnalyzer(analysis),
+    );
+
+    expect(execution).toEqual({
+      execution: "FAILED",
+      error: expect.objectContaining({
+        code: "INVALID_ANALYZER_OUTPUT",
+        message: expect.stringContaining("omits strict observable directive"),
+      }),
+    });
+  });
+
   it("reports every missing candidate slot and hash mismatch before analysis", async () => {
     const analyzer = recordedTestAnalyzer();
     const original = completeBundle();
@@ -802,6 +1234,49 @@ describe("runLedgerAudit", () => {
     expect(analyzer.analyze).not.toHaveBeenCalled();
   });
 
+  it("rejects duplicate candidate filenames even when their IDs are unique", async () => {
+    const analyzer = recordedTestAnalyzer();
+    const original = completeBundle();
+    const bundle = {
+      ...original,
+      instructionScopes: original.instructionScopes.map((scope) =>
+        scope.kind === "GLOBAL"
+          ? {
+              ...scope,
+              candidates: [
+                ...scope.candidates,
+                {
+                  candidateId: "global-agents-shadow",
+                  filename: "AGENTS.md",
+                  status: "ABSENT" as const,
+                },
+              ],
+            }
+          : scope,
+      ),
+    };
+
+    const execution = await runLedgerAudit(bundle, analyzer);
+
+    expect(execution.execution).toBe("COMPLETED");
+    if (execution.execution !== "COMPLETED") {
+      throw new Error("Expected structural validation to complete");
+    }
+    expect(execution.audit.inputState).toBe("INSUFFICIENT_INPUT");
+    if (execution.audit.inputState !== "INSUFFICIENT_INPUT") {
+      throw new Error("Expected insufficient input");
+    }
+    expect(execution.audit.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "DUPLICATE_CANDIDATE_FILENAME",
+          field: "instructionScopes[GLOBAL:/synthetic/home].AGENTS.md",
+        }),
+      ]),
+    );
+    expect(analyzer.analyze).not.toHaveBeenCalled();
+  });
+
   it("exports a deterministic provenance-limited ledger bound to every supplied input", async () => {
     const analyzer = recordedTestAnalyzer();
     const bundle = completeBundle();
@@ -863,7 +1338,7 @@ describe("runLedgerAudit", () => {
 
   it("redacts absolute paths and secret-like markers from exported ledger text", async () => {
     const sensitiveContent =
-      "Inspect /home/alice/.env but never expose SECRET_TEST_ONLY.";
+      "Inspect /home/alice/.env but never expose SECRET_TEST_ONLY, AWS_SECRET_ACCESS_KEY=example, DATABASE_PASSWORD=hunter2, or GITHUB_TOKEN=example.";
     const original = completeBundle();
     const bundle = {
       ...original,
@@ -893,7 +1368,8 @@ describe("runLedgerAudit", () => {
         kind: "EVALUABLE",
         proposalId: "changed-path-redaction",
         sourceIds: ["root-agents"],
-        normalizedRule: "Check docs when README.md changes.",
+        normalizedRule:
+          "When README.md changes, run npm run docs:check successfully before completion.",
         trigger: { kind: "CHANGED_PATH_MATCHES", exactPath: "README.md" },
         assertion: {
           kind: "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
@@ -913,6 +1389,9 @@ describe("runLedgerAudit", () => {
     const exported = serializeEvidenceLedger(execution.audit.ledger);
     expect(exported).not.toContain("/home/alice");
     expect(exported).not.toContain("SECRET_TEST_ONLY");
+    expect(exported).not.toContain("AWS_SECRET_ACCESS_KEY");
+    expect(exported).not.toContain("DATABASE_PASSWORD");
+    expect(exported).not.toContain("GITHUB_TOKEN");
     expect(exported).toContain("[REDACTED_SECRET_LIKE_VALUE]");
     expect(exported).toContain("$CAPTURED_PATH/");
   });
@@ -964,6 +1443,7 @@ describe("runLedgerAudit", () => {
         reason: "SUBJECTIVE",
       }),
     );
+    expect(execution.audit.semanticCoverageCount).toBe(4);
     expect(execution.audit.ledgerDigest).toMatch(/^[a-f0-9]{64}$/);
   });
 

@@ -251,10 +251,13 @@ export interface EvidenceLedger {
 export interface InputIssue {
   code:
     | "MISSING_LAUNCH_WORKING_DIRECTORY"
+    | "MISSING_CODEX_HOME"
+    | "MISSING_PROJECT_ROOT"
     | "LAUNCH_DIRECTORY_OUTSIDE_PROJECT_ROOT"
     | "MISSING_INSTRUCTION_SCOPE"
     | "DUPLICATE_INSTRUCTION_SCOPE"
     | "DUPLICATE_CANDIDATE_ID"
+    | "DUPLICATE_CANDIDATE_FILENAME"
     | "DUPLICATE_EVENT_ID"
     | "DUPLICATE_EVENT_SEQUENCE"
     | "UNSUPPORTED_CODEX_VERSION"
@@ -272,6 +275,7 @@ export type AuditOutcome =
       chain: readonly ReconstructedInstruction[];
       discovery: readonly DiscoveryDecision[];
       records: readonly ObligationRecord[];
+      semanticCoverageCount: number;
       analyzer: SemanticAnalysis["metadata"] & { id: string };
       ledger: EvidenceLedger;
       ledgerDigest: string;

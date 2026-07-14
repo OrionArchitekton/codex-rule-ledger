@@ -37,14 +37,16 @@ function expectedScopeKeys(bundle: CaptureBundleV1): readonly string[] {
   const home = posix.normalize(bundle.codex.home);
   const root = posix.normalize(bundle.codex.projectRoot);
   const cwd = posix.normalize(bundle.codex.launchWorkingDirectory);
-  const relative = posix.relative(root, cwd);
   const projectDirectories = [root];
 
-  if (relative !== "" && relative !== ".." && !relative.startsWith("../")) {
-    let cursor = root;
-    for (const segment of relative.split("/")) {
-      cursor = posix.join(cursor, segment);
-      projectDirectories.push(cursor);
+  if (posix.isAbsolute(root) && posix.isAbsolute(cwd)) {
+    const relative = posix.relative(root, cwd);
+    if (relative !== "" && relative !== ".." && !relative.startsWith("../")) {
+      let cursor = root;
+      for (const segment of relative.split("/")) {
+        cursor = posix.join(cursor, segment);
+        projectDirectories.push(cursor);
+      }
     }
   }
 
@@ -68,6 +70,21 @@ export function validateCaptureBundle(
       code: "UNSUPPORTED_CODEX_VERSION",
       field: "codex.version",
       message: `v0.1 demonstrates discovery fidelity only for Codex ${SUPPORTED_CODEX_VERSION}.`,
+    });
+  }
+
+  if (bundle.codex.home.trim() === "") {
+    issues.push({
+      code: "MISSING_CODEX_HOME",
+      field: "codex.home",
+      message: "The supplied launch capture does not identify Codex home.",
+    });
+  }
+  if (bundle.codex.projectRoot.trim() === "") {
+    issues.push({
+      code: "MISSING_PROJECT_ROOT",
+      field: "codex.projectRoot",
+      message: "The supplied launch capture does not identify the project root.",
     });
   }
 
@@ -95,20 +112,23 @@ export function validateCaptureBundle(
   } else {
     const root = posix.normalize(bundle.codex.projectRoot);
     const cwd = posix.normalize(bundle.codex.launchWorkingDirectory);
-    const relative = posix.relative(root, cwd);
-    if (relative === ".." || relative.startsWith("../")) {
-      issues.push({
-        code: "LAUNCH_DIRECTORY_OUTSIDE_PROJECT_ROOT",
-        field: "codex.launchWorkingDirectory",
-        message:
-          "The supplied launch working directory is outside the captured project root.",
-      });
+    if (posix.isAbsolute(root) && posix.isAbsolute(cwd)) {
+      const relative = posix.relative(root, cwd);
+      if (relative === ".." || relative.startsWith("../")) {
+        issues.push({
+          code: "LAUNCH_DIRECTORY_OUTSIDE_PROJECT_ROOT",
+          field: "codex.launchWorkingDirectory",
+          message:
+            "The supplied launch working directory is outside the captured project root.",
+        });
+      }
     }
   }
 
   const suppliedScopeKeys = new Set<string>();
   for (const scope of bundle.instructionScopes) {
     const scopeKey = `${scope.kind}:${posix.normalize(scope.directory)}`;
+    const seenCandidateFilenames = new Set<string>();
     if (seenScopeKeys.has(scopeKey)) {
       issues.push({
         code: "DUPLICATE_INSTRUCTION_SCOPE",
@@ -128,6 +148,14 @@ export function validateCaptureBundle(
         });
       }
       seenCandidateIds.add(candidate.candidateId);
+      if (seenCandidateFilenames.has(candidate.filename)) {
+        issues.push({
+          code: "DUPLICATE_CANDIDATE_FILENAME",
+          field: `instructionScopes[${scopeKey}].${candidate.filename}`,
+          message: `The ${scopeKey} scope contains more than one ${candidate.filename} candidate.`,
+        });
+      }
+      seenCandidateFilenames.add(candidate.filename);
     }
   }
   for (const scopeKey of expectedScopeKeys(bundle)) {

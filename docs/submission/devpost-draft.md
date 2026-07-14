@@ -64,9 +64,11 @@ runLedgerAudit(bundle, semanticAnalyzer) -> AuditExecution
 Deterministic code owns manifest completeness, instruction discovery, hashes,
 evidence queries, final result states, path redaction, and canonical export.
 GPT-5.6, through the Responses API structured-output path, performs the
-indispensable semantic job: it converts instruction prose into a closed set of
-source-linked observable proposals and declines subjective or ambiguous rules.
-It cannot emit a final ledger verdict or invent a source anchor.
+indispensable semantic job: it maps complete instruction lines in the four
+strict v0.1 forms into source-linked observable proposals and declines
+subjective or ambiguous rules. Deterministic code requires every supported
+directive exactly once. GPT-5.6 cannot emit a final ledger verdict or invent a
+source anchor.
 
 For safe and unrestricted judging, the public site serves a repository-owned
 recording from the same typed analyzer contract. The live GPT-5.6 proof uses the
@@ -95,7 +97,7 @@ malformed output, refusal, or timeout.
 - The fixed fixture covers override precedence, fallback selection, byte-limit
   exclusion, success, affirmative contradiction, missing evidence,
   inapplicability, and subjective-rule decline.
-- The public route is immutable and accepts no uploads, URLs, commands, raw
+- The public route serves a repository-owned recorded fixture and accepts no uploads, URLs, commands, raw
   traces, API keys, or user-controlled model calls.
 - The repository includes CI, secret scanning, dependency review, a security
   policy, and an operator rollback runbook.
