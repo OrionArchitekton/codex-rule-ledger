@@ -135,7 +135,7 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
   `/feedback` in the main Codex build thread.
 - `[LIVE_GPT_RESPONSE_ID]` — retained privately in the proof packet, not as a
   credential or raw response dump.
-- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29365481985
+- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393
   — lint, typecheck, unit, boundary, build, and browser checks green on the
-  merged submission source; the companion dependency, secret, and fail-closed
-  check runs are also green on that head.
+  release baseline; dependency review, Gitleaks, and the fail-closed PR gate
+  are also green for that baseline.
