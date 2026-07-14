@@ -29,6 +29,9 @@ The v0.1 demo makes that review legible in one screen:
 
 ## Try the fixed-fixture demo
 
+[Open the public fixture-only demo](https://codex-rule-ledger.vercel.app).
+It requires no login, API key, upload, or private repository access.
+
 Prerequisites: Node.js 24 and npm.
 
 ```bash

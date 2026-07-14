@@ -11,7 +11,7 @@
   inspectable rule ledger—without pretending missing logs prove compliance.
 - **Repository:** https://github.com/OrionArchitekton/codex-rule-ledger
 - **License:** MIT
-- **Live demo:** `[PUBLIC_VERCEL_URL]`
+- **Live demo:** https://codex-rule-ledger.vercel.app
 - **Video:** `[PUBLIC_YOUTUBE_URL]`
 - **Primary Codex feedback ID:** `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]`
 
@@ -129,10 +129,13 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 
 ## Proof fields before submission
 
-- `[PUBLIC_VERCEL_URL]` — HTTP 200 and commit binding verified.
+- https://codex-rule-ledger.vercel.app — HTTP 200 and commit binding verified.
 - `[PUBLIC_YOUTUBE_URL]` — public, audio present, duration at most 2:59.
 - `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]` — created by the participant with
   `/feedback` in the main Codex build thread.
 - `[LIVE_GPT_RESPONSE_ID]` — retained privately in the proof packet, not as a
   credential or raw response dump.
-- `[CI_RUN_URL]` — every required check green on the submitted commit.
+- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29365481985
+  — lint, typecheck, unit, boundary, build, and browser checks green on the
+  merged submission source; the companion dependency, secret, and fail-closed
+  check runs are also green on that head.
