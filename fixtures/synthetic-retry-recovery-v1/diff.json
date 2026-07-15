@@ -1,0 +1,7 @@
+{
+  "changedPaths": [
+    "packages/cli/src/commands.ts",
+    "packages/shared/src/format.ts"
+  ],
+  "validations": []
+}

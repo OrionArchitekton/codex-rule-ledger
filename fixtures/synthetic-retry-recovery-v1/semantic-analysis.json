@@ -1,0 +1,115 @@
+{
+  "proposals": [
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "release-lint",
+      "sourceIds": ["global-override"],
+      "normalizedRule": "Run npm run lint successfully before completion.",
+      "trigger": { "kind": "ALWAYS" },
+      "assertion": {
+        "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+        "exactCommand": "npm run lint"
+      }
+    },
+    {
+      "kind": "DECLINE",
+      "proposalId": "release-safe",
+      "sourceIds": ["global-override"],
+      "reason": "SUBJECTIVE"
+    },
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "core-unit-conditional",
+      "sourceIds": ["packages-fallback"],
+      "normalizedRule": "When packages/core/src/index.ts changes, run npm run test:unit successfully before completion.",
+      "trigger": {
+        "kind": "CHANGED_PATH_MATCHES",
+        "exactPath": "packages/core/src/index.ts"
+      },
+      "assertion": {
+        "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+        "exactCommand": "npm run test:unit"
+      }
+    },
+    {
+      "kind": "HUMAN_REVIEW",
+      "proposalId": "compatibility-choice",
+      "sourceIds": ["packages-fallback"],
+      "reason": "AMBIGUOUS"
+    },
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "typecheck-recovery",
+      "sourceIds": ["cli-agents"],
+      "normalizedRule": "Do not claim completion after npm run typecheck fails.",
+      "trigger": { "kind": "ALWAYS" },
+      "assertion": {
+        "kind": "NO_COMPLETION_AFTER_COMMAND_FAILED",
+        "exactCommand": "npm run typecheck"
+      }
+    },
+    {
+      "kind": "EVALUABLE",
+      "proposalId": "package-required",
+      "sourceIds": ["cli-agents"],
+      "normalizedRule": "Run npm run package successfully before completion.",
+      "trigger": { "kind": "ALWAYS" },
+      "assertion": {
+        "kind": "COMMAND_SUCCEEDED_BEFORE_COMPLETION",
+        "exactCommand": "npm run package"
+      }
+    }
+  ],
+  "sourceCoverage": [
+    {
+      "sourceId": "global-override",
+      "contentSha256": "227728f0f7582b3cbe81b9127c4b809f69f844b7303fec6e48b14d7e90305413",
+      "proposalIds": ["release-lint", "release-safe"],
+      "quotes": [
+        {
+          "proposalId": "release-lint",
+          "quote": "Run `npm run lint` successfully before completion."
+        },
+        {
+          "proposalId": "release-safe",
+          "quote": "Keep the release process safe."
+        }
+      ]
+    },
+    {
+      "sourceId": "packages-fallback",
+      "contentSha256": "48e3d2d40ba4d12a03847b0b56aca7d69476b88e7ee6025c1a72c0898f2082b3",
+      "proposalIds": ["compatibility-choice", "core-unit-conditional"],
+      "quotes": [
+        {
+          "proposalId": "core-unit-conditional",
+          "quote": "Run `npm run test:unit` successfully before completion when `packages/core/src/index.ts` changes."
+        },
+        {
+          "proposalId": "compatibility-choice",
+          "quote": "Run either the quick or full compatibility suite before completion."
+        }
+      ]
+    },
+    {
+      "sourceId": "cli-agents",
+      "contentSha256": "459e67425f568e462330658c19b87f1a849ffd02e04ee9b86a598a7ad42ed3db",
+      "proposalIds": ["package-required", "typecheck-recovery"],
+      "quotes": [
+        {
+          "proposalId": "typecheck-recovery",
+          "quote": "Do not claim completion after `npm run typecheck` fails."
+        },
+        {
+          "proposalId": "package-required",
+          "quote": "Run `npm run package` successfully before completion."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "mode": "RECORDED",
+    "promptVersion": "semantic-obligations-v2",
+    "inputDigest": "607741187403a987ae7d59c3d8246bed4926b479d71d9aa797cd91881781fffa"
+  }
+}

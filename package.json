@@ -1,6 +1,6 @@
 {
   "name": "codex-rule-ledger",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "Evidence-bound audits for observable Codex repository instructions.",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "audit": "tsx scripts/audit-bundle.ts",
     "proof:gpt-live": "tsx scripts/live-gpt-proof.ts",
     "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e"
   },

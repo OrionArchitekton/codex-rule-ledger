@@ -13,7 +13,7 @@
 - **License:** MIT
 - **Live demo:** https://codex-rule-ledger.vercel.app
 - **Video:** `[PUBLIC_YOUTUBE_URL]`
-- **Primary Codex feedback ID:** `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]`
+- **Primary Codex feedback ID:** `019f5dda-3975-70b3-abc0-2f18d72c3aea`
 
 ## Inspiration
 
@@ -48,15 +48,25 @@ inspect exact source/event anchors and export a deterministic SHA-256-bound JSON
 ledger. Every view retains the `LOCAL_CAPTURE_UNATTESTED` warning: hashes bind
 the supplied bytes, but do not authenticate them or establish trusted time.
 
+v0.2 also ships a repo-local CLI for already-normalized Audit Bundle
+directories. Recorded analysis is keyless by default; explicit local `--live`
+mode binds one GPT-5.6 request to the validated bundle digest. A second
+disclosed synthetic case exercises a different instruction topology, a
+successful retry that prevents a false contradiction, a conditional
+non-trigger, missing evidence, subjective decline, and human review. The public
+Vercel demo remains fixed-fixture and keyless.
+
 ## How we built it
 
-Codex served as Dan Mercede's principal engineering agent for v0.1, carrying
-the approved scope through the living specification, 30 recorded vertical
-RED-to-GREEN slices, interface implementation, adversarial-review repairs,
-deployment verification, and release-proof packaging. Dan remained the solo
-participant and retained authority for credentials and spend plus
-participant-held eligibility, publication, and submission gates. The
-repository preserves the living behavior spec and witnessed build ledger.
+From the minimal Build Week event prompt, Codex independently selected the
+problem, scoped and designed v0.1, implemented and tested it, drove adversarial
+review and repairs, deployed the public demo, and packaged the release. Codex
+then implemented the separately authorized v0.2 CLI scope. The repository
+preserves the living behavior specs and 39 witnessed vertical RED-to-GREEN
+slices. Dan remained the solo participant and retained credentials, spend,
+eligibility, publication, and submission authority. This is the disclosed
+workflow account; the corroborating records do not independently attest agent
+authorship.
 
 The product uses Next.js and strict TypeScript around one deep audit seam:
 
@@ -103,6 +113,11 @@ malformed output, refusal, or timeout.
   inapplicability, and subjective-rule decline.
 - The public route serves a repository-owned recorded fixture and accepts no uploads, URLs, commands, raw
   traces, API keys, or user-controlled model calls.
+- The local v0.2 CLI accepts already-normalized bundles through the same deep
+  audit seam, defaults to recorded/keyless mode, and fails closed on malformed,
+  duplicate, oversized, linked, non-regular, stale, or incomplete inputs.
+- A second disclosed synthetic case proves the engine and CLI are not
+  hard-coded to one instruction topology or result mix.
 - The repository includes CI, secret scanning, dependency review, a security
   policy, and an operator rollback runbook.
 
@@ -135,11 +150,16 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 
 - https://codex-rule-ledger.vercel.app — HTTP 200 and commit binding verified.
 - `[PUBLIC_YOUTUBE_URL]` — public, audio present, duration at most 2:59.
-- `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]` — created by the participant with
-  `/feedback` in the main Codex build thread.
+- `019f5dda-3975-70b3-abc0-2f18d72c3aea` — official `/feedback` upload returned
+  this exact primary-build thread ID with diagnostic logs excluded.
 - Live GPT-5.6 proof completed at `2026-07-15T01:21:59.222Z`; the public release
   proof carries a shortened response identifier and SHA-256 fingerprint while
   the full ID remains in private operator-session evidence.
+- The v0.2 CLI completed exactly one separate GPT-5.6 proof at
+  `2026-07-15T04:23:34Z`: 1,323 input / 820 output tokens, `$0.031215`
+  conservative cost, six mixed-outcome records, and canonical ledger digest
+  `f63e106a…dca6`. The dedicated key remained ephemeral and Vercel remained
+  keyless.
 - https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393
   — lint, typecheck, unit, boundary, build, and browser checks green on the
   release baseline; dependency review, Gitleaks, and the fail-closed PR gate
