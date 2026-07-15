@@ -291,6 +291,46 @@ describe("runAuditBundleCli", () => {
     expect(await readdir(outputDirectory)).toEqual(["ledger.json"]);
   });
 
+  it("rejects an output whose parent directory does not exist", async () => {
+    const outputDirectory = await temporaryDirectory();
+    const outputPath = join(outputDirectory, "missing", "ledger.json");
+
+    const result = await runAuditBundleCli([
+      "--bundle",
+      resolve("fixtures/build-week-demo-v1"),
+      "--out",
+      outputPath,
+    ]);
+
+    expect(result).toEqual({
+      exitCode: 5,
+      stdout: "",
+      stderr: "output rejected\n",
+    });
+    expect(await readdir(outputDirectory)).toEqual([]);
+  });
+
+  it("rejects an output whose parent is a regular file", async () => {
+    const outputDirectory = await temporaryDirectory();
+    const parentPath = join(outputDirectory, "parent");
+    await writeFile(parentPath, "sentinel", { mode: 0o600 });
+
+    const result = await runAuditBundleCli([
+      "--bundle",
+      resolve("fixtures/build-week-demo-v1"),
+      "--out",
+      join(parentPath, "ledger.json"),
+    ]);
+
+    expect(result).toEqual({
+      exitCode: 5,
+      stdout: "",
+      stderr: "output rejected\n",
+    });
+    expect(await readdir(outputDirectory)).toEqual(["parent"]);
+    expect(await readFile(parentPath, "utf8")).toBe("sentinel");
+  });
+
   it("keeps recorded mode keyless and never constructs a live analyzer", async () => {
     const outputPath = join(await temporaryDirectory(), "ledger.json");
     const createLiveAnalyzer = vi.fn(() => {

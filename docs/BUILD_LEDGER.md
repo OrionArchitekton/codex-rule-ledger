@@ -441,7 +441,7 @@ repairs summarized above. The nine slices below bring the witnessed total to 39.
 
 - `npm run lint`: passed.
 - `npm run typecheck`: passed.
-- `npm test`: 7 files, 75 tests passed.
+- `npm test`: 7 files, 77 tests passed.
 - `npm run build`: passed; `/` and `/api/audit` remain static.
 - Playwright browser acceptance: 1/1 Chromium flow passed against the explicit
   local production server. The normal wrapper again stalled during its local

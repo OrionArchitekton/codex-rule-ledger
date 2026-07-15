@@ -26,6 +26,7 @@ import { validateCaptureBundle } from "../ledger/validate-bundle";
 
 const MAX_COMPONENT_BYTES = 1_048_576;
 const MAX_JSON_DEPTH = 64;
+const JSON_WHITESPACE = /\s/u;
 
 const captureManifestSchema = captureBundleSchema
   .pick({
@@ -99,7 +100,7 @@ async function readBoundedJson(
   } catch {
     throw new Error(`bundle component rejected: ${filename}`);
   } finally {
-    await file?.close();
+    await file?.close().catch(() => undefined);
   }
 }
 
@@ -125,7 +126,7 @@ function assertUniqueJsonKeys(contents: string): void {
       if (end >= contents.length) return;
 
       let cursor = end + 1;
-      while (/\s/u.test(contents[cursor] ?? "")) cursor += 1;
+      while (JSON_WHITESPACE.test(contents[cursor] ?? "")) cursor += 1;
       const frame = stack.at(-1);
       if (frame?.kind === "OBJECT" && contents[cursor] === ":") {
         const key = JSON.parse(contents.slice(index, end + 1)) as string;
@@ -197,7 +198,7 @@ async function publishNoClobber(path: string, contents: string): Promise<void> {
     file = undefined;
     await link(temporaryPath, path);
   } finally {
-    await file?.close();
+    await file?.close().catch(() => undefined);
     await unlink(temporaryPath).catch(() => undefined);
   }
 }
@@ -236,7 +237,7 @@ async function outputPathIsAvailable(path: string): Promise<boolean> {
   } catch {
     return false;
   } finally {
-    await probe?.close();
+    await probe?.close().catch(() => undefined);
     await unlink(probeLinkPath).catch(() => undefined);
     await unlink(probePath).catch(() => undefined);
   }
