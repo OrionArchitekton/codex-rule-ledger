@@ -1,0 +1,215 @@
+1
+00:00:00,000 --> 00:00:03,480
+A code diff shows what an agent changed,
+
+2
+00:00:03,480 --> 00:00:06,813
+but not which layered instructions governed the run
+
+3
+00:00:06,813 --> 00:00:10,418
+or whether the session supports its validation claims.
+
+4
+00:00:10,418 --> 00:00:13,752
+Codex Rule Ledger turns those supplied artifacts into
+
+5
+00:00:13,752 --> 00:00:16,815
+an inspectable evidence ledger, always labeled as
+
+6
+00:00:16,815 --> 00:00:18,752
+an unattested local capture.
+
+7
+00:00:18,826 --> 00:00:22,230
+The demo reconstructs one launch-time chain from global
+
+8
+00:00:22,230 --> 00:00:24,635
+scope to the working directory.
+
+9
+00:00:24,635 --> 00:00:28,189
+This synthetic case includes global and project guidance,
+
+10
+00:00:28,189 --> 00:00:30,614
+a fallback, a deeper override,
+
+11
+00:00:30,614 --> 00:00:34,296
+and a candidate excluded by the byte limit.
+
+12
+00:00:34,296 --> 00:00:37,977
+It never invents missing history from today's filesystem.
+
+13
+00:00:38,031 --> 00:00:41,546
+Each observable instruction gets a source-linked state.
+
+14
+00:00:41,546 --> 00:00:44,142
+A successful test is supported.
+
+15
+00:00:44,142 --> 00:00:46,899
+A failed typecheck followed by completion
+
+16
+00:00:46,899 --> 00:00:49,036
+is contradicted by evidence.
+
+17
+00:00:49,036 --> 00:00:53,630
+A missing build event is not evidenced, not failed.
+
+18
+00:00:53,630 --> 00:00:57,007
+An untriggered documentation rule is not applicable,
+
+19
+00:00:57,007 --> 00:00:59,603
+and subjective prose is declined.
+
+20
+00:00:59,603 --> 00:01:04,037
+The inspector exposes the exact source and event anchors.
+
+21
+00:01:04,127 --> 00:01:07,823
+Export preserves every source, result, evidence link,
+
+22
+00:01:07,823 --> 00:01:10,120
+input hash, and warning.
+
+23
+00:01:10,120 --> 00:01:12,875
+The filename is bound to the
+
+24
+00:01:12,875 --> 00:01:15,010
+canonical SHA-256 ledger digest.
+
+25
+00:01:15,010 --> 00:01:18,386
+Those hashes bind supplied bytes after capture;
+
+26
+00:01:18,386 --> 00:01:21,302
+they do not authenticate the capture,
+
+27
+00:01:21,302 --> 00:01:24,516
+prove trusted time, or guarantee obedience.
+
+28
+00:01:24,571 --> 00:01:28,014
+Version zero point two adds a local CLI
+
+29
+00:01:28,014 --> 00:01:30,015
+for already-normalized Audit Bundles.
+
+30
+00:01:30,015 --> 00:01:33,457
+Recorded analysis is the keyless default and never
+
+31
+00:01:33,457 --> 00:01:35,458
+reads an API key.
+
+32
+00:01:35,458 --> 00:01:38,900
+This second synthetic case crosses the same deterministic
+
+33
+00:01:38,900 --> 00:01:42,493
+audit seam, produces six records across five outcome
+
+34
+00:01:42,493 --> 00:01:45,376
+classes, writes a private no-clobber file,
+
+35
+00:01:45,376 --> 00:01:47,958
+and proves the engine is not
+
+36
+00:01:47,958 --> 00:01:49,959
+hard-coded to one topology.
+
+37
+00:01:50,031 --> 00:01:54,774
+Codex independently selected this problem, scoped both releases,
+
+38
+00:01:54,774 --> 00:01:58,236
+and made the key architecture decision:
+
+39
+00:01:58,236 --> 00:02:01,152
+GPT should understand instruction semantics,
+
+40
+00:02:01,152 --> 00:02:04,777
+while deterministic code must own truth.
+
+41
+00:02:04,777 --> 00:02:08,239
+It implemented each vertical test-driven slice,
+
+42
+00:02:08,239 --> 00:02:12,982
+drove adversarial review repairs, deployed the keyless demo,
+
+43
+00:02:12,982 --> 00:02:15,517
+and packaged this submission.
+
+44
+00:02:15,517 --> 00:02:20,804
+Dan retained credentials, spend, eligibility, and publication authority.
+
+45
+00:02:20,804 --> 00:02:25,520
+GPT-5.6 maps complete instruction lines into source-linked observable
+
+46
+00:02:25,520 --> 00:02:30,099
+proposals; TypeScript owns discovery, hashes, evidence sufficiency,
+
+47
+00:02:30,099 --> 00:02:32,634
+and every final verdict.
+
+48
+00:02:32,634 --> 00:02:37,758
+Official feedback, metadata-only Langfuse, reviewed Git, green CI,
+
+49
+00:02:37,758 --> 00:02:42,119
+and production receipts corroborate that workflow without attesting
+
+50
+00:02:42,119 --> 00:02:45,581
+prompts, reasoning, or individual edits.
+
+51
+00:02:45,650 --> 00:02:48,648
+Codex Rule Ledger does not promise compliance.
+
+52
+00:02:48,648 --> 00:02:50,744
+It gives reviewers a compact,
+
+53
+00:02:50,744 --> 00:02:53,623
+runnable account of what supplied evidence supports,
+
+54
+00:02:53,623 --> 00:02:57,150
+what it contradicts, and what it cannot prove.

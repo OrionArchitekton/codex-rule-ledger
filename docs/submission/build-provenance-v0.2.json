@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1",
+  "renderedAt": "2026-07-15T04:45:47Z",
+  "status": "CORROBORATED_BUILD_CONTINUITY_NOT_AUTHORSHIP_ATTESTATION",
+  "codexFeedback": {
+    "threadId": "019f5dda-3975-70b3-abc0-2f18d72c3aea",
+    "classification": "good_result",
+    "diagnosticLogsIncluded": false
+  },
+  "source": {
+    "pullRequest": "https://github.com/OrionArchitekton/codex-rule-ledger/pull/14",
+    "reviewedHeadSha": "20c2d0331d31876851eee689a8a4705afb146013",
+    "mergeSha": "ad009529911577132e336ecd605e57d55114444a",
+    "mergedAt": "2026-07-15T04:38:38Z"
+  },
+  "continuousIntegration": {
+    "repoGuardrails": "https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057",
+    "gitleaks": "https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055",
+    "headSha": "ad009529911577132e336ecd605e57d55114444a",
+    "conclusion": "SUCCESS"
+  },
+  "deployment": {
+    "publicUrl": "https://codex-rule-ledger.vercel.app",
+    "deploymentId": "dpl_GHL2zVtNjBiVMr7wHbD2sDLMgnZa",
+    "deploymentUrl": "https://codex-rule-ledger-er2blsask-dan-mercedes-projects.vercel.app",
+    "gitRef": "main",
+    "gitSha": "ad009529911577132e336ecd605e57d55114444a",
+    "readyState": "READY",
+    "publicAliasVerifiedAt": "2026-07-15T04:49:00Z",
+    "publicAliasResolvedToDeploymentAtVerification": true,
+    "configuredProjectEnvironmentVariableCount": 0,
+    "routeStatus": {
+      "root": 200,
+      "getAudit": 200,
+      "postAudit": 405
+    }
+  },
+  "langfuse": {
+    "verificationScope": "METADATA_ONLY",
+    "queriedAt": "2026-07-15T04:45:47Z",
+    "sessionId": "019f5dda-3975-70b3-abc0-2f18d72c3aea",
+    "traceObservedFrom": "2026-07-14T00:27:36.990Z",
+    "traceObservedTo": "2026-07-15T03:37:10.386Z",
+    "latestGenerationObservationAt": "2026-07-15T03:37:10.387Z",
+    "traceCount": 17,
+    "generationObservationCount": 17,
+    "models": [
+      "gpt-5.6-sol"
+    ],
+    "sources": [
+      "codex"
+    ],
+    "cliVersions": [
+      "0.144.0-alpha.4"
+    ],
+    "levels": {
+      "DEFAULT": 16,
+      "ERROR": 1
+    },
+    "traceInputBodyCount": 0,
+    "traceOutputBodyCount": 0,
+    "observationInputBodyCount": 0,
+    "observationOutputBodyCount": 0
+  },
+  "limits": [
+    "These receipts corroborate build continuity but do not cryptographically attest agent authorship.",
+    "Langfuse is metadata-only and does not prove file edits, repository state, prompts, outputs, reasoning, or tool activity.",
+    "Git, CI, and deployment receipts prove public source and runtime state, not who authored each change."
+  ]
+}

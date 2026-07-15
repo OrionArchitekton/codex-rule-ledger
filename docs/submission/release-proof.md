@@ -1,24 +1,35 @@
 # Release and submission proof
 
-> v0.2 candidate packet: the implementation, PR, CI, merge, and production
-> receipts remain pending until this branch lands. The immutable source and
-> deployment sections below still describe the verified v0.1 baseline and must
-> be reconciled before any v0.2 release claim.
+> v0.2 runtime release is bound to reviewed source, green main-branch CI, and a
+> keyless production deployment below. This post-release packet adds only
+> documentation, media, and supported-engine metadata; it does not alter
+> runtime code, dependencies, or the deployed runtime.
 
-## v0.2 candidate evidence
+## v0.2 immutable source and review
 
-- Feature commit: `8eec1ca612ce28a83891d7c041ed0791014b7cb0`.
-- Local verification on that commit: lint pass, typecheck pass, 75/75 tests
-  across 7 files, production build pass with static `/` and `/api/audit`, and
-  1/1 Chromium acceptance pass against an explicit local production server.
+- Product PR: https://github.com/OrionArchitekton/codex-rule-ledger/pull/14
+- Reviewed PR head: `20c2d0331d31876851eee689a8a4705afb146013`.
+- Squash merge SHA: `ad009529911577132e336ecd605e57d55114444a` at
+  `2026-07-15T04:38:38Z`.
+- Review disposition: all eight review conversations were resolved. Accepted
+  output-cleanup, parser-allocation, missing-parent test, and public-demo
+  wording findings landed; raw debug-error output and a Windows skip were
+  declined to preserve the approved non-leak and POSIX contracts. CodeRabbit's
+  sole finding landed; its latest recorded review is `APPROVED` at
+  `2026-07-15T04:40:14Z`. The admin merge bypassed only the impossible
+  self-codeowner approval rule after every executable and conversation gate was
+  green.
+- Final local verification: lint pass, typecheck pass, 77/77 tests across 7
+  files, production build pass with static `/` and `/api/audit`, and 1/1
+  Chromium acceptance pass.
 - Dependency/secret preflight: `npm audit` reported zero vulnerabilities; a
   repo-file-only Gitleaks scan found no leak. A raw directory scan found only
   ignored Next.js-generated build keys under `.next`.
-- Pending before v0.2 release: public PR URL/head CI, review disposition, merge
-  SHA, keyless Vercel deployment binding, endpoint/browser reconciliation, and
-  a final render-time Langfuse re-query.
+- [Main repo-guardrails](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057)
+  and [main Gitleaks](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055)
+  both completed successfully on the merge SHA.
 
-## Immutable source
+## v0.1 historical source baseline
 
 - Product PR: https://github.com/OrionArchitekton/codex-rule-ledger/pull/1
 - Merged PR head SHA: `7058c9f1e7439159d5a9beeff2d053e7cfa8c14e`
@@ -50,11 +61,17 @@
 - Official Codex feedback: JSON-RPC `feedback/upload` completed without an
   error, excluded optional diagnostic logs, and returned thread ID
   `019f5dda-3975-70b3-abc0-2f18d72c3aea`, matching the primary build session.
-- Langfuse corroboration, queried at `2026-07-15T04:13:31Z`: the private
-  metadata-only session with that same ID contained 17 snapshots spanning
-  `2026-07-14T00:27:36.990Z` through `2026-07-15T03:37:10.386Z`; all 17 linked
-  generation observations reported `gpt-5.6-sol`, source `codex`, and CLI
-  `0.144.0-alpha.4`. No prompt or output bodies were recorded.
+- Langfuse corroboration, re-queried at render time on
+  `2026-07-15T04:45:47Z`: the private metadata-only session with that same ID
+  contained 17 traces spanning `2026-07-14T00:27:36.990Z` through
+  `2026-07-15T03:37:10.386Z` and 17 linked generation observations, the latest
+  at `2026-07-15T03:37:10.387Z`. Every observation reported `gpt-5.6-sol`,
+  source `codex`, and CLI `0.144.0-alpha.4`. Sixteen were `DEFAULT` and one was
+  `ERROR`; trace and observation input/output body counts were all zero.
+- Public provenance card:
+  [`build-provenance-v0.2.md`](build-provenance-v0.2.md),
+  [`build-provenance-v0.2.json`](build-provenance-v0.2.json), and
+  [`build-provenance-v0.2.png`](../assets/build-provenance-v0.2.png).
 - Corroboration limit: the feedback ID, Langfuse metadata, Git/PR/CI receipts,
   and deployment binding support build continuity. They do not cryptographically
   attest agent authorship, authenticate a transcript, or prove what the model
@@ -62,6 +79,21 @@
 
 ## Automated verification
 
+- v0.2 main source: 42 targeted unit/boundary test executions across 4 files,
+  plus lint, typecheck, production build, and Chromium E2E, all green in
+  [run 29389462057](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057)
+  on `ad009529911577132e336ecd605e57d55114444a`.
+- v0.2 main Gitleaks:
+  [run 29389462055](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055)
+  passed on the same merge SHA.
+- The full local release suite remains 77/77 tests across 7 files, as recorded
+  in the final local-verification receipt above; the split CI jobs execute 42
+  targeted release-boundary tests.
+- PR-head dependency review, Gitleaks, fail-closed aggregation, GitGuardian,
+  Vercel preview, lint, typecheck, unit, boundary, build, and E2E all passed;
+  zero review conversations remained unresolved at merge.
+- The following v0.1/PR #11 counts and links are retained as historical proof,
+  not as the current v0.2 release gate.
 - Dependency-maintenance preflight: `npm ci` reported zero vulnerabilities and
   `npm run verify` passed before merge. At `2026-07-14T22:35:22Z`, the release
   baseline had zero open Dependabot alerts and no open Dependabot pull requests.
@@ -148,29 +180,72 @@
   `b250f23b0b112ea6679884af51c55860309c890e` at
   `2026-07-14T22:08:31Z`.
 - Vercel project ID: `prj_rARPEaSAbfGZ59anhwcpKaROMMQg`.
-- Verified preview deployment: `dpl_BTp2oWpNJY4qN1eCXaqBk9E4csP4`.
-- Production deployment: `dpl_FTbqyajmqnCYpfq15WsioAGt4BbS` (`READY`).
+- Production deployment: `dpl_GHL2zVtNjBiVMr7wHbD2sDLMgnZa` (`READY`),
+  created at `2026-07-15T04:38:41.202Z`.
+- Immutable deployment URL:
+  https://codex-rule-ledger-er2blsask-dan-mercedes-projects.vercel.app
 - Public URL: https://codex-rule-ledger.vercel.app
-- Deployed Git SHA: `251ef31cda0615a5438c4061943bce689535a05b`;
-  at `2026-07-14T22:35:22Z`, Vercel `githubCommitSha` matched the then-current
-  GitHub `main` head.
-- PR #11 merged as `86a064e5266f529dc6f8640830b44ff2bc38426f` and is the
-  pre-v0.2 source baseline. The preceding `251ef31` deployment statement is a
-  historical time-bound binding, not current v0.2 production proof.
+- Deployment binding: `gitSource.ref`, `gitSource.sha`, and
+  `meta.githubCommitSha` resolve to `main` and
+  `ad009529911577132e336ecd605e57d55114444a`; independent public-alias
+  inspection resolved to this exact deployment ID at
+  `2026-07-15T04:49:00Z`. A later documentation/media-only `main` deployment may
+  advance the alias without changing runtime files; this immutable deployment
+  remains the source-bound v0.2 runtime receipt.
+- Keyless proof: the Vercel project reported zero configured project
+  environment variables. Vercel system variables are not included in this
+  claim.
 - Root/API HTTP proof: root `200`, `GET /api/audit` `200`, and
-  `POST /api/audit` `405` at `2026-07-14T22:35:22Z`. The API returned only
-  `build-week-demo-v1` in `RECORDED` mode with five ledger records; public
-  secret/path scans passed and the Vercel project had zero environment
-  variables.
-- Public browser proof on the release baseline: desktop evidence inspection and
-  digest-bound export passed; the Pixel 7 viewport passed evidence inspection
-  and exception filtering.
+  `POST /api/audit` `405` at `2026-07-15T04:49:00Z`. The API returned only
+  `build-week-demo-v1`, execution `COMPLETED`, input `READY`, analyzer
+  `RECORDED`, provenance `LOCAL_CAPTURE_UNATTESTED`, and five records. The API
+  response SHA-256 was
+  `51e226b4a717506fd574385a7f7929fba41939edfc3ef458e38011fe0b5f8c48`;
+  public secret/path/content scans passed.
+- Public browser export proof at `2026-07-15T04:49:36.248Z`: the contradiction
+  inspector exposed `event-typecheck-failure`; export produced
+  `codex-rule-ledger-4fc6eab5bc7b.json`, 8,621 bytes, with matching SHA-256
+  `4fc6eab5bc7b9a8fad5f6eb887d4a5ddb62bba470b8061684b6a4330171bc3ba`.
+- Fresh release screenshots:
+  `docs/assets/codex-rule-ledger-desktop.png` (1440x1364, SHA-256
+  `c2fc56a90c990d1c4af946818c3adbb1a9fbbfd3f96711a5888d6e20325bfcb0`)
+  and `docs/assets/codex-rule-ledger-mobile.png` (390x3030, SHA-256
+  `14f0262e80abe00128051f9590bc8e8fea6b19af56c30cd3935a8a73584f1fa8`).
 - Estate live reconciliation: project binding and production parity both pass
   for `personal-brand-hackathons-codex-rule-ledger`.
-- Desktop/mobile screenshot paths: `docs/assets/`
-- Rollback target: reassign the public alias to known-good deployment
-  `dpl_BY7v1BNwYSJXfeUtVtHXvUP8RRXN`, or remove the aliases/project. There is
-  no user data, database, queue, or migration to roll back.
+- Rollback target: known-good pre-v0.2 deployment
+  `dpl_3x4wpvuDABZrdztd6KuHnC9hJi9U`, bound to
+  `86a064e5266f529dc6f8640830b44ff2bc38426f`. Reassign the public alias only if
+  validation fails, then repeat alias identity, route, payload, and browser
+  checks. There is no user data, database, queue, or migration to roll back.
+
+## Demo media
+
+- Upload-ready narrated video:
+  [`codex-rule-ledger-demo-v0.2.mp4`](../assets/codex-rule-ledger-demo-v0.2.mp4),
+  1920x1080 H.264 at 30 fps with AAC-LC audio, `177.219` seconds and
+  `10,698,820` bytes. SHA-256:
+  `dc71469a08a379359331e9ac9e67eaa146cba9626671fd2b585cb28451b4f441`.
+- Checked caption companion:
+  [`codex-rule-ledger-demo-v0.2.srt`](codex-rule-ledger-demo-v0.2.srt), 54
+  non-overlapping cues ending at `177.150` seconds, with no cue longer than nine
+  words. SHA-256:
+  `475d9c908d52aa47e6989abcefbb18d546bdaa3d21ad7d35b070080a065317bb`.
+- The seven-shot recording uses repository-owned visuals, the exact public
+  production site, an actual contradiction-inspection flow, an actual
+  digest-verified export, the recorded v0.2 CLI receipt, and the allowlisted
+  provenance card. It contains no music, secret value, local absolute path,
+  private trace ID, prompt, output body, reasoning, or tool input.
+- The voiceover explicitly covers what the working product does, how Codex
+  selected, scoped, architected, implemented, reviewed, deployed, and packaged
+  it, the participant authority boundary, and how GPT-5.6 produces source-linked
+  semantic proposals while deterministic TypeScript owns every final verdict.
+- Media QC: duration is below the `2:59` ceiling; video and audio both start at
+  zero; audio measured `-22.9 dB` mean and `-1.5 dB` peak with no two-second
+  silence; representative frames across all seven shots were inspected at
+  original resolution.
+- Public YouTube upload remains a participant-held publication gate. The local
+  artifact is complete and does not need a rehearsal or re-recording.
 
 ## Participant-held gates
 

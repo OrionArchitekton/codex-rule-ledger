@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Rule Ledger v0.2 recorded CLI receipt</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f4efe3;
+        --muted: #9dafaa;
+        --panel: #192c31;
+        --background: #102126;
+        --accent: #ef6a45;
+        --green: #64d19b;
+        --amber: #f0bd58;
+      }
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; }
+      body {
+        background: var(--background);
+        color: var(--ink);
+        display: grid;
+        place-items: center;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      main {
+        width: min(1660px, calc(100vw - 100px));
+        min-height: min(920px, calc(100vh - 80px));
+        border: 1px solid #52676b;
+        background: #13262b;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, .28);
+      }
+      header {
+        align-items: center;
+        border-bottom: 1px solid #52676b;
+        display: flex;
+        justify-content: space-between;
+        padding: 28px 34px;
+      }
+      .eyebrow { color: var(--accent); font-size: 15px; letter-spacing: .18em; margin: 0 0 7px; }
+      h1 { font-family: Georgia, serif; font-size: 38px; margin: 0; }
+      .mode { border: 1px solid var(--green); color: var(--green); font-size: 16px; padding: 10px 14px; }
+      .terminal { padding: 36px 42px 28px; }
+      .prompt { color: var(--green); }
+      .command {
+        background: #09171a;
+        border-left: 5px solid var(--accent);
+        color: #fff;
+        font-size: 23px;
+        line-height: 1.55;
+        margin: 0;
+        padding: 26px 30px;
+      }
+      .receipt {
+        background: #0e1d21;
+        border: 1px solid #52676b;
+        margin-top: 22px;
+        padding: 24px 30px;
+      }
+      .receipt strong { color: var(--amber); font-size: 20px; }
+      .digest { color: var(--muted); display: block; font-size: 18px; margin-top: 12px; }
+      .grid { display: grid; gap: 18px; grid-template-columns: repeat(4, 1fr); padding: 0 42px 28px; }
+      .card { background: var(--panel); border-top: 3px solid #52676b; min-height: 122px; padding: 20px; }
+      .card span { color: var(--muted); display: block; font-size: 13px; letter-spacing: .13em; margin-bottom: 14px; }
+      .card strong { font-family: Georgia, serif; font-size: 25px; }
+      .card.green { border-color: var(--green); }
+      .card.orange { border-color: var(--accent); }
+      .outcomes {
+        border-top: 1px solid #52676b;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 0 42px;
+        padding: 24px 0 18px;
+      }
+      .chip { border: 1px solid #72878a; color: var(--ink); font-size: 14px; padding: 9px 12px; }
+      .chip.supported { border-color: var(--green); color: var(--green); }
+      .chip.review { border-color: var(--amber); color: var(--amber); }
+      footer {
+        align-items: center;
+        border-top: 1px solid #52676b;
+        color: var(--muted);
+        display: flex;
+        font-size: 14px;
+        justify-content: space-between;
+        margin-top: 14px;
+        padding: 22px 42px;
+      }
+      .guard { color: var(--green); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow">RECORDED COMMAND RECEIPT / SYNTHETIC_SANITIZED</p>
+          <h1>Normalized Audit Bundle CLI · v0.2</h1>
+        </div>
+        <div class="mode">RECORDED · KEYLESS DEFAULT</div>
+      </header>
+      <section class="terminal">
+        <pre class="command"><span class="prompt">$</span> npm run --silent audit -- --bundle fixtures/synthetic-retry-recovery-v1 --out ledger.json</pre>
+        <div class="receipt">
+          <strong>✓ canonical Evidence Ledger published</strong>
+          <span class="digest">ledgerDigest=0cf36d29834033a2343e4f163a89fb713b918af0a225fff025cef72839b6eaee</span>
+        </div>
+      </section>
+      <section class="grid">
+        <div class="card green"><span>ANALYZER</span><strong>RECORDED</strong></div>
+        <div class="card"><span>RECORDS</span><strong>6</strong></div>
+        <div class="card orange"><span>OUTPUT MODE</span><strong>0600</strong></div>
+        <div class="card"><span>PROVENANCE</span><strong>UNATTESTED</strong></div>
+      </section>
+      <section class="outcomes">
+        <span class="chip supported">1 SUPPORTED</span>
+        <span class="chip">2 NOT_EVIDENCED</span>
+        <span class="chip">1 NOT_APPLICABLE</span>
+        <span class="chip">1 DECLINED</span>
+        <span class="chip review">1 HUMAN_REVIEW</span>
+      </section>
+      <footer>
+        <span class="guard">No key read · no model request · strict bounded bundle parser</span>
+        <span>Same deterministic audit seam as the public demo</span>
+      </footer>
+    </main>
+  </body>
+</html>
