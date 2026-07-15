@@ -29,6 +29,9 @@ The v0.1 demo makes that review legible in one screen:
 
 ## Try the fixed-fixture demo
 
+[Open the public fixture-only demo](https://codex-rule-ledger.vercel.app).
+It requires no login, API key, upload, or private repository access.
+
 Prerequisites: Node.js 24 and npm.
 
 ```bash
@@ -100,10 +103,13 @@ bounds.
 
 ## Codex and GPT-5.6
 
-Codex was used as the primary engineering agent for product research,
-specification, vertical RED-to-GREEN implementation, visual iteration,
-adversarial review, and release proof. The repository preserves the living
-spec and witnessed build ledger in [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
+Codex served as Dan Mercede's principal engineering agent for v0.1, carrying
+the approved scope through the living specification, 30 recorded vertical
+RED-to-GREEN slices, interface implementation, adversarial-review repairs,
+deployment verification, and release-proof packaging. Dan remained the solo
+participant and retained credentials, spend, eligibility, publication, and
+submission authority. The repository preserves the living spec and witnessed
+build ledger in [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
 
 GPT-5.6 performs the indispensable semantic step: it maps complete instruction
 lines in the four strict v0.1 forms into source-linked observable proposals and

@@ -11,7 +11,7 @@
   inspectable rule ledger—without pretending missing logs prove compliance.
 - **Repository:** https://github.com/OrionArchitekton/codex-rule-ledger
 - **License:** MIT
-- **Live demo:** `[PUBLIC_VERCEL_URL]`
+- **Live demo:** https://codex-rule-ledger.vercel.app
 - **Video:** `[PUBLIC_YOUTUBE_URL]`
 - **Primary Codex feedback ID:** `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]`
 
@@ -50,10 +50,13 @@ the supplied bytes, but do not authenticate them or establish trusted time.
 
 ## How we built it
 
-Codex was the primary engineering agent throughout research, specification,
-vertical RED-to-GREEN implementation, interface iteration, adversarial review,
-and release proof. The repository preserves a living behavior spec and a build
-ledger for those slices.
+Codex served as Dan Mercede's principal engineering agent for v0.1, carrying
+the approved scope through the living specification, 30 recorded vertical
+RED-to-GREEN slices, interface implementation, adversarial-review repairs,
+deployment verification, and release-proof packaging. Dan remained the solo
+participant and retained authority for credentials and spend plus
+participant-held eligibility, publication, and submission gates. The
+repository preserves the living behavior spec and witnessed build ledger.
 
 The product uses Next.js and strict TypeScript around one deep audit seam:
 
@@ -73,7 +76,8 @@ final ledger verdict or invent a source anchor.
 For safe and unrestricted judging, the public site serves a repository-owned
 recording from the same typed analyzer contract. The live GPT-5.6 proof uses the
 same allowlisted fixture, with no tools, no automatic retries, no filesystem
-paths, strict byte/event/output limits, `store: false`, and a server-side key.
+paths, strict byte/event/output limits, `store: false`, and an operator-injected
+dedicated key. The public Vercel project remains keyless.
 
 ## Challenges
 
@@ -129,10 +133,14 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 
 ## Proof fields before submission
 
-- `[PUBLIC_VERCEL_URL]` — HTTP 200 and commit binding verified.
+- https://codex-rule-ledger.vercel.app — HTTP 200 and commit binding verified.
 - `[PUBLIC_YOUTUBE_URL]` — public, audio present, duration at most 2:59.
 - `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]` — created by the participant with
   `/feedback` in the main Codex build thread.
-- `[LIVE_GPT_RESPONSE_ID]` — retained privately in the proof packet, not as a
-  credential or raw response dump.
-- `[CI_RUN_URL]` — every required check green on the submitted commit.
+- Live GPT-5.6 proof completed at `2026-07-15T01:21:59.222Z`; the public release
+  proof carries a shortened response identifier and SHA-256 fingerprint while
+  the full ID remains in private operator-session evidence.
+- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393
+  — lint, typecheck, unit, boundary, build, and browser checks green on the
+  release baseline; dependency review, Gitleaks, and the fail-closed PR gate
+  are also green for that baseline.

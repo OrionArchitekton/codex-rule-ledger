@@ -43,11 +43,13 @@ Click Export and briefly show the filename/digest.
 
 ## 1:54–2:23 — Codex + GPT-5.6 architecture
 
-> Codex was the primary builder across research, specification, test-driven
-> implementation, design, review, and release proof. At runtime, GPT-5.6 maps
-> complete instructions in four strict forms into source-linked semantic
-> proposals. It cannot emit final verdicts. Deterministic TypeScript proves
-> complete coverage and owns discovery, hashes, evidence sufficiency, and all
+> Codex served as Dan's principal engineering agent, carrying the approved v0.1
+> scope through 30 recorded test-driven slices, interface implementation,
+> adversarial-review repairs, deployment verification, and release packaging.
+> Dan retained credentials, spend, eligibility, publication, and submission
+> authority. At runtime, GPT-5.6 maps complete instructions in four strict forms
+> into source-linked semantic proposals. It cannot emit final verdicts.
+> Deterministic TypeScript owns discovery, hashes, evidence sufficiency, and all
 > terminal states. The public demo uses a recorded result from that same typed
 > contract, so judges need no key and cannot spend ours.
 

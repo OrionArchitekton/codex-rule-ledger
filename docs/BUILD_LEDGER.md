@@ -327,14 +327,15 @@ seconds.
 
 ## Current regression state
 
-- `npm test`: 4 files, 40 tests passed after the hardening slices.
+- `npm test`: 5 files, 41 tests passed after the proof-entrypoint regression.
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
 - `npm run build`: passed; `/` and `/api/audit` are static.
-- `npm run test:e2e`: passed in the approved loopback-binding lane; the browser
-  inspected the contradiction and verified the downloaded bytes against the
-  displayed digest. The default filesystem/network sandbox correctly rejected
-  the local server bind before this runner-only escalation.
+- Playwright browser flow: passed against an explicitly started local production
+  server; the browser inspected the contradiction and verified the downloaded
+  bytes against the displayed digest. The normal Playwright web-server wrapper
+  stalled during local availability polling in this session, so CI remains the
+  required wrapper-level proof.
 
 ## Slice 21 — Candidate filename uniqueness
 
@@ -403,3 +404,13 @@ seconds.
 - GREEN: all four line-bearing error paths use deterministic selected-source,
   directive, or line positions while preserving the failure category for
   diagnosis.
+
+## Slice 30 — Executable one-shot proof entrypoint
+
+- RED: `npm run proof:gpt-live` failed during TypeScript transformation because
+  top-level `await` was not supported by the repository's CommonJS output
+  format; the failure occurred before any OpenAI request.
+- GREEN: the CLI now owns an async entrypoint with bounded error output, and a
+  keyless subprocess regression test proves it starts before failing at the
+  credential boundary. The subsequent admitted run completed exactly one
+  GPT-5.6 request with zero automatic retries.
