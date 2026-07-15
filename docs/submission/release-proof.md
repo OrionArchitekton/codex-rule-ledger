@@ -34,7 +34,8 @@
   deployment ID and immutable URL, alias timestamp, zero-environment-variable
   check, route probes, both browser exports, screenshot hashes, estate parity,
   and rollback target will be posted as an immutable reconciliation comment on
-  `[FINAL_SURFACE_PR_URL]` after merge and production verification.
+  https://github.com/OrionArchitekton/codex-rule-ledger/pull/16 after merge and
+  production verification.
 
 ## v0.2 CLI baseline: immutable source and review
 
