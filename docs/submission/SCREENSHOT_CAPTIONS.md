@@ -5,21 +5,21 @@ contract second, and build corroboration third.
 
 1. **Product UI:** `docs/assets/codex-rule-ledger-desktop.png`
 
-   A story-labeled selector exposes two disclosed recorded cases above the
-   three-step judge tour. Case 001 shows the reconstructed instruction chain,
-   four evidence results, the `NOT_EVIDENCED` legend, and linked inspector.
+   Case 001 turns a failed typecheck followed by completion into one
+   `CONTRADICTED` row with linked evidence. The two-case selector, three-step
+   tour, and `NOT_EVIDENCED` legend make the reviewer path visible at a glance.
 
 2. **CLI receipt:** `docs/assets/cli-recorded-v0.2.png`
 
-   The same Case 002 topology now visible in the browser crosses the local CLI
-   in keyless recorded mode, producing six records across supported,
-   not-evidenced, not-applicable, declined, and human-review classes.
+   Case 002's successful retry prevents a false contradiction. The same
+   already-normalized bundle crosses the keyless local CLI and produces a
+   six-record, digest-bound ledger.
 
-3. **Build provenance:** `docs/assets/build-provenance-v0.2.png`
+3. **v0.2 CLI baseline provenance:** `docs/assets/build-provenance-v0.2.png`
 
-   Corroborating `/feedback`, Git, CI, deployment, and metadata-only Langfuse
-   receipts. This card documents the disclosed workflow; it is not an
-   authorship or transcript attestation.
+   Corroborating build-continuity receipts for the v0.2 CLI baseline (PR #14,
+   merge `ad00952`). PR #16's immutable reconciliation binds the final public
+   explorer. Neither receipt attests authorship or transcript authenticity.
 
 4. **Optional mobile view:** `docs/assets/codex-rule-ledger-mobile.png`
 
