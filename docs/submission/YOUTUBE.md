@@ -45,9 +45,10 @@ individual edits.
 
 The public demo exposes exactly two repository-owned synthetic fixtures with
 recorded semantic analysis: no account, API key, upload, or private repository
-is required. The video follows the unchanged default Case 001 flow; the live
-selector now also exposes the existing retry-recovery case. v0.2 includes a
-local CLI for the same already-normalized bundle contract.
+is required. The video begins with the unchanged default Case 001 flow, then
+shows the local CLI and the current live selector switching to the disclosed
+synthetic Case 002 retry-recovery story and exporting its ledger. v0.2 includes
+a local CLI for the same already-normalized bundle contract.
 
 Live demo: https://codex-rule-ledger.vercel.app
 
@@ -69,7 +70,7 @@ OpenAI Build Week, Developer Tools track.
 00:19 Reconstructed instruction chain
 00:38 Evidence states and inspector
 01:04 Digest-bound export
-01:25 Keyless v0.2 CLI and second case
+01:25 Keyless v0.2 CLI and Case 002 explorer
 01:50 Codex, GPT-5.6, and the deterministic verdict boundary
 02:46 The reviewer decision
 ```
