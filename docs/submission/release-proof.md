@@ -1,5 +1,23 @@
 # Release and submission proof
 
+> v0.2 candidate packet: the implementation, PR, CI, merge, and production
+> receipts remain pending until this branch lands. The immutable source and
+> deployment sections below still describe the verified v0.1 baseline and must
+> be reconciled before any v0.2 release claim.
+
+## v0.2 candidate evidence
+
+- Feature commit: `8eec1ca612ce28a83891d7c041ed0791014b7cb0`.
+- Local verification on that commit: lint pass, typecheck pass, 75/75 tests
+  across 7 files, production build pass with static `/` and `/api/audit`, and
+  1/1 Chromium acceptance pass against an explicit local production server.
+- Dependency/secret preflight: `npm audit` reported zero vulnerabilities; a
+  repo-file-only Gitleaks scan found no leak. A raw directory scan found only
+  ignored Next.js-generated build keys under `.next`.
+- Pending before v0.2 release: public PR URL/head CI, review disposition, merge
+  SHA, keyless Vercel deployment binding, endpoint/browser reconciliation, and
+  a final render-time Langfuse re-query.
+
 ## Immutable source
 
 - Product PR: https://github.com/OrionArchitekton/codex-rule-ledger/pull/1
@@ -17,17 +35,30 @@
 
 ## Build provenance
 
-- Disclosed workflow: Codex served as Dan Mercede's principal engineering agent
-  for v0.1, carrying the approved scope through the living specification, 30
-  recorded vertical RED-to-GREEN slices, interface implementation,
-  adversarial-review repairs, deployment verification, and release-proof
-  packaging.
+- Disclosed workflow: from the minimal Build Week event prompt, Codex
+  independently selected the problem, scoped and designed v0.1, implemented
+  and tested it, drove adversarial review and repairs, deployed the public demo,
+  and packaged the release. Codex then implemented the separately authorized
+  v0.2 CLI scope. The build ledger records 39 witnessed vertical RED-to-GREEN
+  slices across both versions.
 - Operator boundary: Dan remained the solo participant and retained authority
   for credentials and spend plus participant-held eligibility, publication,
   and submission gates.
 - Attribution limit: Git commits use Dan's authenticated repository identity
   and carry no Codex co-author trailers. This workflow disclosure is not an
   independent cryptographic attestation of agent authorship.
+- Official Codex feedback: JSON-RPC `feedback/upload` completed without an
+  error, excluded optional diagnostic logs, and returned thread ID
+  `019f5dda-3975-70b3-abc0-2f18d72c3aea`, matching the primary build session.
+- Langfuse corroboration, queried at `2026-07-15T04:13:31Z`: the private
+  metadata-only session with that same ID contained 17 snapshots spanning
+  `2026-07-14T00:27:36.990Z` through `2026-07-15T03:37:10.386Z`; all 17 linked
+  generation observations reported `gpt-5.6-sol`, source `codex`, and CLI
+  `0.144.0-alpha.4`. No prompt or output bodies were recorded.
+- Corroboration limit: the feedback ID, Langfuse metadata, Git/PR/CI receipts,
+  and deployment binding support build continuity. They do not cryptographically
+  attest agent authorship, authenticate a transcript, or prove what the model
+  received.
 
 ## Automated verification
 
@@ -82,6 +113,30 @@
   injected ephemerally for the operator proof. It was not written to the
   repository or attached to Vercel.
 
+## v0.2 CLI GPT-5.6 proof
+
+- Completed once at `2026-07-15T04:23:34Z` through the committed local CLI and
+  the second disclosed `synthetic-retry-recovery-v1` bundle.
+- Controls: one request, automatic retries `0`, `store: false`, tools disabled,
+  structured output, bounded request, environment-only key, and no public model
+  route.
+- Semantic-input digest:
+  `607741187403a987ae7d59c3d8246bed4926b479d71d9aa797cd91881781fffa`.
+- Response ID: `resp_04e26c5d…`; full ID retained only in the private proof
+  ledger. SHA-256 fingerprint:
+  `11da2e91cb958e3ee4ae4311c82c94ea40c02f440c2c00caec5c43715677030a`.
+- Input/output tokens: `1,323 / 820`; conservative cost on the same standard
+  price basis as the v0.1 proof: `$0.031215`, below the separately authorized
+  `$0.25` v0.2 call ceiling.
+- Result mix: `1 SUPPORTED`, `2 NOT_EVIDENCED`, `1 NOT_APPLICABLE`,
+  `1 DECLINED_NON_OBSERVABLE`, and `1 HUMAN_REVIEW_REQUIRED`.
+- Canonical ledger/file digest:
+  `f63e106aece6195a3b18d2de6bac482997955a41fce6b9ae728c37c0c5f7dca6`.
+  The private output was mode `0600`; its scan contained no fixture absolute
+  path, API-key marker, or OpenAI key-shaped value.
+- The dedicated key was injected ephemerally from Doppler and was not written
+  to the repository, proof metadata, or Vercel.
+
 ## Public deployment
 
 - Estate deploy-target/secret-scope admission:
@@ -99,11 +154,9 @@
 - Deployed Git SHA: `251ef31cda0615a5438c4061943bce689535a05b`;
   at `2026-07-14T22:35:22Z`, Vercel `githubCommitSha` matched the then-current
   GitHub `main` head.
-- PR #11 changes release documentation, the operator-only live-proof CLI, and
-  its regression test; it does not change the public page or audit-route runtime
-  behavior. Merging it advances `main`, so the preceding SHA is a time-bound
-  production binding, not a claim of perpetual current-head parity. Re-probe
-  the Vercel binding after merge.
+- PR #11 merged as `86a064e5266f529dc6f8640830b44ff2bc38426f` and is the
+  pre-v0.2 source baseline. The preceding `251ef31` deployment statement is a
+  historical time-bound binding, not current v0.2 production proof.
 - Root/API HTTP proof: root `200`, `GET /api/audit` `200`, and
   `POST /api/audit` `405` at `2026-07-14T22:35:22Z`. The API returned only
   `build-week-demo-v1` in `RECORDED` mode with five ledger records; public
@@ -125,7 +178,7 @@
 - [ ] Jurisdiction/participation attestation supplied.
 - [ ] Official conflicts/exclusions attestation supplied.
 - [ ] Prior Sponsor/Administrator relationship attestation supplied.
-- [ ] Primary `/feedback` ID supplied from this build thread.
+- [x] Primary `/feedback` ID supplied from this build thread.
 - [ ] Public YouTube video reviewed and uploaded.
 - [ ] Final Devpost fields reviewed and submitted before 2026-07-21 17:00 PT.
 
