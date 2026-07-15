@@ -50,10 +50,13 @@ the supplied bytes, but do not authenticate them or establish trusted time.
 
 ## How we built it
 
-Codex was the primary engineering agent throughout research, specification,
-vertical RED-to-GREEN implementation, interface iteration, adversarial review,
-and release proof. The repository preserves a living behavior spec and a build
-ledger for those slices.
+Codex served as Dan Mercede's principal engineering agent for v0.1, carrying
+the approved scope through the living specification, 30 recorded vertical
+RED-to-GREEN slices, interface implementation, adversarial-review repairs,
+deployment verification, and release-proof packaging. Dan remained the solo
+participant and retained authority for credentials and spend plus
+participant-held eligibility, publication, and submission gates. The
+repository preserves the living behavior spec and witnessed build ledger.
 
 The product uses Next.js and strict TypeScript around one deep audit seam:
 

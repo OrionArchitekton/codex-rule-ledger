@@ -15,6 +15,20 @@
 - Repository visibility/API proof: public GitHub repository verified through the
   GitHub API on `2026-07-14T21:28:00Z`.
 
+## Build provenance
+
+- Disclosed workflow: Codex served as Dan Mercede's principal engineering agent
+  for v0.1, carrying the approved scope through the living specification, 30
+  recorded vertical RED-to-GREEN slices, interface implementation,
+  adversarial-review repairs, deployment verification, and release-proof
+  packaging.
+- Operator boundary: Dan remained the solo participant and retained authority
+  for credentials and spend plus participant-held eligibility, publication,
+  and submission gates.
+- Attribution limit: Git commits use Dan's authenticated repository identity
+  and carry no Codex co-author trailers. This workflow disclosure is not an
+  independent cryptographic attestation of agent authorship.
+
 ## Automated verification
 
 - Dependency-maintenance preflight: `npm ci` reported zero vulnerabilities and
@@ -22,7 +36,10 @@
   baseline had zero open Dependabot alerts and no open Dependabot pull requests.
 - Lint: pass — `npm run lint`.
 - Typecheck: pass — `npm run typecheck`.
-- Unit/contract: 40/40 pass — `npm test`.
+- Release-baseline unit/contract: 40/40 pass across 4 test files — `npm test`.
+- PR #11 proof-head unit/contract: 41/41 pass across 5 test files. The
+  [PR checks page](https://github.com/OrionArchitekton/codex-rule-ledger/pull/11/checks)
+  resolves to the current head rather than pinning a stale intermediate run.
 - Production build: pass — static `/` and `/api/audit` routes.
 - Local browser acceptance: 1/1 Chromium flow pass on merged source.
 - Public browser acceptance: desktop and mobile evaluator flows pass, including
@@ -80,7 +97,13 @@
 - Production deployment: `dpl_FTbqyajmqnCYpfq15WsioAGt4BbS` (`READY`).
 - Public URL: https://codex-rule-ledger.vercel.app
 - Deployed Git SHA: `251ef31cda0615a5438c4061943bce689535a05b`;
-  Vercel `githubCommitSha` matches the live GitHub `main` head.
+  at `2026-07-14T22:35:22Z`, Vercel `githubCommitSha` matched the then-current
+  GitHub `main` head.
+- PR #11 changes release documentation, the operator-only live-proof CLI, and
+  its regression test; it does not change the public page or audit-route runtime
+  behavior. Merging it advances `main`, so the preceding SHA is a time-bound
+  production binding, not a claim of perpetual current-head parity. Re-probe
+  the Vercel binding after merge.
 - Root/API HTTP proof: root `200`, `GET /api/audit` `200`, and
   `POST /api/audit` `405` at `2026-07-14T22:35:22Z`. The API returned only
   `build-week-demo-v1` in `RECORDED` mode with five ledger records; public
