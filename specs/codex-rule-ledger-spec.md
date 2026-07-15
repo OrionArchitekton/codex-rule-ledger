@@ -227,8 +227,8 @@ outcome is legible and navigable in the judge-facing flow.
 
 ## v0.2 Local Audit Bundle CLI Extension
 
-The v0.1 deterministic audit contract and hosted fixed-fixture boundary remain
-unchanged. v0.2 adds a repo-local process adapter that accepts only an
+The v0.1 deterministic audit contract remains unchanged. v0.2 adds a
+repo-local process adapter that accepts only an
 already-normalized Audit Bundle directory. Recorded/keyless analysis is the
 default; `--live` is the sole local GPT-5.6 opt-in and obtains its credential
 from the process environment only.
@@ -247,3 +247,56 @@ instruction topology, conditional non-trigger, successful required command,
 retry recovery, missing evidence, subjective decline, and human review. The
 detailed scenarios, exit classes, test seams, and acceptance criteria are
 authoritative in [`audit-bundle-cli-spec.md`](audit-bundle-cli-spec.md).
+
+## v0.2 Public Recorded-Case Explorer Extension
+
+The public demo exposes exactly two repository-owned, recorded cases through a
+client-side selector. Case 001 remains the default `build-week-demo-v1`
+validation-drift story. Case 002 is the existing
+`synthetic-retry-recovery-v1` retry-recovery story. Both cases are rendered
+from server-validated, canonical audit results and require no model request,
+credential, upload, persistence, or user-supplied fixture.
+
+Case 002 is visibly labeled `SYNTHETIC_SANITIZED` and “not a captured real
+session.” The selector does not change `GET /api/audit`, which continues to
+return Case 001 only. It does not change fixture bytes, deterministic verdict
+or provenance contracts, the CLI, or the live GPT adapter.
+
+### Scenario 6 — Compare two disclosed recorded cases
+
+An engineering reviewer opens the public demo on Case 001, follows a compact
+three-step tour, and inspects the contradicted validation obligation. The
+reviewer switches to Case 002 to inspect retry recovery, then switches back.
+Each case shows its own story, disclosure, chain metadata, initial record, and
+outcome mix.
+
+### Acceptance criteria
+
+- Case 001 is selected on first load and preserves the existing validation-
+  drift flow and export digest.
+- Case 002 is selected only by an explicit reviewer action and visibly states
+  that it is synthetic, sanitized, and not a captured real session.
+- Each case supplies its own title, story, disclosure, initial record, and
+  optional discovery-exclusion metadata; no Case 001 metadata leaks into Case
+  002.
+- Switching cases resets the result filter to `ALL` and selects that case's
+  truthful initial record. Switching in either direction never leaves a stale
+  selected row or inspector.
+- The three-step tour is case-aware. It does not claim Case 002 contains a
+  contradiction; its retry-recovery record begins at `NOT_EVIDENCED`.
+- The outcome legend explicitly explains that `NOT_EVIDENCED` is neither a
+  failure nor compliance.
+- Each case exports its own digest-bound canonical ledger without changing
+  `/api/audit` or making a model request.
+- The selector, tour, disclosure, legend, records, and inspector remain usable
+  at desktop and mobile widths.
+
+### Test seam decision
+
+The explorer crosses the existing browser seam because its risk is the
+composition of server-validated fixture output with client state. Five focused
+browser flows exercise initial render, switching in both directions,
+case-aware copy, filter and selection reset, both downloads, the legend, and a
+mobile no-overflow check. Existing engine and CLI tests continue to own fixture
+parsing, deterministic outcomes, digests, API behavior, and model-boundary
+guarantees.
