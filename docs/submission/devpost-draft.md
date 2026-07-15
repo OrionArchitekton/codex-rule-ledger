@@ -12,7 +12,8 @@
 - **Repository:** https://github.com/OrionArchitekton/codex-rule-ledger
 - **License:** MIT
 - **Live demo:** https://codex-rule-ledger.vercel.app
-- **Video:** `[PUBLIC_YOUTUBE_URL]`
+- **Video:** `[PUBLIC_YOUTUBE_URL]` (upload-ready source:
+  `docs/assets/codex-rule-ledger-demo-v0.2.mp4`)
 - **Primary Codex feedback ID:** `019f5dda-3975-70b3-abc0-2f18d72c3aea`
 
 ## Inspiration
@@ -56,6 +57,35 @@ successful retry that prevents a false contradiction, a conditional
 non-trigger, missing evidence, subjective decline, and human review. The public
 Vercel demo remains fixed-fixture and keyless.
 
+## How judges can test it
+
+The fastest path is the public demo in any current desktop or mobile browser:
+open the live URL, select the contradicted obligation, inspect its linked event,
+filter the exceptions, and export the digest-bound JSON. It needs no account,
+key, upload, or private repository.
+
+The supported local judge configuration is Node.js 24 with npm on Ubuntu Linux;
+the package contract accepts Node.js 22 or newer, and the CLI targets normalized
+POSIX capture paths. Windows CLI support is not claimed. To run the same
+keyless fixture and the second v0.2 case:
+
+```bash
+git clone https://github.com/OrionArchitekton/codex-rule-ledger.git
+cd codex-rule-ledger
+npm ci
+npm run dev
+
+npm run --silent audit -- \
+  --bundle fixtures/synthetic-retry-recovery-v1 \
+  --out ledger.json
+```
+
+Open `http://localhost:3000`. The CLI command creates a private, no-clobber
+ledger file and prints its digest to stderr. `npm run verify` runs lint,
+typecheck, all 77 unit/contract tests, the production build, and Chromium E2E.
+Judges do not need `--live`; that operator-only mode requires an environment
+key and is excluded from the public test path.
+
 ## How we built it
 
 From the minimal Build Week event prompt, Codex independently selected the
@@ -63,10 +93,10 @@ problem, scoped and designed v0.1, implemented and tested it, drove adversarial
 review and repairs, deployed the public demo, and packaged the release. Codex
 then implemented the separately authorized v0.2 CLI scope. The repository
 preserves the living behavior specs and 39 witnessed vertical RED-to-GREEN
-slices. Dan remained the solo participant and retained credentials, spend,
-eligibility, publication, and submission authority. This is the disclosed
-workflow account; the corroborating records do not independently attest agent
-authorship.
+slices, with 77 current unit and contract tests. Dan remained the solo
+participant and retained credentials, spend, eligibility, publication, and
+submission authority. This is the disclosed workflow account; the
+corroborating records do not independently attest agent authorship.
 
 The product uses Next.js and strict TypeScript around one deep audit seam:
 
@@ -88,6 +118,12 @@ recording from the same typed analyzer contract. The live GPT-5.6 proof uses the
 same allowlisted fixture, with no tools, no automatic retries, no filesystem
 paths, strict byte/event/output limits, `store: false`, and an operator-injected
 dedicated key. The public Vercel project remains keyless.
+
+The build-provenance card binds the official Codex feedback thread ID to the
+public PR, main-branch CI, and production deployment, plus render-time-verified
+Langfuse metadata showing 17 GPT-5.6 Codex generations. It is explicitly
+corroboration, not a cryptographic authorship or transcript attestation, and it
+publishes no trace IDs, prompts, outputs, reasoning, paths, or tool inputs.
 
 ## Challenges
 
@@ -118,6 +154,8 @@ malformed output, refusal, or timeout.
   duplicate, oversized, linked, non-regular, stale, or incomplete inputs.
 - A second disclosed synthetic case proves the engine and CLI are not
   hard-coded to one instruction topology or result mix.
+- A compact provenance card connects official `/feedback`, Git, CI, Vercel,
+  and metadata-only Langfuse receipts without overclaiming authorship.
 - The repository includes CI, secret scanning, dependency review, a security
   policy, and an operator rollback runbook.
 
@@ -148,8 +186,13 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 
 ## Proof fields before submission
 
-- https://codex-rule-ledger.vercel.app — HTTP 200 and commit binding verified.
-- `[PUBLIC_YOUTUBE_URL]` — public, audio present, duration at most 2:59.
+- https://codex-rule-ledger.vercel.app — production deployment
+  `dpl_GHL2zVtNjBiVMr7wHbD2sDLMgnZa` is `READY` and bound to v0.2 merge SHA
+  `ad009529911577132e336ecd605e57d55114444a`; root/GET/POST are `200/200/405`
+  and the project has zero configured environment variables.
+- `[PUBLIC_YOUTUBE_URL]` — participant-held upload remains pending. The finished
+  upload-ready MP4 is 1920x1080 H.264/AAC, `177.830` seconds, with checked
+  54-cue captions and SHA-256 `80d33823…fdbf`.
 - `019f5dda-3975-70b3-abc0-2f18d72c3aea` — official `/feedback` upload returned
   this exact primary-build thread ID with diagnostic logs excluded.
 - Live GPT-5.6 proof completed at `2026-07-15T01:21:59.222Z`; the public release
@@ -160,7 +203,13 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
   conservative cost, six mixed-outcome records, and canonical ledger digest
   `f63e106a…dca6`. The dedicated key remained ephemeral and Vercel remained
   keyless.
-- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393
-  — lint, typecheck, unit, boundary, build, and browser checks green on the
-  release baseline; dependency review, Gitleaks, and the fail-closed PR gate
-  are also green for that baseline.
+- https://github.com/OrionArchitekton/codex-rule-ledger/pull/14 — all review
+  conversations resolved before the green-gated v0.2 merge.
+- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057
+  — lint, typecheck, 77 tests, deterministic boundary, build, and browser E2E
+  green on the v0.2 merge SHA.
+- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055
+  — main-branch Gitleaks green on the same merge SHA.
+- `docs/submission/build-provenance-v0.2.md` — official feedback, public
+  Git/CI/deployment receipts, and render-time metadata-only Langfuse proof with
+  explicit non-attestation limits.
