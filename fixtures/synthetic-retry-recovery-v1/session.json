@@ -1,0 +1,31 @@
+{
+  "events": [
+    {
+      "eventId": "event-lint-success",
+      "sequence": 10,
+      "kind": "COMMAND_FINISHED",
+      "command": "npm run lint",
+      "exitCode": 0
+    },
+    {
+      "eventId": "event-typecheck-failure",
+      "sequence": 20,
+      "kind": "COMMAND_FINISHED",
+      "command": "npm run typecheck",
+      "exitCode": 1
+    },
+    {
+      "eventId": "event-typecheck-recovery",
+      "sequence": 30,
+      "kind": "COMMAND_FINISHED",
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "eventId": "event-completion",
+      "sequence": 40,
+      "kind": "COMPLETION_CLAIM",
+      "text": "The synthetic constellation CLI release is complete."
+    }
+  ]
+}

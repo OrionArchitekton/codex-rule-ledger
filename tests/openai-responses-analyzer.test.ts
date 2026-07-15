@@ -162,6 +162,50 @@ describe("OpenAIResponsesAnalyzer", () => {
     expect(parse).not.toHaveBeenCalled();
   });
 
+  it("rejects request-count bounds before crossing the API boundary", async () => {
+    const base = semanticInput();
+    const input: SemanticAnalysisInput = {
+      ...base,
+      events: Array.from({ length: 201 }, (_, index) => ({
+        eventId: `event-${index}`,
+        sequence: index,
+        kind: "COMMAND_FINISHED" as const,
+        command: "npm test",
+        exitCode: 0,
+      })),
+    };
+    const parse = vi.fn();
+    const analyzer = new OpenAIResponsesAnalyzer({
+      client: { responses: { parse } },
+      allowedInputDigest: digestSemanticAnalysisInput(input),
+    });
+
+    await expect(analyzer.analyze(input)).rejects.toThrow(
+      "exceeds the live-analysis request bounds",
+    );
+    expect(parse).not.toHaveBeenCalled();
+  });
+
+  it("propagates the configured abort deadline to the API request", async () => {
+    const input = semanticInput();
+    const parse = vi.fn(
+      async (_body: Record<string, unknown>, options?: { signal?: AbortSignal }) =>
+        await new Promise<never>((_resolve, reject) => {
+          options?.signal?.addEventListener("abort", () => {
+            reject(options.signal?.reason);
+          });
+        }),
+    );
+    const analyzer = new OpenAIResponsesAnalyzer({
+      client: { responses: { parse } },
+      allowedInputDigest: digestSemanticAnalysisInput(input),
+      timeoutMs: 10,
+    });
+
+    await expect(analyzer.analyze(input)).rejects.toThrow();
+    expect(parse).toHaveBeenCalledOnce();
+  });
+
   it("rejects a semantically empty response for a nonempty instruction chain", async () => {
     const input = semanticInput();
     const analyzer = new OpenAIResponsesAnalyzer({

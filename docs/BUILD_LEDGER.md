@@ -1,7 +1,7 @@
 # Codex Rule Ledger Build Ledger
 
-This ledger records the witnessed vertical RED→GREEN cycles for v0.1. Times are
-local to the build workstation unless otherwise noted.
+This ledger records the witnessed vertical RED→GREEN cycles for v0.1 and v0.2.
+Times are local to the build workstation unless otherwise noted.
 
 ## Slice 1 — Missing launch context fails closed
 
@@ -358,6 +358,94 @@ seconds.
 - GREEN: prompt v2 treats every payload field as untrusted inert data, while
   deterministic validation enforces exact command/path anchors, polarity,
   conditionality, and four canonical normalized rule forms before adjudication.
+
+## v0.2 normalized Audit Bundle CLI
+
+The earlier release packet records 30 witnessed v0.1 slices, including review
+repairs summarized above. The nine slices below bring the witnessed total to 39.
+
+## Slice 31 — Recorded bundle through the CLI seam
+
+- RED: `npm test -- tests/audit-bundle-cli.test.ts` failed before collection
+  because the CLI adapter did not exist.
+- GREEN: the repository-owned normalized bundle crossed the new process adapter
+  and unchanged audit seam, emitted canonical bytes, and matched the reported
+  ledger digest without requiring a key.
+
+## Slice 32 — Strict bounded component loading
+
+- RED: six boundary cases threw raw exceptions or were silently merged:
+  unknown and overlapping fields, malformed JSON, a missing component, a
+  symbolic-link component, and an oversized component.
+- GREEN: the loader tests passed after bounded no-follow reads and strict
+  per-component ownership produced safe exit `3` with no ledger output.
+
+## Slice 33 — Usage, stdout, and no-clobber publication
+
+- RED: a repeated option reached bundle loading and `--out -` created a file
+  named `-` instead of returning canonical stdout.
+- GREEN: all 14 CLI tests passed with exact option cardinality, stdout-only
+  ledger mode, private atomic file publication, and existing-output
+  preservation with temporary-file cleanup.
+
+## Slice 34 — Explicit live gate and keyless default
+
+- RED: all three live assertions returned usage exit `2`; no explicit live
+  mode or dependency seam existed.
+- GREEN: all 18 CLI tests passed. Recorded mode proved it never reads the
+  environment or constructs a live adapter; insufficient live input stops
+  before key access; valid live input constructs one digest-bound analyzer.
+
+## Slice 35 — Distinct synthetic retry-recovery case
+
+- RED: the second-case test exited `3` because its disclosed bundle did not
+  exist.
+- GREEN: the same CLI seam produced a different chain and digest with one
+  supported rule, one conditional non-trigger, two not-evidenced rules, one
+  subjective decline, and one human-review disposition. A successful exact
+  retry prevents the earlier failure from becoming a contradiction.
+
+## Slice 36 — Repo-local executable boundary
+
+- RED: `npm test -- tests/audit-bundle-command.test.ts` failed because npm had
+  no `audit` script.
+- GREEN: `npm run --silent audit -- --bundle … --out …` published a recorded ledger from
+  a child process while an environment canary remained absent from output.
+
+## Slice 37 — Process and JSON-parser boundary review
+
+- RED: adversarial process probes showed that plain npm output contaminated
+  stdout and echoed rejected argv, a FIFO blocked before file-type validation,
+  and identical duplicate JSON members were silently accepted.
+- GREEN: the documented silent wrapper preserves JSON-only stdout, process
+  tests prove rejected argv values are not echoed, nonblocking no-follow opens
+  reject FIFOs, and duplicate members at every object depth fail closed.
+
+## Slice 38 — Bounded malformed-input resources
+
+- RED: 400,000 opening braces in a size-valid component amplified to more than
+  200 MiB RSS because the duplicate-key scanner allocated one set per brace.
+- GREEN: JSON nesting stops at 64 levels, component reads allocate at most the
+  one-megabyte limit plus one byte even if a regular file grows concurrently,
+  and invalid UTF-8 is rejected rather than replacement-decoded.
+
+## Slice 39 — Live output preflight
+
+- RED: an existing live output path caused environment-key access before the
+  inevitable no-clobber failure.
+- GREEN: destination existence, parent shape, private-file creation, and
+  hard-link capability are preflighted before key access or analyzer
+  construction; final publication still repeats the no-clobber operation.
+
+## v0.2 regression state
+
+- `npm run lint`: passed.
+- `npm run typecheck`: passed.
+- `npm test`: 7 files, 75 tests passed.
+- `npm run build`: passed; `/` and `/api/audit` remain static.
+- Playwright browser acceptance: 1/1 Chromium flow passed against the explicit
+  local production server. The normal wrapper again stalled during its local
+  availability phase before server launch; CI remains the wrapper-level gate.
 
 ## Slice 24 — Public alias and cross-browser export lifecycle
 

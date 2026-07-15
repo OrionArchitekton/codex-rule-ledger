@@ -224,3 +224,26 @@ outcome is legible and navigable in the judge-facing flow.
 - multi-user accounts, billing, team dashboards, or persistent customer data;
 - estate platform or shared-runtime adoption; and
 - post-event OSS ownership until separately approved.
+
+## v0.2 Local Audit Bundle CLI Extension
+
+The v0.1 deterministic audit contract and hosted fixed-fixture boundary remain
+unchanged. v0.2 adds a repo-local process adapter that accepts only an
+already-normalized Audit Bundle directory. Recorded/keyless analysis is the
+default; `--live` is the sole local GPT-5.6 opt-in and obtains its credential
+from the process environment only.
+
+The adapter strictly partitions and bounds the capture, diff, session, and
+recorded-analysis components; rejects duplicate JSON members, unknown or
+overlapping fields, symbolic links, non-regular files, malformed schemas, and
+structurally insufficient capture inventories; and publishes canonical output
+atomically without replacing an existing file. It does not discover a
+repository, normalize a raw Codex session, execute captured commands, upload or
+persist data, add a public model route, or change ledger verdict/provenance
+contracts.
+
+The second repository fixture is explicitly synthetic and exercises a distinct
+instruction topology, conditional non-trigger, successful required command,
+retry recovery, missing evidence, subjective decline, and human review. The
+detailed scenarios, exit classes, test seams, and acceptance criteria are
+authoritative in [`audit-bundle-cli-spec.md`](audit-bundle-cli-spec.md).

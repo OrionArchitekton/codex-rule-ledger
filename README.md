@@ -18,7 +18,7 @@ directory-specific overrides can all govern one Codex run. Reviewing only the
 diff does not show which instructions applied or whether the captured session
 contains evidence for the validation it claims.
 
-The v0.1 demo makes that review legible in one screen:
+The public demo makes that review legible in one screen:
 
 - the reconstructed global-to-launch-directory instruction chain;
 - `SUPPORTED`, `CONTRADICTED`, `NOT_EVIDENCED`, and `NOT_APPLICABLE` results;
@@ -55,6 +55,37 @@ npm run verify
 The individual checks are `lint`, `typecheck`, `test`, `build`, and
 `test:e2e`. The browser acceptance flow starts its own local server.
 
+## Audit an already-normalized bundle locally
+
+v0.2 adds a repo-local CLI for disclosed Audit Bundle directories that already
+contain normalized capture, diff, and session JSON. Recorded analysis is the
+keyless default:
+
+```bash
+npm run --silent audit -- \
+  --bundle fixtures/synthetic-retry-recovery-v1 \
+  --out ledger.json
+```
+
+Use `--out -` to send only the canonical ledger JSON to stdout. A file output
+is created privately, atomically, and without replacing an existing path. The
+ledger digest is reported on stderr.
+
+Explicit local `--live` mode uses one GPT-5.6 analysis request. It requires
+`OPENAI_API_KEY` to already be present in the process environment; the key is
+never accepted as an argument:
+
+```bash
+npm run --silent audit -- --bundle <normalized-bundle> --out ledger.json --live
+```
+
+The CLI accepts only `capture-manifest.json`, `diff.json`, and `session.json`
+as its normalized bundle components; recorded mode also requires
+`semantic-analysis.json`. It does not crawl a repository, import raw Codex
+sessions, execute captured commands, upload data, or change the fixture-only
+public site. Review [`docs/runbooks/local-audit-cli.md`](docs/runbooks/local-audit-cli.md)
+and [`SECURITY.md`](SECURITY.md) before using `--live`.
+
 ## What the fixture proves
 
 The disclosed synthetic capture exercises instruction override/fallback order
@@ -89,6 +120,8 @@ Semantic analysis is replaceable:
 - `RecordedFixtureAnalyzer` powers tests and the unrestricted public demo.
 - `OpenAIResponsesAnalyzer` uses GPT-5.6 structured output for typed,
   source-linked proposals.
+- The v0.2 CLI selects either adapter only after strict, bounded bundle parsing;
+  recorded mode never reads an API key.
 
 GPT-5.6 cannot emit a ledger verdict, reorder instruction discovery, alter
 hashes, or cite an unknown source. Its source text is explicitly treated as
@@ -103,13 +136,15 @@ bounds.
 
 ## Codex and GPT-5.6
 
-Codex served as Dan Mercede's principal engineering agent for v0.1, carrying
-the approved scope through the living specification, 30 recorded vertical
-RED-to-GREEN slices, interface implementation, adversarial-review repairs,
-deployment verification, and release-proof packaging. Dan remained the solo
-participant and retained credentials, spend, eligibility, publication, and
-submission authority. The repository preserves the living spec and witnessed
-build ledger in [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
+From the minimal Build Week event brief, Codex independently selected the
+problem, scoped and designed v0.1, implemented and tested it, drove adversarial
+review and repairs, deployed the public demo, and packaged the release. Codex
+then implemented the separately authorized v0.2 CLI scope through nine more
+vertical RED-to-GREEN slices. This is a workflow disclosure, not independent
+proof of agent authorship. Dan remained the solo participant and retained
+credentials, spend, eligibility, publication, and submission authority. The
+repository preserves the living specs and witnessed build ledger in
+[`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
 
 GPT-5.6 performs the indispensable semantic step: it maps complete instruction
 lines in the four strict v0.1 forms into source-linked observable proposals and
@@ -121,10 +156,11 @@ consume API budget or expose a key.
 
 ## Input, privacy, and trust boundary
 
-v0.1 is deliberately fixture-only and demonstrates Codex 0.144.0 with POSIX
-capture paths. It does not accept uploads, URLs, arbitrary
-repositories, raw environment dumps, commands, or user-controlled model calls.
-The included fixture is synthetic and contains no private code or credentials.
+The public deployment remains deliberately fixture-only. The local v0.2 CLI
+accepts only already-normalized Audit Bundle directories and demonstrates Codex
+0.144.0 with POSIX capture paths. Neither surface accepts uploads or URLs,
+executes captured commands, or normalizes raw sessions. Both included cases are
+synthetic and contain no private code or credentials.
 
 Hashes bind the supplied bytes after capture; they do not establish
 authenticity, trusted time, or what a model actually received. Read
@@ -139,6 +175,10 @@ repository tree, commit identity, or edit timing.
 - [`src/ledger`](src/ledger) — deterministic audit core and analyzer adapters.
 - [`fixtures/build-week-demo-v1`](fixtures/build-week-demo-v1) — disclosed
   synthetic capture and recorded semantic proposal batch.
+- [`fixtures/synthetic-retry-recovery-v1`](fixtures/synthetic-retry-recovery-v1)
+  — second disclosed synthetic topology with retry-safe mixed outcomes.
+- [`specs/audit-bundle-cli-spec.md`](specs/audit-bundle-cli-spec.md) — v0.2
+  local CLI behavior and safety contract.
 - [`tests`](tests) — deep-seam, adapter, and route contract tests.
 - [`e2e/demo.spec.ts`](e2e/demo.spec.ts) — judge-facing browser acceptance flow.
 - [`docs/runbooks/public-demo.md`](docs/runbooks/public-demo.md) — rollout,
@@ -146,7 +186,7 @@ repository tree, commit identity, or edit timing.
 
 ## Status and license
 
-This is a v0.1 OpenAI Build Week Developer Tools entry and a Personal Authority
+This is a v0.2 OpenAI Build Week Developer Tools entry and a Personal Authority
 `hackathon-project`. Post-event OSS graduation is a separate decision.
 
 MIT licensed. See [`LICENSE`](LICENSE).
