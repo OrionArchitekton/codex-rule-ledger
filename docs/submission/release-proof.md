@@ -4,7 +4,9 @@
 > deployment below. The final public-surface release adds a two-case in-memory
 > recorded explorer and therefore changes the public UI runtime. It does not
 > change the deterministic core, fixture bytes, dependencies, `/api/audit`, the
-> GPT path, keys, uploads, persistence, authentication, or the finished video.
+> GPT path, keys, uploads, persistence, or authentication. PR #16 did not
+> change the then-current video; the later media-only release documented below
+> updates the MP4 and submission packet without changing product runtime.
 
 ## Final public-surface release
 
@@ -37,6 +39,45 @@
   merge SHA. The full source, route, browser, export, environment, artifact,
   estate, and rollback reconciliation is recorded in the
   [immutable post-merge receipt](https://github.com/OrionArchitekton/codex-rule-ledger/pull/16#issuecomment-4982803645).
+
+## Media-only Case 002 video recut
+
+- Scope: the original narration, AAC audio, SRT wording, CLI receipt, provenance
+  sequence, and `177.219002`-second container duration remain unchanged. Only
+  the Case 002 visuals and the three media-packet documents were updated; no
+  product/runtime code, tour, hero, API, fixture, GPT, TTS, key, or spend
+  changed.
+- Capture source: immutable deployment
+  `dpl_77rNPnRdqgsoWigMxFxyaS3qfcpf`, URL
+  https://codex-rule-ledger-h0uqi408l-dan-mercedes-projects.vercel.app,
+  bound to source SHA `1cc3169c6f8dcee93a3fb1c6dd3a6c34d3b22725`.
+- Visual frame map, zero-indexed at constant 30 fps: frames `2864–3074` show
+  the selector, `SYNTHETIC_SANITIZED` disclosure, three-source topology, six
+  extracted records, and the distinct outcome mix; original CLI frames
+  `3075–3161` retain the original CLI content; frames `3162–3297` show the Case 002 ledger and
+  export; source frames resume at frame `3298`, and the unchanged provenance
+  card resumes at its original frame `3303`.
+- Browser export receipt: the captured download was
+  `codex-rule-ledger-0cf36d298340.json`, `8,641` bytes, six records, SHA-256
+  `0cf36d29834033a2343e4f163a89fb713b918af0a225fff025cef72839b6eaee`.
+  The suggested filename matched the first twelve characters of the downloaded
+  bytes' digest.
+- Caption continuity: cues 32–33 and 35–36 were reburned on the replacement
+  footage in the existing Arial 9, white, bottom-centered, translucent-box
+  style. Original cue 34 remains embedded in the source-preserved CLI frames.
+  The wording and timing of all 54 SRT cues remain byte-identical, including
+  the gap before cue 37 at `01:50.031`.
+- Material-change check: frame SSIM below `0.95` occurred only in the two
+  authorized replacement ranges. Outside those ranges, average whole-frame
+  SSIM was `0.999748`; the residual is H.264 generational drift from the required
+  non-keyframe-aligned full-video encode.
+- Rollback: the previously verified MP4 remains recoverable from source SHA
+  `1cc3169c6f8dcee93a3fb1c6dd3a6c34d3b22725`, where its SHA-256 is
+  `dc71469a08a379359331e9ac9e67eaa146cba9626671fd2b585cb28451b4f441`.
+- Release trail: [PR #18](https://github.com/OrionArchitekton/codex-rule-ledger/pull/18)
+  and its [stable release receipt](https://github.com/OrionArchitekton/codex-rule-ledger/pull/18#issuecomment-4984048912)
+  consolidate pre-merge media evidence with the final post-merge source, CI,
+  deployment, route, environment, and rollback reconciliation.
 
 ## v0.2 CLI baseline: immutable source and review
 
@@ -255,29 +296,39 @@
 - Upload-ready narrated video:
   [`codex-rule-ledger-demo-v0.2.mp4`](../assets/codex-rule-ledger-demo-v0.2.mp4),
   1920x1080 H.264 at 30 fps with AAC-LC audio, `177.219` seconds and
-  `10,698,820` bytes. SHA-256:
-  `dc71469a08a379359331e9ac9e67eaa146cba9626671fd2b585cb28451b4f441`.
+  `10,919,193` bytes. SHA-256:
+  `c3e4abf2d2608cc297ffcc63fe3f7231cd0622eef55a32183bfd62676bb9cc8e`.
 - Checked caption companion:
   [`codex-rule-ledger-demo-v0.2.srt`](codex-rule-ledger-demo-v0.2.srt), 54
   non-overlapping cues ending at `177.150` seconds, with no cue longer than nine
   words. SHA-256:
   `475d9c908d52aa47e6989abcefbb18d546bdaa3d21ad7d35b070080a065317bb`.
-- The seven-shot recording uses repository-owned visuals, the exact public
+- The seven-part narrative uses repository-owned visuals, immutable production
+  footage, an actual selector switch, the exact public
   production site, an actual contradiction-inspection flow, an actual
-  digest-verified export, the recorded v0.2 CLI receipt, and the allowlisted
-  provenance card. It contains no music, secret value, local absolute path,
-  private trace ID, prompt, output body, reasoning, or tool input.
-- The finished video follows the unchanged default Case 001 flow and does not
-  show the later public case selector. The final-surface release and fresh
-  product screenshots expose Case 002 without changing the video artifact.
+  digest-verified Case 001 export, the recorded v0.2 CLI receipt, the disclosed
+  Case 002 explorer and digest-verified export, and the allowlisted provenance
+  card. It contains no music, secret value, local absolute path, private trace
+  ID, prompt, output body, reasoning, or tool input.
+- The finished video follows the unchanged default Case 001 flow, then visibly
+  switches to the repository-owned `SYNTHETIC_SANITIZED` Case 002 story,
+  inspects its distinct topology and outcome mix, and exports its ledger before
+  the unchanged provenance sequence.
 - The voiceover explicitly covers what the working product does, how Codex
   selected, scoped, architected, implemented, reviewed, deployed, and packaged
   it, the participant authority boundary, and how GPT-5.6 produces source-linked
   semantic proposals while deterministic TypeScript owns every final verdict.
-- Media QC: duration is below the `2:59` ceiling; video and audio both start at
-  zero; audio measured `-22.9 dB` mean and `-1.5 dB` peak with no two-second
-  silence; representative frames across all seven shots were inspected at
-  original resolution.
+- Media QC: H.264 High video remains 1920x1080, yuv420p, constant 30 fps,
+  `5,316` frames, and `177.200000` seconds; AAC-LC audio remains 44.1 kHz mono,
+  `7,634` packets, and `177.219002` seconds. Video and audio both start at zero.
+  Extracted AAC/ADTS SHA-256
+  `f42048ed685b68a108826a0abebb64793864d38f89e869de60af3c1435c35848`
+  and decoded PCM SHA-256
+  `44cca4740e71a4308a3f8943191d161ec19e261150e60096a390429d28b84966`
+  exactly match the original video. Audio measured `-22.9 dB` mean and
+  `-1.5 dB` peak with no two-second silence; representative transition,
+  selector, disclosure, topology, export, caption-gap, CLI, and provenance
+  frames were inspected at original resolution.
 - Public YouTube upload remains a participant-held publication gate. The local
   artifact is complete and does not need a rehearsal or re-recording.
 

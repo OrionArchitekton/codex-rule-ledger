@@ -1,9 +1,11 @@
 # Codex Rule Ledger v0.2 demo script
 
-Final runtime: 2:57.219. Hard ceiling: 2:59. The shot plan drove the
-repository-owned `agent-demo-video` pipeline. Each action block was captured as
-a verified clip before the final compliant narration render. Local asset URLs were
-served from the repository root during capture and do not appear in the video.
+Final runtime: 2:57.219. Hard ceiling: 2:59. The original shot plan drove the
+repository-owned `agent-demo-video` pipeline. A later media-only recut preserved
+the narration, AAC audio, SRT wording, CLI receipt, and provenance sequence while
+replacing only the Case 002 visual windows with footage from the immutable
+`1cc3169` production deployment. Local asset URLs were served from the repository
+root during capture and do not appear in the video.
 
 ### SHOT problem
 - target: dashboard
@@ -43,16 +45,27 @@ served from the repository root during capture and do not appear in the video.
 - action: click selector=".export-button"
 - action: wait ms=700
 
-### SHOT cli
-- target: dashboard
+### SHOT cli-and-case-two
+- target: CLI receipt and immutable production dashboard
 - narration: Version zero point two adds a local CLI for already-normalized Audit Bundles. Recorded analysis is the keyless default and never reads an API key. This second synthetic case crosses the same deterministic audit seam, produces six records across five outcome classes, writes a private no-clobber file, and proves the engine is not hard-coded to one topology.
-- action: goto url="http://127.0.0.1:4178/docs/assets/cli-recorded-v0.2.html"
+- action: cues 28–31; goto url="http://127.0.0.1:4178/docs/assets/cli-recorded-v0.2.html"
 - action: wait ms=500
 - action: highlight selector=".command"
 - action: wait ms=600
 - action: highlight selector=".receipt"
 - action: highlight selector=".outcomes"
-- action: highlight selector=".guard"
+- action: cues 32–33, 01:35.458–01:42.493; goto url="https://codex-rule-ledger-h0uqi408l-dan-mercedes-projects.vercel.app"
+- action: highlight selector=".case-selector"
+- action: click role="button" name="Case 002: Retry recovery"
+- action: highlight selector=".case-disclosure"
+- action: highlight selector=".ledger-panel"
+- action: cue 34, 01:42.493–01:45.376; preserve the original CLI private/no-clobber receipt
+- action: cues 35–36, 01:45.376–01:49.959; return to the selected Case 002 dashboard capture
+- action: scroll through the distinct Case 002 topology and outcome mix
+- action: highlight selector=".export-button"
+- action: click role="button" name="Export ledger"
+- action: verify download filename="codex-rule-ledger-0cf36d298340.json"
+- action: cue 37 begins at 01:50.031; resume the unchanged provenance sequence, with the original card visible from frame 3303
 
 ### SHOT provenance
 - target: dashboard
@@ -77,8 +90,9 @@ served from the repository root during capture and do not appear in the video.
   `docs/submission/codex-rule-ledger-demo-v0.2.srt`.
 - Final MP4 is no longer than 2:59, has narration and checked captions, and
   uses only repository-owned visuals.
-- The live product flow, contradiction inspector, export click, v0.2 CLI
-  receipt, GPT-5.6 boundary, and provenance card are visible.
+- The live product flow, contradiction inspector, Case 001 export, v0.2 CLI
+  receipt, visible Case 002 selector and synthetic disclosure, distinct outcome
+  mix, Case 002 export, GPT-5.6 boundary, and provenance card are visible.
 - No secrets, local absolute paths, private IDs other than the approved
   feedback thread ID, private code, copyrighted music, or unlicensed media
   appear.
