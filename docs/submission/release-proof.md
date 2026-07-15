@@ -74,6 +74,10 @@
 - Rollback: the previously verified MP4 remains recoverable from source SHA
   `1cc3169c6f8dcee93a3fb1c6dd3a6c34d3b22725`, where its SHA-256 is
   `dc71469a08a379359331e9ac9e67eaa146cba9626671fd2b585cb28451b4f441`.
+- Release trail: [PR #18](https://github.com/OrionArchitekton/codex-rule-ledger/pull/18)
+  and its [stable release receipt](https://github.com/OrionArchitekton/codex-rule-ledger/pull/18#issuecomment-4984048912)
+  consolidate pre-merge media evidence with the final post-merge source, CI,
+  deployment, route, environment, and rollback reconciliation.
 
 ## v0.2 CLI baseline: immutable source and review
 
