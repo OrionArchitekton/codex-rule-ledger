@@ -6,7 +6,7 @@
 > change the deterministic core, fixture bytes, dependencies, `/api/audit`, the
 > GPT path, keys, uploads, persistence, authentication, or the finished video.
 
-## Final public-surface release candidate
+## Final public-surface release
 
 - Surface: Case 001 remains the default `build-week-demo-v1` validation-drift
   story. Case 002 exposes the existing `synthetic-retry-recovery-v1` story and
@@ -30,12 +30,13 @@
   `a782943c7e8065288424c4cb41b3fd188053613e79c6ea5014f971d1d566e232`).
 - Spend boundary: no OpenAI request, key access, or model spend occurred for
   this release.
-- To avoid a self-referential proof commit, the exact merge SHA, main CI,
-  deployment ID and immutable URL, alias timestamp, zero-environment-variable
-  check, route probes, both browser exports, screenshot hashes, estate parity,
-  and rollback target will be posted as an immutable reconciliation comment on
-  https://github.com/OrionArchitekton/codex-rule-ledger/pull/16 after merge and
-  production verification.
+- Immutable post-merge receipt: [PR #16](https://github.com/OrionArchitekton/codex-rule-ledger/pull/16)
+  merged as `7b49ae3037ce2c18bb2ca9b3d2ecbfd5c1a6c888` at
+  `2026-07-15T16:05:16Z`; main repo guardrails and Gitleaks passed; Vercel
+  deployment `dpl_2kAnobKLufbX76GARbecDctzqpwy` is `READY` and bound to that
+  merge SHA. The full source, route, browser, export, environment, artifact,
+  estate, and rollback reconciliation is recorded in the
+  [immutable post-merge receipt](https://github.com/OrionArchitekton/codex-rule-ledger/pull/16#issuecomment-4982803645).
 
 ## v0.2 CLI baseline: immutable source and review
 

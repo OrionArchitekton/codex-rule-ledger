@@ -11,18 +11,22 @@ Codex Rule Ledger | Evidence-bound audits for Codex runs | OpenAI Build Week
 ## Description
 
 For staff engineers, platform teams, and security reviewers deciding whether
-to accept, investigate, or block an agent-produced change pending evidence.
+the supplied evidence supports accepting, investigating, or blocking an
+agent-produced change.
 
-A diff shows what an agent changed, but not which instruction chain a supplied
-Codex launch capture reconstructs or whether the captured session supports the
-run's validation claims. Codex Rule Ledger turns an already-normalized
-launch-and-session bundle into a source-linked ledger of support,
-contradiction, missing evidence, inapplicability, and declined non-observable
-instructions.
+An agent-produced diff can look ready while its supplied session evidence says
+otherwise. In Case 001, npm run typecheck fails and a completion event follows.
+Rule Ledger exposes that sequence as one source-linked CONTRADICTED row. Case
+002 shows why an exact successful retry must not become a false contradiction.
 
-Rather than asking only whether a rule passed, Rule Ledger first asks whether
-the supplied evidence makes any verdict admissible. Missing evidence is neither
-failure nor compliance.
+Codex Rule Ledger turns an already-normalized launch-and-session bundle into a
+source-linked ledger of support, contradiction, missing evidence,
+inapplicability, declined non-observable instructions, and human-review
+routing.
+
+Rule Ledger first asks whether the supplied evidence makes any verdict
+admissible, then whether the rule passed. Missing evidence is neither failure
+nor compliance.
 
 Judge it in 60 seconds:
 
@@ -30,18 +34,20 @@ Judge it in 60 seconds:
 2. Inspect the contradicted typecheck rule and its linked events.
 3. Switch to Case 002 for retry recovery, then export its digest-bound ledger.
 
-Codex independently selected and scoped the problem, implemented the vertical
-test-driven slices, drove adversarial review repair, deployed the keyless demo,
-and packaged the submission. In live mode, GPT-5.6 maps complete instruction
-lines into typed, source-linked semantic proposals. Deterministic TypeScript
-owns input validation, instruction discovery, hashes, evidence sufficiency,
-and every final ledger state.
+In the disclosed build workflow, Codex independently selected and scoped the
+problem, implemented the vertical test-driven slices, drove adversarial review
+repair, deployed the keyless demo, and packaged the submission. In live mode,
+GPT-5.6 maps complete instruction lines into typed, source-linked semantic
+proposals. Deterministic TypeScript owns input validation, instruction
+discovery, hashes, evidence sufficiency, and every final ledger state. Linked
+receipts corroborate workflow continuity; they do not independently attest
+individual edits.
 
-The public demo exposes exactly two repository-owned recorded synthetic cases:
-no account, API key, upload, or private repository is required. The video
-follows the unchanged default Case 001 flow; the live selector now also exposes
-the existing retry-recovery case. v0.2 includes a local CLI for the same
-already-normalized bundle contract.
+The public demo exposes exactly two repository-owned synthetic fixtures with
+recorded semantic analysis: no account, API key, upload, or private repository
+is required. The video follows the unchanged default Case 001 flow; the live
+selector now also exposes the existing retry-recovery case. v0.2 includes a
+local CLI for the same already-normalized bundle contract.
 
 Live demo: https://codex-rule-ledger.vercel.app
 

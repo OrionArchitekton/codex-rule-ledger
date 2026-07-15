@@ -4,7 +4,12 @@ Evidence-bound audits for Codex runs: support, contradict, or admit the evidence
 cannot decide.
 
 For staff engineers, platform teams, and security reviewers deciding whether
-to accept, investigate, or block an agent-produced change pending evidence.
+the supplied evidence supports accepting, investigating, or blocking an
+agent-produced change.
+
+Case 001 turns a failed `npm run typecheck` followed by completion into one
+source-linked `CONTRADICTED` row. Case 002 shows why an exact successful retry
+must not become a false contradiction.
 
 ![Codex Rule Ledger desktop demo](docs/assets/codex-rule-ledger-desktop.png)
 
@@ -14,8 +19,9 @@ to accept, investigate, or block an agent-produced change pending evidence.
    default **Case 001: Validation drift** and read its reconstructed chain.
 2. Open “Do not claim completion after `npm run typecheck` fails” and inspect
    the linked source, failed-typecheck event, and completion event.
-3. Switch to **Case 002: Retry recovery** to see why a successful retry yields
-   `NOT_EVIDENCED`, then export that case's digest-bound ledger.
+3. Switch to **Case 002: Retry recovery** to see why an exact successful retry
+   prevents a false contradiction without becoming a compliance claim, then
+   export that case's digest-bound ledger.
 
 No login, API key, upload, private repository, or rebuild is required. This
 case-switch, inspect, and export path is covered by the repository's Chromium
@@ -32,7 +38,8 @@ The public demo makes that review legible in one screen:
 
 - the reconstructed global-to-launch-directory instruction chain;
 - `SUPPORTED`, `CONTRADICTED`, `NOT_EVIDENCED`, and `NOT_APPLICABLE` results;
-- declined subjective instructions outside the mechanical result machine;
+- declined subjective instructions and human-review routing outside the
+  mechanical result machine;
 - exact source links plus evidence or search records for each disposition; and
 - a deterministic, hash-bound JSON export labeled
   `LOCAL_CAPTURE_UNATTESTED`.
@@ -105,7 +112,7 @@ recorded-case explorer. Review
 [`docs/runbooks/local-audit-cli.md`](docs/runbooks/local-audit-cli.md) and
 [`SECURITY.md`](SECURITY.md) before using `--live`.
 
-## What the recorded cases prove
+## What the synthetic cases demonstrate
 
 Case 001 exercises instruction override/fallback order and the configured byte
 limit. Its normalized events yield:
@@ -141,22 +148,21 @@ produces a canonical SHA-256-bound export.
 
 Semantic analysis is replaceable:
 
-- `RecordedFixtureAnalyzer` powers tests and the unrestricted public demo.
+- `RecordedFixtureAnalyzer` powers tests and the keyless public demo.
 - `OpenAIResponsesAnalyzer` uses GPT-5.6 structured output for typed,
   source-linked proposals.
 - The v0.2 CLI selects either adapter only after strict, bounded bundle parsing;
   recorded mode never reads an API key.
 
-GPT-5.6 cannot emit a ledger verdict, reorder instruction discovery, alter
-hashes, or cite an unknown source. Its source text is explicitly treated as
-untrusted data. Evaluable output must use one of four canonical v0.1 rule forms,
-and deterministic code verifies that every exact command, conditional path,
-polarity, and trigger is explicitly entailed by the cited quote. Refusal,
-malformed or fabricated semantics, an unallowlisted fixture digest, or a
-timeout fails closed. The live adapter has no tools, stores no response through
-the API request, redacts absolute paths and common credential-like markers
-before transmission, has no automatic retry, and applies strict input/output
-bounds.
+GPT-5.6 does not own ledger verdicts, instruction discovery, or hashes. Its
+source text is explicitly treated as untrusted data. Evaluable output must use
+one of four canonical v0.1 rule forms, and deterministic code verifies that
+every exact command, conditional path, polarity, and trigger is explicitly
+entailed by the cited quote. An unknown source anchor, refusal, malformed or
+fabricated semantics, an unallowlisted fixture digest, or a timeout fails
+closed. The live adapter has no tools, stores no response through the API
+request, redacts absolute paths and common credential-like markers before
+transmission, has no automatic retry, and applies strict input/output bounds.
 
 ## Codex and GPT-5.6
 
@@ -176,24 +182,25 @@ and submission assets. The key architecture decision was to let GPT-5.6
 propose semantics while deterministic TypeScript alone owns evidence
 sufficiency and final ledger states.
 
-In live mode, GPT-5.6 performs the semantic step: it maps complete instruction
-lines in the four strict v0.1 forms into source-linked observable proposals and
-declines subjective or ambiguous language. Deterministic code requires every
-supported directive to have exactly one total, evaluable disposition and
-remains the authority for all final evidence states. The public demo serves two
-recorded synthetic cases from the same typed contract so judging does not
-consume API budget or expose a key.
+In live mode, GPT-5.6 maps complete instruction lines into typed, source-linked
+proposals, routes ambiguous or conflicting language to human review, and
+declines subjective, unbounded, or non-observable language. Deterministic code
+requires complete semantic coverage, validates every source anchor and
+supported rule form, and remains the authority for all final dispositions and
+evidence states. The public demo serves two repository-owned synthetic fixtures
+with recorded semantic analysis through the same typed contract, so judging
+does not consume API budget or expose a key.
 
 ## Input, privacy, and trust boundary
 
 The public deployment remains deliberately recorded-case-only. It exposes
-exactly two repository-owned synthetic cases and accepts no visitor input. The
-local v0.2 CLI accepts only already-normalized Audit Bundle directories and
-demonstrates Codex
-0.144.0 with POSIX capture paths. `GET /api/audit` remains default-only for
-Case 001. Neither surface accepts uploads or URLs,
-executes captured commands, or normalizes raw sessions. Both included cases are
-synthetic and contain no private code or credentials.
+exactly two repository-owned synthetic fixtures and accepts no visitor-supplied
+audit material, text, URLs, or credentials. The local v0.2 CLI accepts only
+already-normalized Audit Bundle directories and demonstrates Codex 0.144.0 with
+POSIX capture paths. `GET /api/audit` remains default-only for Case 001.
+Neither surface accepts uploads or executes captured commands, and neither
+normalizes raw sessions. Both included cases are synthetic and contain no
+private code or credentials.
 
 Hashes bind the supplied bytes after capture; they do not establish
 authenticity, trusted time, or what a model actually received. Read
