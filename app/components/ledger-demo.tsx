@@ -7,9 +7,9 @@ import type {
   EvidenceLink,
   ObligationRecord,
 } from "../../src/ledger";
+import type { PublicDemoCase } from "../../src/fixtures/ready-public-demo-cases";
 
 type ReadyAudit = Extract<AuditOutcome, { inputState: "READY" }>;
-type PublicReadyAudit = Pick<ReadyAudit, "ledger" | "ledgerDigest">;
 type Filter = "ALL" | "EVALUATED" | "EXCEPTIONS";
 
 const RESULT_LABELS = {
@@ -77,18 +77,21 @@ function shortDigest(value: string): string {
   return `${value.slice(0, 8)}…${value.slice(-6)}`;
 }
 
-export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
+export function LedgerDemo({
+  cases,
+}: {
+  cases: readonly [PublicDemoCase, PublicDemoCase];
+}) {
+  const [activeCaseId, setActiveCaseId] = useState(cases[0].id);
+  const activeCase =
+    cases.find((demoCase) => demoCase.id === activeCaseId) ?? cases[0];
+  const audit: Pick<ReadyAudit, "ledger" | "ledgerDigest"> = activeCase.audit;
   const records = audit.ledger.records;
   const initial =
-    records.find(
-      (record) =>
-        record.disposition === "EVALUATED" &&
-        record.finding.result === "CONTRADICTED",
-    ) ?? records[0];
+    records.find((record) => recordId(record) === activeCase.initialRecordId) ??
+    records[0];
   const [filter, setFilter] = useState<Filter>("ALL");
-  const [selectedId, setSelectedId] = useState(
-    initial ? recordId(initial) : "",
-  );
+  const [selectedId, setSelectedId] = useState(cases[0].initialRecordId);
   const visibleRecords = useMemo(
     () => records.filter((record) => belongsToFilter(record, filter)),
     [filter, records],
@@ -105,6 +108,12 @@ export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
       }, {}),
     [records],
   );
+
+  function selectCase(demoCase: PublicDemoCase) {
+    setActiveCaseId(demoCase.id);
+    setFilter("ALL");
+    setSelectedId(demoCase.initialRecordId);
+  }
 
   function exportLedger() {
     const body = `${JSON.stringify(audit.ledger, null, 2)}\n`;
@@ -131,10 +140,40 @@ export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
           </div>
         </div>
         <div className="edition-block">
-          <span>Case 001</span>
-          <span>Validation drift</span>
+          <span>{activeCase.number}</span>
+          <span>{activeCase.title}</span>
         </div>
       </header>
+
+      <section className="case-explorer" aria-label="Recorded cases">
+        <div className="case-explorer-heading">
+          <span>Recorded case index</span>
+          <p>Two keyless audits. Same deterministic contract.</p>
+        </div>
+        <div className="case-selector">
+          {cases.map((demoCase) => {
+            const selectedCase = demoCase.id === activeCase.id;
+            return (
+              <button
+                aria-label={`${demoCase.number}: ${demoCase.title}`}
+                aria-pressed={selectedCase}
+                className={selectedCase ? "case-option case-option-active" : "case-option"}
+                key={demoCase.id}
+                onClick={() => selectCase(demoCase)}
+                type="button"
+              >
+                <span>{demoCase.number}</span>
+                <strong>{demoCase.title}</strong>
+                <small>{demoCase.story}</small>
+              </button>
+            );
+          })}
+        </div>
+        <div className="case-disclosure" aria-live="polite">
+          <strong>{activeCase.disclosureLabel}</strong>
+          <span>{activeCase.disclosureNote}</span>
+        </div>
+      </section>
 
       <section className="hero" aria-labelledby="page-title">
         <div className="hero-title-block">
@@ -178,6 +217,63 @@ export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
         </div>
       </section>
 
+      <section
+        aria-label="Three-step judge tour"
+        className="judge-tour"
+        role="region"
+      >
+        <div className="judge-tour-heading">
+          <span>Fast path</span>
+          <h2>Judge it in 60 seconds</h2>
+        </div>
+        <ol>
+          <li>
+            <span>01</span>
+            <p>Read the reconstructed instruction chain</p>
+          </li>
+          <li>
+            <span>02</span>
+            <p>{activeCase.tourFocus}</p>
+          </li>
+          <li>
+            <span>03</span>
+            <p>Export the digest-bound ledger</p>
+          </li>
+        </ol>
+      </section>
+
+      <section
+        aria-label="Outcome legend"
+        className="outcome-legend"
+        role="region"
+      >
+        <div className="outcome-legend-heading">
+          <span>Verdict key</span>
+          <strong>Evidence decides admissibility</strong>
+        </div>
+        <dl>
+          <div>
+            <dt className="status-supported">Supported</dt>
+            <dd>Affirmative supporting evidence.</dd>
+          </div>
+          <div>
+            <dt className="status-contradicted">Contradicted</dt>
+            <dd>Affirmative conflicting evidence.</dd>
+          </div>
+          <div className="legend-not-evidenced">
+            <dt className="status-not_evidenced">Not evidenced</dt>
+            <dd>
+              Neither failure nor compliance; the supplied evidence cannot
+              support either verdict.
+            </dd>
+          </div>
+          <div>
+            <dt className="status-not_applicable">Not applicable</dt>
+            <dd>The trigger affirmatively did not occur.</dd>
+          </div>
+        </dl>
+      </section>
+
       <div className="desk-grid">
         <section className="chain-panel" aria-labelledby="chain-heading">
           <div className="panel-heading">
@@ -202,16 +298,20 @@ export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
                 </div>
               </li>
             ))}
-            <li className="chain-entry chain-excluded">
-              <span className="chain-node" aria-hidden="true">
-                ×
-              </span>
-              <div>
-                <span className="scope-label">BYTE LIMIT</span>
-                <code>$PROJECT_ROOT/apps/web/demo/AGENTS.md</code>
-                <span className="source-meta">Excluded at 164 B budget</span>
-              </div>
-            </li>
+            {activeCase.excludedSource ? (
+              <li className="chain-entry chain-excluded">
+                <span className="chain-node" aria-hidden="true">
+                  ×
+                </span>
+                <div>
+                  <span className="scope-label">BYTE LIMIT</span>
+                  <code>{activeCase.excludedSource.displayPath}</code>
+                  <span className="source-meta">
+                    {activeCase.excludedSource.reason}
+                  </span>
+                </div>
+              </li>
+            ) : null}
           </ol>
           <p className="chain-caption">
             One chain, captured at launch. No per-file instruction fiction.
@@ -229,6 +329,7 @@ export function LedgerDemo({ audit }: { audit: PublicReadyAudit }) {
           <div className="filter-bar" aria-label="Filter obligations">
             {(["ALL", "EVALUATED", "EXCEPTIONS"] as const).map((value) => (
               <button
+                aria-pressed={filter === value}
                 className={filter === value ? "filter-active" : ""}
                 key={value}
                 onClick={() => setFilter(value)}

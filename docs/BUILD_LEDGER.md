@@ -502,3 +502,33 @@ repairs summarized above. The nine slices below bring the witnessed total to 39.
   keyless subprocess regression test proves it starts before failing at the
   credential boundary. The subsequent admitted run completed exactly one
   GPT-5.6 request with zero automatic retries.
+
+## v0.2 final public recorded-case explorer
+
+The three additive browser slices below bring the witnessed total to 42. They
+reuse the two existing recorded fixtures and do not change the deterministic
+core, fixture bytes, API contract, dependencies, model adapter, or video.
+
+## Slice 40 — Truthful two-case explorer state
+
+- RED: the browser could not find either story-labeled case control, and the
+  single-case UI hard-coded Case 001 metadata.
+- GREEN: both server-validated recorded cases cross the existing audit seam;
+  Case 001 remains the default, Case 002 is explicitly synthetic and not a
+  captured real session, and switching either direction resets the filter and
+  truthful initial record before exporting the active digest.
+
+## Slice 41 — Case-aware three-step judge tour
+
+- RED: the browser could not find the three-step judge-tour region or its
+  active-case evidence instruction.
+- GREEN: the compact tour renders exactly three steps, preserves the Case 001
+  contradiction path, and changes Case 002's middle step to retry recovery
+  without claiming that case contains a contradiction.
+
+## Slice 42 — Outcome-admissibility legend
+
+- RED: the browser could not find an outcome legend or the required
+  `NOT_EVIDENCED` distinction.
+- GREEN: the four evaluated results are defined in the public surface, with
+  `NOT_EVIDENCED` explicitly described as neither failure nor compliance.

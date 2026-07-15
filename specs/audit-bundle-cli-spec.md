@@ -37,9 +37,11 @@ an explicit local action using an environment-held key.
 - The existing `runLedgerAudit(bundle, semanticAnalyzer) -> AuditExecution`
   interface remains the sole deterministic audit seam. The CLI is an adapter;
   it cannot assign verdicts, relax validation, or change provenance language.
-- No new runtime dependency, service, database, authentication surface,
-  upload, public model endpoint, repository crawler, raw-session normalizer,
-  CI Action, or hosted fixture selector is introduced.
+- This CLI slice introduces no new runtime dependency, service, database,
+  authentication surface, upload, public model endpoint, repository crawler,
+  raw-session normalizer, CI Action, or hosted fixture selector. A separately
+  authorized public recorded-case explorer may expose only repository-owned,
+  server-validated recorded cases and does not change this CLI contract.
 - Bundle components are read only from the four known filenames. Each required
   file must be a bounded regular file, not a symbolic link, and each component
   must contain only its owned top-level fields. Unknown, overlapping, missing,

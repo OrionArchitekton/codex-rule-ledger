@@ -1,11 +1,43 @@
 # Release and submission proof
 
-> v0.2 runtime release is bound to reviewed source, green main-branch CI, and a
-> keyless production deployment below. This post-release packet adds only
-> documentation, media, and supported-engine metadata; it does not alter
-> runtime code, dependencies, or the deployed runtime.
+> The v0.2 CLI baseline remains bound to its reviewed source and immutable
+> deployment below. The final public-surface release adds a two-case in-memory
+> recorded explorer and therefore changes the public UI runtime. It does not
+> change the deterministic core, fixture bytes, dependencies, `/api/audit`, the
+> GPT path, keys, uploads, persistence, authentication, or the finished video.
 
-## v0.2 immutable source and review
+## Final public-surface release candidate
+
+- Surface: Case 001 remains the default `build-week-demo-v1` validation-drift
+  story. Case 002 exposes the existing `synthetic-retry-recovery-v1` story and
+  is visibly labeled `SYNTHETIC_SANITIZED` and not a captured real session.
+- Judge path: a story-labeled selector, case-aware three-step tour, and outcome
+  legend teach that `NOT_EVIDENCED` is neither failure nor compliance.
+- State contract: every switch resets the filter to `ALL` and selects the
+  active case's pinned initial record. Case-specific discovery metadata cannot
+  leak between cases.
+- Runtime boundary: both audits are computed from repository-owned recorded
+  fixtures during static generation and switch in memory. `GET /api/audit`
+  remains Case-001-only; `POST /api/audit` remains disallowed.
+- Verification: 77/77 unit and contract tests across 7 files plus 5/5 Chromium
+  acceptance flows, lint, typecheck, and a static production build are green
+  locally. The browser suite covers both exports, switching in both directions,
+  reset state, case-aware copy, the legend, and a 390px no-overflow path.
+- Fresh screenshots:
+  `docs/assets/codex-rule-ledger-desktop.png` (1440x1631, SHA-256
+  `bd8014d8baf3fca6a17c519198382bc73645fff02f668558c45458040c884984`)
+  and `docs/assets/codex-rule-ledger-mobile.png` (390x3843, SHA-256
+  `a782943c7e8065288424c4cb41b3fd188053613e79c6ea5014f971d1d566e232`).
+- Spend boundary: no OpenAI request, key access, or model spend occurred for
+  this release.
+- To avoid a self-referential proof commit, the exact merge SHA, main CI,
+  deployment ID and immutable URL, alias timestamp, zero-environment-variable
+  check, route probes, both browser exports, screenshot hashes, estate parity,
+  and rollback target will be posted as an immutable reconciliation comment on
+  https://github.com/OrionArchitekton/codex-rule-ledger/pull/16 after merge and
+  production verification.
+
+## v0.2 CLI baseline: immutable source and review
 
 - Product PR: https://github.com/OrionArchitekton/codex-rule-ledger/pull/14
 - Reviewed PR head: `20c2d0331d31876851eee689a8a4705afb146013`.
@@ -19,7 +51,7 @@
   `2026-07-15T04:40:14Z`. The admin merge bypassed only the impossible
   self-codeowner approval rule after every executable and conversation gate was
   green.
-- Final local verification: lint pass, typecheck pass, 77/77 tests across 7
+- Baseline local verification: lint pass, typecheck pass, 77/77 tests across 7
   files, production build pass with static `/` and `/api/audit`, and 1/1
   Chromium acceptance pass.
 - Dependency/secret preflight: `npm audit` reported zero vulnerabilities; a
@@ -50,8 +82,9 @@
   independently selected the problem, scoped and designed v0.1, implemented
   and tested it, drove adversarial review and repairs, deployed the public demo,
   and packaged the release. Codex then implemented the separately authorized
-  v0.2 CLI scope. The build ledger records 39 witnessed vertical RED-to-GREEN
-  slices across both versions.
+  v0.2 CLI scope and final public recorded-case explorer. The build ledger
+  records 39 witnessed vertical RED-to-GREEN slices through the CLI baseline
+  and three final-surface slices, for 42 total.
 - Operator boundary: Dan remained the solo participant and retained authority
   for credentials and spend plus participant-held eligibility, publication,
   and submission gates.
@@ -77,7 +110,7 @@
   attest agent authorship, authenticate a transcript, or prove what the model
   received.
 
-## Automated verification
+## v0.2 CLI baseline automated verification
 
 - v0.2 main source: 42 targeted unit/boundary test executions across 4 files,
   plus lint, typecheck, production build, and Chromium E2E, all green in
@@ -86,9 +119,9 @@
 - v0.2 main Gitleaks:
   [run 29389462055](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055)
   passed on the same merge SHA.
-- The full local release suite remains 77/77 tests across 7 files, as recorded
-  in the final local-verification receipt above; the split CI jobs execute 42
-  targeted release-boundary tests.
+- The baseline full local release suite was 77/77 tests across 7 files, as
+  recorded in the baseline local-verification receipt above; the split CI jobs
+  executed 42 targeted release-boundary tests.
 - PR-head dependency review, Gitleaks, fail-closed aggregation, GitGuardian,
   Vercel preview, lint, typecheck, unit, boundary, build, and E2E all passed;
   zero review conversations remained unresolved at merge.
@@ -104,8 +137,8 @@
   [PR checks page](https://github.com/OrionArchitekton/codex-rule-ledger/pull/11/checks)
   resolves to the current head rather than pinning a stale intermediate run.
 - Production build: pass — static `/` and `/api/audit` routes.
-- Local browser acceptance: 1/1 Chromium flow pass on merged source.
-- Public browser acceptance: desktop and mobile evaluator flows pass, including
+- Baseline local browser acceptance: 1/1 Chromium flow pass on merged source.
+- Baseline public browser acceptance: desktop and mobile evaluator flows pass, including
   evidence inspection, exception filtering, and digest-bound ledger export.
 - [Main CI run](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393):
   lint, typecheck, unit, boundary, build, and browser checks are green on
@@ -169,7 +202,7 @@
 - The dedicated key was injected ephemerally from Doppler and was not written
   to the repository, proof metadata, or Vercel.
 
-## Public deployment
+## v0.2 CLI baseline public deployment
 
 - Estate deploy-target/secret-scope admission:
   https://github.com/OrionArchitekton/orion-estate-audit/pull/586 merged as
@@ -185,13 +218,12 @@
 - Immutable deployment URL:
   https://codex-rule-ledger-er2blsask-dan-mercedes-projects.vercel.app
 - Public URL: https://codex-rule-ledger.vercel.app
-- Deployment binding: `gitSource.ref`, `gitSource.sha`, and
+- Historical deployment binding: `gitSource.ref`, `gitSource.sha`, and
   `meta.githubCommitSha` resolve to `main` and
   `ad009529911577132e336ecd605e57d55114444a`; independent public-alias
   inspection resolved to this exact deployment ID at
-  `2026-07-15T04:49:00Z`. A later documentation/media-only `main` deployment may
-  advance the alias without changing runtime files; this immutable deployment
-  remains the source-bound v0.2 runtime receipt.
+  `2026-07-15T04:49:00Z`. This immutable deployment remains the source-bound
+  v0.2 CLI baseline runtime receipt; it is not the final-surface deployment.
 - Keyless proof: the Vercel project reported zero configured project
   environment variables. Vercel system variables are not included in this
   claim.
@@ -206,11 +238,9 @@
   inspector exposed `event-typecheck-failure`; export produced
   `codex-rule-ledger-4fc6eab5bc7b.json`, 8,621 bytes, with matching SHA-256
   `4fc6eab5bc7b9a8fad5f6eb887d4a5ddb62bba470b8061684b6a4330171bc3ba`.
-- Fresh release screenshots:
-  `docs/assets/codex-rule-ledger-desktop.png` (1440x1364, SHA-256
-  `c2fc56a90c990d1c4af946818c3adbb1a9fbbfd3f96711a5888d6e20325bfcb0`)
-  and `docs/assets/codex-rule-ledger-mobile.png` (390x3030, SHA-256
-  `14f0262e80abe00128051f9590bc8e8fea6b19af56c30cd3935a8a73584f1fa8`).
+- The baseline screenshots were superseded by the final-surface captures
+  recorded near the top of this packet; no current artifact path is bound to
+  the older screenshot hashes.
 - Estate live reconciliation: project binding and production parity both pass
   for `personal-brand-hackathons-codex-rule-ledger`.
 - Rollback target: known-good pre-v0.2 deployment
@@ -236,6 +266,9 @@
   digest-verified export, the recorded v0.2 CLI receipt, and the allowlisted
   provenance card. It contains no music, secret value, local absolute path,
   private trace ID, prompt, output body, reasoning, or tool input.
+- The finished video follows the unchanged default Case 001 flow and does not
+  show the later public case selector. The final-surface release and fresh
+  product screenshots expose Case 002 without changing the video artifact.
 - The voiceover explicitly covers what the working product does, how Codex
   selected, scoped, architected, implemented, reviewed, deployed, and packaged
   it, the participant authority boundary, and how GPT-5.6 produces source-linked
