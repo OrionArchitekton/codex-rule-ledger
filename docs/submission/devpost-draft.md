@@ -1,14 +1,17 @@
 # Devpost submission draft
 
 > Draft only. Do not submit until the participant supplies all four eligibility
-> attestations. Replace every bracketed proof field with a live-verified value.
+> attestations and the finished video has a public YouTube URL.
 
 ## Identity
 
 - **Project:** Codex Rule Ledger
 - **Track:** Developer Tools
-- **Tagline:** Turn layered Codex instructions and session evidence into an
-  inspectable rule ledger—without pretending missing logs prove compliance.
+- **Tagline:** Evidence-bound audits for Codex runs: support, contradict, or
+  admit the evidence cannot decide.
+- **Audience and decision:** Staff engineers, platform teams, and security
+  reviewers deciding whether to accept, investigate, or block an
+  agent-produced change pending evidence.
 - **Repository:** https://github.com/OrionArchitekton/codex-rule-ledger
 - **License:** MIT
 - **Live demo:** https://codex-rule-ledger.vercel.app
@@ -16,26 +19,38 @@
   `docs/assets/codex-rule-ledger-demo-v0.2.mp4`)
 - **Primary Codex feedback ID:** `019f5dda-3975-70b3-abc0-2f18d72c3aea`
 
+## Judge it in 60 seconds
+
+1. Open the [keyless public demo](https://codex-rule-ledger.vercel.app) on the
+   default **Case 001: Validation drift** and read its reconstructed chain.
+2. Open the contradicted typecheck rule and inspect its exact source plus the
+   linked failure and completion events.
+3. Switch to **Case 002: Retry recovery**, use the legend to see why an exact
+   successful retry yields `NOT_EVIDENCED`, then export that case's
+   digest-bound ledger.
+
+No account, API key, upload, private repository, or rebuild is required. The
+review flow is covered by Chromium browser acceptance at desktop and mobile
+viewports.
+
 ## Inspiration
 
-When a coding agent says a task is done, reviewers can inspect the diff—but the
-diff alone does not show which layered repository instructions governed the run
-or whether the captured session supports the validation it claims. Codex can
-load global guidance, project guidance, directory overrides, and configured
-fallback files into one launch-context instruction chain. Reading that chain
-and a full trace by hand is slow, and it is easy to make a worse mistake:
-treating an absent event as proof that an action never happened.
+Staff engineers, platform teams, and security reviewers can inspect an
+agent-produced diff, but the diff does not show which instruction chain a
+supplied Codex launch capture reconstructs or whether the captured session
+supports the run's validation claims. That leaves a real human decision:
+accept the change, investigate it, or block it pending evidence.
 
-We built Codex Rule Ledger to give reviewers a smaller, honest object: an
-evidence ledger for observable instructions, linked back to the supplied source
-and event that justifies every result.
+Codex Rule Ledger turns an already-normalized launch-and-session bundle into a
+source-linked evidence ledger. Rather than asking only whether a rule passed,
+Rule Ledger first asks whether the supplied evidence makes any verdict
+admissible. Missing evidence is neither failure nor compliance.
 
 ## What it does
 
-The demo reconstructs a disclosed Codex instruction chain from a synthetic
-launch capture, including override/fallback precedence and a configured byte
-limit. It then evaluates typed obligations against normalized session evidence
-and presents four deliberately distinct outcomes:
+Rule Ledger reconstructs the instruction chain described by the supplied
+launch capture, separates mechanically observable obligations from subjective
+prose, and returns four result states:
 
 - `SUPPORTED`: affirmative supplied evidence matches the rule;
 - `CONTRADICTED`: affirmative supplied evidence conflicts with the rule;
@@ -44,86 +59,77 @@ and presents four deliberately distinct outcomes:
 - `NOT_APPLICABLE`: affirmative trigger evidence shows the conditional rule did
   not apply.
 
-Subjective prose is declined outside that result state machine. Reviewers can
-inspect exact source/event anchors and export a deterministic SHA-256-bound JSON
-ledger. Every view retains the `LOCAL_CAPTURE_UNATTESTED` warning: hashes bind
-the supplied bytes, but do not authenticate them or establish trusted time.
+Non-observable instructions are declined rather than guessed into pass/fail.
+Each row links to its instruction source and the supplied evidence or search
+record behind its disposition. Export produces deterministic SHA-256-bound JSON
+labeled `LOCAL_CAPTURE_UNATTESTED`; the hash binds the supplied bytes, not their
+authenticity or time.
 
-v0.2 also ships a repo-local CLI for already-normalized Audit Bundle
-directories. Recorded analysis is keyless by default; explicit local `--live`
-mode binds one GPT-5.6 request to the validated bundle digest. A second
-disclosed synthetic case exercises a different instruction topology, a
-successful retry that prevents a false contradiction, a conditional
-non-trigger, missing evidence, subjective decline, and human review. The public
-Vercel demo remains fixed-fixture and keyless.
+Confusing `NOT_EVIDENCED` with compliance can admit an unverified “done” claim.
+Confusing it with failure can reject work that happened but was not captured.
+Rule Ledger preserves that distinction for human review.
+
+v0.2 reuses the same audit contract in a repo-local CLI for already-normalized
+bundles. Recorded mode is keyless by default; explicit local `--live` mode uses
+one GPT-5.6 semantic-analysis request. The public demo now exposes both
+repository-owned synthetic cases through a story-labeled, keyless selector.
+Neither is a captured real session. The explorer accepts no upload, arbitrary
+fixture, credential, or model request.
 
 ## How judges can test it
 
-The fastest path is the public demo in any current desktop or mobile browser:
-open the live URL, select the contradicted obligation, inspect its linked event,
-filter the exceptions, and export the digest-bound JSON. It needs no account,
-key, upload, or private repository.
+**Public browser path:** Use the 60-second flow above. It is the fastest way to
+inspect the product without rebuilding it.
 
-The supported local judge configuration is Node.js 24 with npm on Ubuntu Linux.
-The exact package engine contract is Node.js `^22.13.0 || >=24.0.0`, and the CLI
-targets normalized POSIX capture paths. Windows CLI support is not claimed. To
-run the same keyless fixture and the second v0.2 case:
+**Supported local judge platform:** Ubuntu Linux with Node.js 24 and npm. The
+package contract also supports Node.js `^22.13.0 || >=24.0.0`; normalized POSIX
+paths are supported, while Windows CLI behavior is not claimed.
 
 ```bash
 git clone https://github.com/OrionArchitekton/codex-rule-ledger.git
 cd codex-rule-ledger
 npm ci
-npm run dev
-
 npm run --silent audit -- \
   --bundle fixtures/synthetic-retry-recovery-v1 \
   --out ledger.json
 ```
 
-Open `http://localhost:3000`. The CLI command creates a private, no-clobber
-ledger file and prints its digest to stderr. `npm run verify` runs lint,
-typecheck, all 77 unit/contract tests, the production build, and Chromium E2E.
-Judges do not need `--live`; that operator-only mode requires an environment
-key and is excluded from the public test path.
+The command writes a private, no-clobber ledger and reports its digest on
+stderr. For the complete release proof on fresh Ubuntu, run
+`npx playwright install --with-deps chromium` once and then `npm run verify`.
+Verification runs lint, typecheck, all 77 unit and contract tests, the
+production build, and five Chromium E2E flows. Judges do not need `--live`; that
+operator-only mode requires an environment key and is excluded from the public
+test path.
 
 ## How we built it
 
-From the minimal Build Week event prompt, Codex independently selected the
-problem, scoped and designed v0.1, implemented and tested it, drove adversarial
-review and repairs, deployed the public demo, and packaged the release. Codex
-then implemented the separately authorized v0.2 CLI scope. The repository
-preserves the living behavior specs and 39 witnessed vertical RED-to-GREEN
-slices, with 77 current unit and contract tests. Dan remained the solo
-participant and retained credentials, spend, eligibility, publication, and
-submission authority. This is the disclosed workflow account; the
-corroborating records do not independently attest agent authorship.
+Working from the minimal event prompt, Codex independently selected the
+problem; scoped, designed, implemented, and tested v0.1; drove adversarial
+review and repair; deployed the keyless demo; and implemented the separately
+authorized v0.2 CLI and final public recorded-case explorer. Dan remained the
+sole entrant and retained release authorization, credentials, spend,
+eligibility, and publication decisions. The public repository and product work
+begin inside the submission period.
 
-The product uses Next.js and strict TypeScript around one deep audit seam:
+The repository preserves 42 witnessed vertical RED-to-GREEN slices and 77
+current tests. The architecture keeps each authority legible:
 
-```text
-runLedgerAudit(bundle, semanticAnalyzer) -> AuditExecution
-```
+| Layer | Responsibility |
+| --- | --- |
+| Codex | Selected and scoped the problem, implemented the vertical slices, drove review repair, deployment, and submission packaging. |
+| GPT-5.6 | In live mode, maps complete instruction lines into typed, source-linked semantic proposals and declines ambiguous or subjective rules. |
+| Deterministic TypeScript | Owns input validation, instruction discovery, hashes, evidence queries, semantic coverage, and every final ledger state. |
 
-Deterministic code owns manifest completeness, instruction discovery, hashes,
-evidence queries, final result states, path redaction, and canonical export.
-GPT-5.6, through the Responses API structured-output path, performs the
-indispensable semantic job: it maps complete instruction lines in the four
-strict v0.1 forms into source-linked observable proposals and declines
-subjective or ambiguous rules. Deterministic code requires exactly one total,
-evaluable disposition for every supported directive. GPT-5.6 cannot emit a
-final ledger verdict or invent a source anchor.
+GPT-5.6 cannot emit a final verdict or invent a source anchor. The public demo
+serves two repository-owned recordings through the same typed analyzer contract,
+so unrestricted judging consumes no API budget and exposes no key.
 
-For safe and unrestricted judging, the public site serves a repository-owned
-recording from the same typed analyzer contract. The live GPT-5.6 proof uses the
-same allowlisted fixture, with no tools, no automatic retries, no filesystem
-paths, strict byte/event/output limits, `store: false`, and an operator-injected
-dedicated key. The public Vercel project remains keyless.
-
-The build-provenance card binds the official Codex feedback thread ID to the
-public PR, main-branch CI, and production deployment, plus render-time-verified
-Langfuse metadata showing 17 GPT-5.6 Codex generations. It is explicitly
-corroboration, not a cryptographic authorship or transcript attestation, and it
-publishes no trace IDs, prompts, outputs, reasoning, paths, or tool inputs.
+The [build-provenance card](https://github.com/OrionArchitekton/codex-rule-ledger/blob/main/docs/submission/build-provenance-v0.2.md)
+and [release proof](https://github.com/OrionArchitekton/codex-rule-ledger/blob/main/docs/submission/release-proof.md)
+carry the detailed `/feedback`, Git, CI, deployment, metadata-only Langfuse,
+and bounded live-request receipts. They corroborate the disclosed workflow;
+they do not independently attest authorship.
 
 ## Challenges
 
@@ -141,23 +147,17 @@ malformed output, refusal, or timeout.
 
 ## Accomplishments
 
-- One browser flow makes layered instruction discovery and five distinct
-  obligation outcomes understandable in under 90 seconds.
-- The same deep module seam drives contract tests, the API route, and the UI.
-- The fixed fixture covers override precedence, fallback selection, byte-limit
-  exclusion, success, affirmative contradiction, missing evidence,
-  inapplicability, and subjective-rule decline.
-- The public route serves a repository-owned recorded fixture and accepts no uploads, URLs, commands, raw
-  traces, API keys, or user-controlled model calls.
-- The local v0.2 CLI accepts already-normalized bundles through the same deep
-  audit seam, defaults to recorded/keyless mode, and fails closed on malformed,
-  duplicate, oversized, linked, non-regular, stale, or incomplete inputs.
-- A second disclosed synthetic case proves the engine and CLI are not
-  hard-coded to one instruction topology or result mix.
-- A compact provenance card connects official `/feedback`, Git, CI, Vercel,
-  and metadata-only Langfuse receipts without overclaiming authorship.
-- The repository includes CI, secret scanning, dependency review, a security
-  policy, and an operator rollback runbook.
+- A zero-login browser workflow compares two disclosed recorded cases, exposes
+  their instruction chains and outcome mixes, and exports each digest-bound
+  ledger.
+- One audit seam drives tests, the API, the UI, and the v0.2 normalized-bundle
+  CLI.
+- The second synthetic topology is judge-visible in the browser and
+  demonstrates that the contract handles a different instruction chain and
+  outcome mix.
+- The release has 77 unit and contract tests across seven files plus five
+  Chromium acceptance flows, successful bounded GPT-5.6 proof requests, and a
+  keyless public deployment.
 
 ## What we learned
 
@@ -166,53 +166,38 @@ as what they found. A useful ledger is not a green compliance badge; it is a
 compact chain of inspectable claims whose sources, evidence, and limitations
 survive export.
 
-We also learned that the best model boundary is narrow and asymmetric: semantic
-understanding benefits from GPT-5.6, while ordering, hashes, evidence
+We also learned that the best model boundary is narrow and asymmetric:
+semantic understanding benefits from GPT-5.6, while ordering, hashes, evidence
 sufficiency, and terminal states benefit from deterministic code.
 
 ## What's next
 
-After the event, the first step is not a universal agent dashboard. It is a
-careful OSS extraction of the deterministic core, a versioned capture/import
-contract, more disclosed Codex fixtures, and signed capture provenance only
-when a real key-backed attestation design exists. Support for other agent
-harnesses and private traces would require separate threat modeling,
-authorization, retention, and deletion controls.
+After the event, the next step is a careful OSS extraction of the deterministic
+core, a versioned capture/import contract, more disclosed Codex fixtures, and
+signed capture provenance only when a real key-backed attestation design
+exists. Support for other agent harnesses and private traces requires separate
+threat modeling, authorization, retention, and deletion controls.
 
 ## Built with
 
 Codex, GPT-5.6, OpenAI Responses API, structured outputs, Next.js, React,
 TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 
-## Proof fields before submission
+## Submission media order
 
-- https://codex-rule-ledger.vercel.app — production deployment
-  `dpl_GHL2zVtNjBiVMr7wHbD2sDLMgnZa` is `READY` and bound to v0.2 merge SHA
-  `ad009529911577132e336ecd605e57d55114444a`; root/GET/POST are `200/200/405`
-  and the project has zero configured environment variables.
-- `[PUBLIC_YOUTUBE_URL]` — participant-held upload remains pending. The finished
-  upload-ready MP4 is 1920x1080 H.264/AAC, `177.219` seconds, with checked
-  54-cue captions and SHA-256 `dc71469a…f441`. Its voiceover covers the working
-  product, the specific Codex build workflow and key architecture decision, and
-  GPT-5.6's semantic-proposal role versus deterministic verdict ownership.
-- `019f5dda-3975-70b3-abc0-2f18d72c3aea` — official `/feedback` upload returned
-  this exact primary-build thread ID with diagnostic logs excluded.
-- Live GPT-5.6 proof completed at `2026-07-15T01:21:59.222Z`; the public release
-  proof carries a shortened response identifier and SHA-256 fingerprint while
-  the full ID remains in private operator-session evidence.
-- The v0.2 CLI completed exactly one separate GPT-5.6 proof at
-  `2026-07-15T04:23:34Z`: 1,323 input / 820 output tokens, `$0.031215`
-  conservative cost, six mixed-outcome records, and canonical ledger digest
-  `f63e106a…dca6`. The dedicated key remained ephemeral and Vercel remained
-  keyless.
-- https://github.com/OrionArchitekton/codex-rule-ledger/pull/14 — all review
-  conversations resolved before the green-gated v0.2 merge.
-- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057
-  — lint, typecheck, 42 targeted unit/boundary test executions across 4 files,
-  build, and browser E2E green on the v0.2 merge SHA. The full local release
-  suite is 77/77 across 7 files.
-- https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055
-  — main-branch Gitleaks green on the same merge SHA.
-- `docs/submission/build-provenance-v0.2.md` — official feedback, public
-  Git/CI/deployment receipts, and render-time metadata-only Langfuse proof with
-  explicit non-attestation limits.
+1. **Product UI:** `docs/assets/codex-rule-ledger-desktop.png`
+2. **CLI receipt:** `docs/assets/cli-recorded-v0.2.png`
+3. **Build provenance:** `docs/assets/build-provenance-v0.2.png`
+4. **Optional mobile view:** `docs/assets/codex-rule-ledger-mobile.png`
+
+Use the reviewed captions in `docs/submission/SCREENSHOT_CAPTIONS.md`.
+
+## Operator-only gates
+
+- [ ] Supply all four participant eligibility attestations.
+- [ ] Upload the finished 2:57 video as **Public** on YouTube using
+  `docs/submission/YOUTUBE.md`, then replace `[PUBLIC_YOUTUBE_URL]`.
+- [ ] Perform the final Devpost preview and submit before the event deadline.
+- [x] Final-surface local proof, captions, fresh screenshots, and upload-ready
+  video are complete; the exact runtime receipt will be attached to the merged
+  final-surface PR.

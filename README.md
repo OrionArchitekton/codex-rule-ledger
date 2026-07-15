@@ -1,36 +1,50 @@
 # Codex Rule Ledger
 
-Evidence-bound audits for observable Codex repository instructions.
+Evidence-bound audits for Codex runs: support, contradict, or admit the evidence
+cannot decide.
+
+For staff engineers, platform teams, and security reviewers deciding whether
+to accept, investigate, or block an agent-produced change pending evidence.
 
 ![Codex Rule Ledger desktop demo](docs/assets/codex-rule-ledger-desktop.png)
 
-Codex Rule Ledger reconstructs the instruction chain described by a supplied
-Codex launch capture, separates mechanically observable obligations from
-subjective prose, and links each result to the supplied session evidence.
+## Judge it in 60 seconds
 
-It reports evidence. It does **not** certify compliance, authenticate a trace,
-or infer that an unlogged action did not happen.
+1. [Open the keyless public demo](https://codex-rule-ledger.vercel.app) on the
+   default **Case 001: Validation drift** and read its reconstructed chain.
+2. Open “Do not claim completion after `npm run typecheck` fails” and inspect
+   the linked source, failed-typecheck event, and completion event.
+3. Switch to **Case 002: Retry recovery** to see why a successful retry yields
+   `NOT_EVIDENCED`, then export that case's digest-bound ledger.
+
+No login, API key, upload, private repository, or rebuild is required. This
+case-switch, inspect, and export path is covered by the repository's Chromium
+E2E acceptance tests at desktop and mobile widths.
 
 ## Why it exists
 
-Repository instructions are layered: global guidance, project guidance, and
-directory-specific overrides can all govern one Codex run. Reviewing only the
-diff does not show which instructions applied or whether the captured session
-contains evidence for the validation it claims.
+A diff shows what an agent changed, but not which instruction chain a supplied
+Codex launch capture reconstructs or whether the captured session supports the
+run's validation claims. Rather than asking only whether a rule passed, Rule
+Ledger first asks whether the supplied evidence makes any verdict admissible.
 
 The public demo makes that review legible in one screen:
 
 - the reconstructed global-to-launch-directory instruction chain;
 - `SUPPORTED`, `CONTRADICTED`, `NOT_EVIDENCED`, and `NOT_APPLICABLE` results;
 - declined subjective instructions outside the mechanical result machine;
-- exact instruction and event anchors for each result; and
+- exact source links plus evidence or search records for each disposition; and
 - a deterministic, hash-bound JSON export labeled
   `LOCAL_CAPTURE_UNATTESTED`.
 
-## Try the fixed-fixture demo
+Confusing missing evidence with compliance can admit an unverified “done”
+claim. Confusing it with failure can reject work that happened but was not
+captured. Rule Ledger preserves that distinction for human review.
 
-[Open the public fixture-only demo](https://codex-rule-ledger.vercel.app).
-It requires no login, API key, upload, or private repository access.
+It reports supplied evidence. It does **not** certify compliance, authenticate
+a trace, or infer that an unlogged action did not happen.
+
+## Run locally
 
 Prerequisites: Node.js 22.13 or newer within the 22.x line, or Node.js 24+, and
 npm. Release CI and the documented judge path use Node.js 24 on Ubuntu Linux.
@@ -42,19 +56,22 @@ npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`. The page is preloaded with the sanitized
-`build-week-demo-v1` fixture, so evaluators do not need an API key, private
-repository, or rebuild step. Select ledger rows to inspect their evidence, use
-the filters to isolate exceptions, and export the canonical ledger JSON.
+Open `http://localhost:3000`. The page defaults to the disclosed
+`build-week-demo-v1` synthetic case and can switch locally to the disclosed
+`synthetic-retry-recovery-v1` case. Case 002 is visibly labeled
+`SYNTHETIC_SANITIZED` and is not a captured real session. Both use recorded
+analysis, so evaluators do not need an API key or private repository.
 
-To run the complete local proof:
+For the complete local proof on a fresh Ubuntu machine, install the Chromium
+test browser and its system dependencies once, then run verification:
 
 ```bash
+npx playwright install --with-deps chromium
 npm run verify
 ```
 
-The individual checks are `lint`, `typecheck`, `test`, `build`, and
-`test:e2e`. The browser acceptance flow starts its own local server.
+Verification runs lint, typecheck, all 77 unit and contract tests, the
+production build, and five Chromium E2E flows.
 
 ## Audit an already-normalized bundle locally
 
@@ -83,14 +100,15 @@ npm run --silent audit -- --bundle <normalized-bundle> --out ledger.json --live
 The CLI accepts only `capture-manifest.json`, `diff.json`, and `session.json`
 as its normalized bundle components; recorded mode also requires
 `semantic-analysis.json`. It does not crawl a repository, import raw Codex
-sessions, execute captured commands, upload data, or change the fixture-only
-public site. Review [`docs/runbooks/local-audit-cli.md`](docs/runbooks/local-audit-cli.md)
-and [`SECURITY.md`](SECURITY.md) before using `--live`.
+sessions, execute captured commands, upload data, or change the public
+recorded-case explorer. Review
+[`docs/runbooks/local-audit-cli.md`](docs/runbooks/local-audit-cli.md) and
+[`SECURITY.md`](SECURITY.md) before using `--live`.
 
-## What the fixture proves
+## What the recorded cases prove
 
-The disclosed synthetic capture exercises instruction override/fallback order
-and the configured byte limit. Its normalized events yield:
+Case 001 exercises instruction override/fallback order and the configured byte
+limit. Its normalized events yield:
 
 | Rule | Result | Required evidence |
 |---|---|---|
@@ -100,8 +118,13 @@ and the configured byte limit. Its normalized events yield:
 | Run `npm run docs:check` when `README.md` changes | `NOT_APPLICABLE` | The captured changed-path set affirmatively excludes `README.md` |
 | “Make the interface delightful” | `DECLINED_NON_OBSERVABLE` | Subjective prose never receives a mechanical pass/fail result |
 
+Case 002 uses a distinct three-source topology and six-record outcome mix. Its
+failed typecheck is followed by an exact successful retry before completion,
+so the earlier failure is not affirmative contradiction evidence.
+
 `NOT_EVIDENCED` means only that the supplied capture lacks sufficient evidence.
-It is never treated as proof of non-action.
+It is neither failure nor compliance and is never treated as proof of
+non-action.
 
 ## Architecture
 
@@ -140,26 +163,35 @@ bounds.
 From the minimal Build Week event brief, Codex independently selected the
 problem, scoped and designed v0.1, implemented and tested it, drove adversarial
 review and repairs, deployed the public demo, and packaged the release. Codex
-then implemented the separately authorized v0.2 CLI scope through nine more
-vertical RED-to-GREEN slices. This is a workflow disclosure, not independent
+then implemented the separately authorized v0.2 CLI and final public
+recorded-case explorer. This is a workflow disclosure, not independent
 proof of agent authorship. Dan remained the solo participant and retained
 credentials, spend, eligibility, publication, and submission authority. The
 repository preserves the living specs and witnessed build ledger in
 [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
 
-GPT-5.6 performs the indispensable semantic step: it maps complete instruction
+Codex accelerated the workflow by carrying 42 vertical RED-to-GREEN slices and
+review repairs from living specs through tests, implementation, CI, deployment,
+and submission assets. The key architecture decision was to let GPT-5.6
+propose semantics while deterministic TypeScript alone owns evidence
+sufficiency and final ledger states.
+
+In live mode, GPT-5.6 performs the semantic step: it maps complete instruction
 lines in the four strict v0.1 forms into source-linked observable proposals and
-declines subjective or ambiguous language. Deterministic code proves that every
-supported directive has exactly one total disposition—and that disposition is
-evaluable—and remains the authority for all final evidence states. The public
-demo serves a recorded result from the same typed contract so judging does not
+declines subjective or ambiguous language. Deterministic code requires every
+supported directive to have exactly one total, evaluable disposition and
+remains the authority for all final evidence states. The public demo serves two
+recorded synthetic cases from the same typed contract so judging does not
 consume API budget or expose a key.
 
 ## Input, privacy, and trust boundary
 
-The public deployment remains deliberately fixture-only. The local v0.2 CLI
-accepts only already-normalized Audit Bundle directories and demonstrates Codex
-0.144.0 with POSIX capture paths. Neither surface accepts uploads or URLs,
+The public deployment remains deliberately recorded-case-only. It exposes
+exactly two repository-owned synthetic cases and accepts no visitor input. The
+local v0.2 CLI accepts only already-normalized Audit Bundle directories and
+demonstrates Codex
+0.144.0 with POSIX capture paths. `GET /api/audit` remains default-only for
+Case 001. Neither surface accepts uploads or URLs,
 executes captured commands, or normalizes raw sessions. Both included cases are
 synthetic and contain no private code or credentials.
 
@@ -171,18 +203,18 @@ repository tree, commit identity, or edit timing.
 
 ## Project map
 
-- [`specs/codex-rule-ledger-spec.md`](specs/codex-rule-ledger-spec.md) — living
+- [`specs/codex-rule-ledger-spec.md`](specs/codex-rule-ledger-spec.md): living
   behavior contract and acceptance criteria.
-- [`src/ledger`](src/ledger) — deterministic audit core and analyzer adapters.
-- [`fixtures/build-week-demo-v1`](fixtures/build-week-demo-v1) — disclosed
+- [`src/ledger`](src/ledger): deterministic audit core and analyzer adapters.
+- [`fixtures/build-week-demo-v1`](fixtures/build-week-demo-v1): disclosed
   synthetic capture and recorded semantic proposal batch.
-- [`fixtures/synthetic-retry-recovery-v1`](fixtures/synthetic-retry-recovery-v1)
-  — second disclosed synthetic topology with retry-safe mixed outcomes.
-- [`specs/audit-bundle-cli-spec.md`](specs/audit-bundle-cli-spec.md) — v0.2
+- [`fixtures/synthetic-retry-recovery-v1`](fixtures/synthetic-retry-recovery-v1):
+  second disclosed synthetic topology with retry-safe mixed outcomes.
+- [`specs/audit-bundle-cli-spec.md`](specs/audit-bundle-cli-spec.md): v0.2
   local CLI behavior and safety contract.
-- [`tests`](tests) — deep-seam, adapter, and route contract tests.
-- [`e2e/demo.spec.ts`](e2e/demo.spec.ts) — judge-facing browser acceptance flow.
-- [`docs/runbooks/public-demo.md`](docs/runbooks/public-demo.md) — rollout,
+- [`tests`](tests): deep-seam, adapter, and route contract tests.
+- [`e2e/demo.spec.ts`](e2e/demo.spec.ts): judge-facing browser acceptance flow.
+- [`docs/runbooks/public-demo.md`](docs/runbooks/public-demo.md): rollout,
   validation, monitoring, and rollback.
 
 ## Status and license
