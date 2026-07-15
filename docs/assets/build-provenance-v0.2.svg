@@ -38,7 +38,7 @@
     <text x="560" y="394" font-size="18" font-weight="700" fill="#15262b">PR 14  ·  20c2d033</text>
     <text x="560" y="440" font-size="14" letter-spacing="1" fill="#40565a">MAIN MERGE / CI</text>
     <text x="560" y="471" font-size="18" font-weight="700" fill="#15262b">ad009529  ·  GUARDRAILS GREEN</text>
-    <text x="560" y="510" font-size="16" fill="#26805c">77 tests + lint + types + build + E2E</text>
+    <text x="560" y="510" font-size="16" fill="#26805c">42 targeted tests + lint + types + build + E2E</text>
     <text x="560" y="558" font-size="14" letter-spacing="1" fill="#40565a">PRODUCTION</text>
     <text x="560" y="589" font-size="18" font-weight="700" fill="#15262b">VERCEL READY  ·  SHA MATCH</text>
     <text x="560" y="620" font-size="16" fill="#26805c">0 configured project environment variables</text>

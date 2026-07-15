@@ -78,14 +78,16 @@
 
 ## Automated verification
 
-- v0.2 main source: 77/77 unit/contract tests across 7 files, plus lint,
-  typecheck, deterministic boundary, production build, and Chromium E2E, all
-  green in
+- v0.2 main source: 42 targeted unit/boundary test executions across 4 files,
+  plus lint, typecheck, production build, and Chromium E2E, all green in
   [run 29389462057](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057)
   on `ad009529911577132e336ecd605e57d55114444a`.
 - v0.2 main Gitleaks:
   [run 29389462055](https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055)
   passed on the same merge SHA.
+- The full local release suite remains 77/77 tests across 7 files, as recorded
+  in the final local-verification receipt above; the split CI jobs execute 42
+  targeted release-boundary tests.
 - PR-head dependency review, Gitleaks, fail-closed aggregation, GitGuardian,
   Vercel preview, lint, typecheck, unit, boundary, build, and E2E all passed;
   zero review conversations remained unresolved at merge.
@@ -220,21 +222,25 @@
 
 - Upload-ready narrated video:
   [`codex-rule-ledger-demo-v0.2.mp4`](../assets/codex-rule-ledger-demo-v0.2.mp4),
-  1920x1080 H.264 at 30 fps with AAC-LC audio, `177.830` seconds and
-  `10,656,468` bytes. SHA-256:
-  `80d338234ac251177261660721a83d426d6fad9d026f4194385aa29d2146fdbf`.
+  1920x1080 H.264 at 30 fps with AAC-LC audio, `177.219` seconds and
+  `10,698,820` bytes. SHA-256:
+  `dc71469a08a379359331e9ac9e67eaa146cba9626671fd2b585cb28451b4f441`.
 - Checked caption companion:
   [`codex-rule-ledger-demo-v0.2.srt`](codex-rule-ledger-demo-v0.2.srt), 54
-  non-overlapping cues ending at `177.801` seconds, with no cue longer than nine
+  non-overlapping cues ending at `177.150` seconds, with no cue longer than nine
   words. SHA-256:
-  `0354527c66f24d9f39ef62d813c593df6e4dbe3c4ca7cb591646bbeba967c26f`.
+  `475d9c908d52aa47e6989abcefbb18d546bdaa3d21ad7d35b070080a065317bb`.
 - The seven-shot recording uses repository-owned visuals, the exact public
   production site, an actual contradiction-inspection flow, an actual
   digest-verified export, the recorded v0.2 CLI receipt, and the allowlisted
   provenance card. It contains no music, secret value, local absolute path,
   private trace ID, prompt, output body, reasoning, or tool input.
+- The voiceover explicitly covers what the working product does, how Codex
+  selected, scoped, architected, implemented, reviewed, deployed, and packaged
+  it, the participant authority boundary, and how GPT-5.6 produces source-linked
+  semantic proposals while deterministic TypeScript owns every final verdict.
 - Media QC: duration is below the `2:59` ceiling; video and audio both start at
-  zero; audio measured `-22.6 dB` mean and `-1.9 dB` peak with no two-second
+  zero; audio measured `-22.9 dB` mean and `-1.5 dB` peak with no two-second
   silence; representative frames across all seven shots were inspected at
   original resolution.
 - Public YouTube upload remains a participant-held publication gate. The local

@@ -191,8 +191,10 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
   `ad009529911577132e336ecd605e57d55114444a`; root/GET/POST are `200/200/405`
   and the project has zero configured environment variables.
 - `[PUBLIC_YOUTUBE_URL]` — participant-held upload remains pending. The finished
-  upload-ready MP4 is 1920x1080 H.264/AAC, `177.830` seconds, with checked
-  54-cue captions and SHA-256 `80d33823…fdbf`.
+  upload-ready MP4 is 1920x1080 H.264/AAC, `177.219` seconds, with checked
+  54-cue captions and SHA-256 `dc71469a…f441`. Its voiceover covers the working
+  product, the specific Codex build workflow and key architecture decision, and
+  GPT-5.6's semantic-proposal role versus deterministic verdict ownership.
 - `019f5dda-3975-70b3-abc0-2f18d72c3aea` — official `/feedback` upload returned
   this exact primary-build thread ID with diagnostic logs excluded.
 - Live GPT-5.6 proof completed at `2026-07-15T01:21:59.222Z`; the public release
@@ -206,8 +208,9 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 - https://github.com/OrionArchitekton/codex-rule-ledger/pull/14 — all review
   conversations resolved before the green-gated v0.2 merge.
 - https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462057
-  — lint, typecheck, 77 tests, deterministic boundary, build, and browser E2E
-  green on the v0.2 merge SHA.
+  — lint, typecheck, 42 targeted unit/boundary test executions across 4 files,
+  build, and browser E2E green on the v0.2 merge SHA. The full local release
+  suite is 77/77 across 7 files.
 - https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29389462055
   — main-branch Gitleaks green on the same merge SHA.
 - `docs/submission/build-provenance-v0.2.md` — official feedback, public
