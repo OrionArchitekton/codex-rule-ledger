@@ -2,7 +2,8 @@
 
 > v0.2 runtime release is bound to reviewed source, green main-branch CI, and a
 > keyless production deployment below. This post-release packet adds only
-> documentation and media; it does not broaden or alter the deployed runtime.
+> documentation, media, and supported-engine metadata; it does not alter
+> runtime code, dependencies, or the deployed runtime.
 
 ## v0.2 immutable source and review
 

@@ -64,10 +64,10 @@ open the live URL, select the contradicted obligation, inspect its linked event,
 filter the exceptions, and export the digest-bound JSON. It needs no account,
 key, upload, or private repository.
 
-The supported local judge configuration is Node.js 24 with npm on Ubuntu Linux;
-the package contract accepts Node.js 22 or newer, and the CLI targets normalized
-POSIX capture paths. Windows CLI support is not claimed. To run the same
-keyless fixture and the second v0.2 case:
+The supported local judge configuration is Node.js 24 with npm on Ubuntu Linux.
+The exact package engine contract is Node.js `^22.13.0 || >=24.0.0`, and the CLI
+targets normalized POSIX capture paths. Windows CLI support is not claimed. To
+run the same keyless fixture and the second v0.2 case:
 
 ```bash
 git clone https://github.com/OrionArchitekton/codex-rule-ledger.git

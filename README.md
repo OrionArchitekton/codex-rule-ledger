@@ -32,8 +32,8 @@ The public demo makes that review legible in one screen:
 [Open the public fixture-only demo](https://codex-rule-ledger.vercel.app).
 It requires no login, API key, upload, or private repository access.
 
-Prerequisites: Node.js 22 or newer and npm. Release CI and the documented judge
-path use Node.js 24 on Ubuntu Linux.
+Prerequisites: Node.js 22.13 or newer within the 22.x line, or Node.js 24+, and
+npm. Release CI and the documented judge path use Node.js 24 on Ubuntu Linux.
 
 ```bash
 git clone https://github.com/OrionArchitekton/codex-rule-ledger.git

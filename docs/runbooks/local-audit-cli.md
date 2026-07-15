@@ -31,7 +31,8 @@ through live mode.
 
 ## Preflight
 
-1. Use Node.js 22 or newer and install the lockfile with `npm ci`.
+1. Use Node.js 22.13 or newer within the 22.x line, or Node.js 24+, and install
+   the lockfile with `npm ci`.
 2. Confirm the bundle directory contains `capture-manifest.json`, `diff.json`,
    and `session.json`; recorded mode also requires `semantic-analysis.json`.
 3. Review the normalized content and ensure it contains no secret or private
