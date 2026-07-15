@@ -16,10 +16,11 @@ describe("proof:gpt-live CLI", () => {
         encoding: "utf8",
       },
     );
-    const output = `${result.stdout}${result.stderr}`;
-
     expect(result.status).toBe(1);
-    expect(output).toContain("OPENAI_API_KEY is required");
-    expect(output).not.toContain("Top-level await is currently not supported");
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toContain("OPENAI_API_KEY is required");
+    expect(result.stderr).not.toContain(
+      "Top-level await is currently not supported",
+    );
   });
 });
