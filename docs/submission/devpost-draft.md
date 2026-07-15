@@ -73,7 +73,8 @@ final ledger verdict or invent a source anchor.
 For safe and unrestricted judging, the public site serves a repository-owned
 recording from the same typed analyzer contract. The live GPT-5.6 proof uses the
 same allowlisted fixture, with no tools, no automatic retries, no filesystem
-paths, strict byte/event/output limits, `store: false`, and a server-side key.
+paths, strict byte/event/output limits, `store: false`, and an operator-injected
+dedicated key. The public Vercel project remains keyless.
 
 ## Challenges
 
@@ -133,8 +134,9 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 - `[PUBLIC_YOUTUBE_URL]` — public, audio present, duration at most 2:59.
 - `[FEEDBACK_ID_FROM_PRIMARY_BUILD_THREAD]` — created by the participant with
   `/feedback` in the main Codex build thread.
-- `[LIVE_GPT_RESPONSE_ID]` — retained privately in the proof packet, not as a
-  credential or raw response dump.
+- Live GPT-5.6 proof completed at `2026-07-15T01:21:59.222Z`; the public release
+  proof carries a shortened response identifier and SHA-256 fingerprint while
+  the full ID remains in private operator-session evidence.
 - https://github.com/OrionArchitekton/codex-rule-ledger/actions/runs/29373378393
   — lint, typecheck, unit, boundary, build, and browser checks green on the
   release baseline; dependency review, Gitleaks, and the fail-closed PR gate

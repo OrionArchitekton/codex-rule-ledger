@@ -37,19 +37,33 @@
 
 ## GPT-5.6 proof
 
-- Model: `gpt-5.6`
+- Model: `gpt-5.6`, the standard alias for
+  [GPT-5.6 Sol](https://developers.openai.com/api/docs/models).
 - Prompt contract: `semantic-obligations-v2`
 - Prompt SHA-256: `8d9c6eea9279e1fb9d4bbd2999271178de66f7e1b36327e0737da6812b909236`
 - Fixture digest: `1b2d24559d4fa8cee0a1f46d13a6d2ee7fc58a4c605d2fe9caf234d371870752`
-- Call status: PENDING — no dedicated OpenAI key has been injected and no
-  billable proof command has been attempted.
-- Response ID: `[LIVE_GPT_RESPONSE_ID]`
-- Input/output tokens: `[TOKEN_COUNTS]`
-- Cost ledger: `no proof call attempted / $20 maximum`
-- Secret scope: Doppler project `openai-build-week-rule-ledger` materialized on
-  `2026-07-14T21:22:05Z`; root configs are `dev` and `prd`, staging was removed,
-  and `OPENAI_API_KEY` is absent. Doppler's automatic non-root personal overlay
-  is unused. No Doppler or OpenAI secret is attached to Vercel.
+- Call status: COMPLETED at `2026-07-15T01:21:59.222Z` with exactly one
+  OpenAI request and zero automatic retries. An earlier CLI invocation failed
+  during local TypeScript transformation, before the API boundary; the
+  entrypoint was repaired and covered by a regression test before this call.
+- Response ID: `resp_026bb975…f24e6d`; full ID retained in private
+  operator-session evidence. SHA-256 fingerprint:
+  `77abb9627038d89be32da286b06a1eef8c59b22854b04e3eb0fc204d04074636`.
+- Input/output tokens: `1,315 / 846`.
+- Result counts: `5` proposals and `4` source-coverage receipts.
+- Semantic-analysis digest:
+  `bd163dc845061355f31a93738cbd67915b66bf2c68df513c389cdfc33244da78`.
+- Ledger digest:
+  `d3b706e5546958d1c9504e1342a0553dfdaad29e299a20dbc1ba1ad41f961d67`.
+- Request controls: `store: false`, tools disabled, automatic retries `0`.
+- Cost ledger: conservative standard-price upper bound `$0.031955 / $12`
+  effective operator ceiling (`$20` remained the approved build-fire maximum).
+  This uses the published GPT-5.6 Sol rates of `$5 / 1M` input tokens and
+  `$30 / 1M` output tokens and assumes no cached-input discount.
+- Secret scope: Doppler project `openai-hack-codex-ledger`, config `prd`.
+  `OPENAI_API_KEY` presence was verified without displaying its value and was
+  injected ephemerally for the operator proof. It was not written to the
+  repository or attached to Vercel.
 
 ## Public deployment
 
