@@ -1,7 +1,9 @@
-# Devpost submission draft
+# Devpost submission record
 
-> Draft only. Do not submit until the participant supplies all four eligibility
-> attestations and the finished video has a public YouTube URL.
+> Submitted to OpenAI Build Week at
+> https://devpost.com/software/codex-rule-ledger. Logged-out verification on
+> `2026-07-16` confirmed the full story, public video embed, three-image gallery,
+> captions, and external links.
 
 ## Identity
 
@@ -15,7 +17,8 @@
 - **Repository:** https://github.com/OrionArchitekton/codex-rule-ledger
 - **License:** MIT
 - **Live demo:** https://codex-rule-ledger.vercel.app
-- **Video:** `[PUBLIC_YOUTUBE_URL]` (upload-ready source:
+- **Devpost:** https://devpost.com/software/codex-rule-ledger
+- **Video:** https://youtu.be/7zJCkww6TaE (published source:
   `docs/assets/codex-rule-ledger-demo-v0.2.mp4`)
 - **Primary Codex feedback ID:** `019f5dda-3975-70b3-abc0-2f18d72c3aea`
 
@@ -196,13 +199,15 @@ TypeScript, Zod, Vitest, Playwright, GitHub Actions, and Vercel.
 3. **v0.2 CLI baseline provenance:** `docs/assets/build-provenance-v0.2.png`
 4. **Optional mobile view:** `docs/assets/codex-rule-ledger-mobile.png`
 
-Use the reviewed captions in `docs/submission/SCREENSHOT_CAPTIONS.md`.
+Use the final 140-character-limit captions in
+`docs/submission/SCREENSHOT_CAPTIONS.md`.
 
-## Operator-only gates
+## Publication status
 
-- [ ] Supply all four participant eligibility attestations.
-- [ ] Upload the finished 2:57 video as **Public** on YouTube using
-  `docs/submission/YOUTUBE.md`, then replace `[PUBLIC_YOUTUBE_URL]`.
-- [ ] Perform the final Devpost preview and submit before the event deadline.
+- [x] Participant eligibility attestations supplied.
+- [x] Finished 2:57 video published as **Public** on YouTube and verified while
+  logged out at https://youtu.be/7zJCkww6TaE.
+- [x] Final Devpost page reviewed, submitted, and verified while logged out at
+  https://devpost.com/software/codex-rule-ledger.
 - [x] Final-surface proof is complete and reconciled in the
   [PR #16 post-merge receipt](https://github.com/OrionArchitekton/codex-rule-ledger/pull/16#issuecomment-4982803645).

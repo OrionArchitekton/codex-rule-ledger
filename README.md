@@ -13,6 +13,10 @@ must not become a false contradiction.
 
 ![Codex Rule Ledger desktop demo](docs/assets/codex-rule-ledger-desktop.png)
 
+Build Week links: [Devpost submission](https://devpost.com/software/codex-rule-ledger),
+[public demo video](https://youtu.be/7zJCkww6TaE), and
+[keyless live demo](https://codex-rule-ledger.vercel.app).
+
 ## Judge it in 60 seconds
 
 1. [Open the keyless public demo](https://codex-rule-ledger.vercel.app) on the
