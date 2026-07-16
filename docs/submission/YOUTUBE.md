@@ -1,8 +1,9 @@
-# YouTube upload packet
+# YouTube publication record
 
-This packet prepares the participant-held public upload. Do not publish until
-the participant has reviewed the final video and supplied the required
-eligibility attestations.
+Published publicly at https://youtu.be/7zJCkww6TaE on
+`2026-07-15T23:07:45-07:00`. Logged-out verification confirmed playability,
+the 177-second runtime, 1080p processing, and both the reviewed English (United
+States) caption track and YouTube's automatic English track.
 
 ## Title
 
@@ -75,24 +76,25 @@ OpenAI Build Week, Developer Tools track.
 02:46 The reviewer decision
 ```
 
-## Upload settings and checks
+## Published settings and checks
 
 - Visibility: **Public**. Unlisted does not satisfy the event requirement.
+- Public URL: https://youtu.be/7zJCkww6TaE
+- Published: `2026-07-15T23:07:45-07:00`
 - Video: `docs/assets/codex-rule-ledger-demo-v0.2.mp4`
 - Captions: `docs/submission/codex-rule-ledger-demo-v0.2.srt`
-- Thumbnail: choose a clean 16:9 frame from the opening product-UI shot. Keep
-  the ledger legible and do not overlay unsupported claims; the tall desktop
-  screenshot should not be uploaded without a deliberate crop.
+- Thumbnail: clean auto-generated 16:9 product-UI frame.
 - Category: Science & Technology.
 - Audience setting: not made for kids.
-- License: Standard YouTube License unless the participant deliberately chooses
-  otherwise.
+- License: Standard YouTube License.
 - No copyrighted music, third-party footage, secrets, raw traces, private IDs,
   or unsupported enforcement claims appear in the reviewed video.
-- After upload, watch the public URL while logged out, confirm 1080p processing
-  and captions, then replace `[PUBLIC_YOUTUBE_URL]` in the Devpost draft.
+- Fresh logged-out verification reported player status `OK`, qualities `1080p`,
+  `720p`, `360p`, and `144p`, and both published caption tracks.
 
-## Pinned comment
+## Optional pinned comment
+
+Prepared copy; not required for the submission:
 
 Try the keyless demo in under a minute: inspect Case 001's contradicted
 typecheck rule, switch to Case 002's retry recovery, and export either

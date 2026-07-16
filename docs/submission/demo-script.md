@@ -85,7 +85,7 @@ root during capture and do not appear in the video.
 
 ## Recording acceptance
 
-- Upload-ready artifact:
+- Published video: https://youtu.be/7zJCkww6TaE. Repository source:
   `docs/assets/codex-rule-ledger-demo-v0.2.mp4`; checked caption companion:
   `docs/submission/codex-rule-ledger-demo-v0.2.srt`.
 - Final MP4 is no longer than 2:59, has narration and checked captions, and

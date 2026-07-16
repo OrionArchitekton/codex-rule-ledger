@@ -293,11 +293,16 @@
 
 ## Demo media
 
-- Upload-ready narrated video:
+- Published narrated video source:
   [`codex-rule-ledger-demo-v0.2.mp4`](../assets/codex-rule-ledger-demo-v0.2.mp4),
   1920x1080 H.264 at 30 fps with AAC-LC audio, `177.219` seconds and
   `10,919,193` bytes. SHA-256:
   `c3e4abf2d2608cc297ffcc63fe3f7231cd0622eef55a32183bfd62676bb9cc8e`.
+- Public YouTube publication: https://youtu.be/7zJCkww6TaE, published at
+  `2026-07-15T23:07:45-07:00`. Fresh logged-out verification reported
+  playability `OK`, a 177-second runtime, qualities `1080p`, `720p`, `360p`,
+  and `144p`, plus the reviewed English (United States) and automatic English
+  caption tracks.
 - Checked caption companion:
   [`codex-rule-ledger-demo-v0.2.srt`](codex-rule-ledger-demo-v0.2.srt), 54
   non-overlapping cues ending at `177.150` seconds, with no cue longer than nine
@@ -329,18 +334,19 @@
   `-1.5 dB` peak with no two-second silence; representative transition,
   selector, disclosure, topology, export, caption-gap, CLI, and provenance
   frames were inspected at original resolution.
-- Public YouTube upload remains a participant-held publication gate. The local
-  artifact is complete and does not need a rehearsal or re-recording.
 
-## Participant-held gates
+## Closed participant gates
 
-- [ ] Age-of-majority attestation supplied.
-- [ ] Jurisdiction/participation attestation supplied.
-- [ ] Official conflicts/exclusions attestation supplied.
-- [ ] Prior Sponsor/Administrator relationship attestation supplied.
+- [x] Age-of-majority attestation: **YES**.
+- [x] Jurisdiction/participation attestation: **United States; permitted YES**.
+- [x] Official conflicts/exclusions attestation: **NONE**.
+- [x] Sponsor/Administrator support attestation: **NONE**.
 - [x] Primary `/feedback` ID supplied from this build thread.
-- [ ] Public YouTube video reviewed and uploaded.
-- [ ] Final Devpost fields reviewed and submitted before 2026-07-21 17:00 PT.
+- [x] Public YouTube video reviewed, uploaded, and verified logged out:
+  https://youtu.be/7zJCkww6TaE.
+- [x] Final Devpost fields reviewed and submitted before the event deadline:
+  https://devpost.com/software/codex-rule-ledger. The public activity timestamp
+  is `2026-07-16T11:49:11-04:00`, and a fresh logged-out request returned `200`.
 
-Until all four eligibility attestations are checked, Devpost submission,
-YouTube upload, and social publishing remain unauthorized.
+All Build Week eligibility, media, and submission gates recorded in this packet
+are closed. Broader social publishing remains out of scope.
