@@ -347,6 +347,38 @@
 - [x] Final Devpost fields reviewed and submitted before the event deadline:
   https://devpost.com/software/codex-rule-ledger. The public activity timestamp
   is `2026-07-16T11:49:11-04:00`, and a fresh logged-out request returned `200`.
+- [x] One-page judges technical brief uploaded through the Devpost
+  `Additional info` file field. An authenticated reload at
+  `2026-07-16T09:28:20-07:00` showed current file
+  `Codex_Rule_Ledger_-_Judges_Technical_Brief.pdf` with attachment record
+  `127772`; finalization still showed `SUBMITTED`, `5/5 steps done`, and
+  `Project submitted!`.
+
+## One-page judges technical brief
+
+- Published artifact:
+  [`docs/Codex Rule Ledger - Judges Technical Brief.pdf`](../Codex%20Rule%20Ledger%20-%20Judges%20Technical%20Brief.pdf)
+  from the maintainable
+  [`docs/submission/TECHNICAL_BRIEF.html`](TECHNICAL_BRIEF.html) source.
+- Format: one US Letter page (`612 x 792` points), searchable tagged text,
+  embedded fonts, four live PDF link annotations, and `95,313` bytes.
+- PDF SHA-256:
+  `627e796f65b95d1c661d0efe2a8a21a71992b138e544f085ef1b259db82956a9`.
+  HTML SHA-256:
+  `9cd77c0545beb8395762bb32abf27c034a3e05f6cc14ce1f3e03dac3603c375c`.
+- Content boundary: the brief names the reviewer decision, separates GPT-5.6
+  semantic proposal from deterministic TypeScript adjudication, reports the
+  verified release metrics, provides a shell-valid judge command, and preserves
+  the synthetic-case and unattested-evidence limits.
+- Verification: full `npm run verify` passed with lint, typecheck, 77/77 unit
+  and contract tests, production build, and 5/5 Chromium flows. Independent
+  adversarial review found no blocker after the CLI wrapping and claim-language
+  corrections.
+- Devpost proof: the multipart form submission transitioned to finalization.
+  An authenticated reload exposed the stored filename and attachment record
+  above. The judge-only attachment does not appear on the public project page;
+  a separate logged-out check confirmed that page and its external links
+  remained healthy.
 
 All Build Week eligibility, media, and submission gates recorded in this packet
 are closed. Broader social publishing remains out of scope.

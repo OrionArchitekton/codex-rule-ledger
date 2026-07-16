@@ -14,6 +14,7 @@ must not become a false contradiction.
 ![Codex Rule Ledger desktop demo](docs/assets/codex-rule-ledger-desktop.png)
 
 Build Week links: [Devpost submission](https://devpost.com/software/codex-rule-ledger),
+[one-page judges technical brief](docs/Codex%20Rule%20Ledger%20-%20Judges%20Technical%20Brief.pdf),
 [public demo video](https://youtu.be/7zJCkww6TaE), and
 [keyless live demo](https://codex-rule-ledger.vercel.app).
 

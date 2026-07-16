@@ -18,6 +18,9 @@
 - **License:** MIT
 - **Live demo:** https://codex-rule-ledger.vercel.app
 - **Devpost:** https://devpost.com/software/codex-rule-ledger
+- **Judges technical brief:**
+  [`Codex Rule Ledger - Judges Technical Brief.pdf`](../Codex%20Rule%20Ledger%20-%20Judges%20Technical%20Brief.pdf)
+  (one-page US Letter PDF; uploaded to the Devpost judge-only file field)
 - **Video:** https://youtu.be/7zJCkww6TaE (published source:
   `docs/assets/codex-rule-ledger-demo-v0.2.mp4`)
 - **Primary Codex feedback ID:** `019f5dda-3975-70b3-abc0-2f18d72c3aea`
@@ -209,5 +212,8 @@ Use the final 140-character-limit captions in
   logged out at https://youtu.be/7zJCkww6TaE.
 - [x] Final Devpost page reviewed, submitted, and verified while logged out at
   https://devpost.com/software/codex-rule-ledger.
+- [x] One-page judges technical brief uploaded to the Devpost judge-only file
+  field and verified after reload as
+  `Codex_Rule_Ledger_-_Judges_Technical_Brief.pdf`.
 - [x] Final-surface proof is complete and reconciled in the
   [PR #16 post-merge receipt](https://github.com/OrionArchitekton/codex-rule-ledger/pull/16#issuecomment-4982803645).
