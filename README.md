@@ -175,10 +175,13 @@ From the minimal Build Week event brief, Codex independently selected the
 problem, scoped and designed v0.1, implemented and tested it, drove adversarial
 review and repairs, deployed the public demo, and packaged the release. Codex
 then implemented the separately authorized v0.2 CLI and final public
-recorded-case explorer. This is a workflow disclosure, not independent
-proof of agent authorship. Dan remained the solo participant and retained
-credentials, spend, eligibility, publication, and submission authority. The
-repository preserves the living specs and witnessed build ledger in
+recorded-case explorer. Codex also carried the release through its public-facing
+finish: it rendered the verified 2:57 demo, uploaded it to YouTube, and populated
+the Devpost submission, pausing at participant-held gates for Dan's approval.
+This is a workflow disclosure, not independent proof of agent authorship. Dan
+remained the solo participant and retained credentials, spend, eligibility,
+publication, and submission authority. The repository preserves the living
+specs and witnessed build ledger in
 [`docs/BUILD_LEDGER.md`](docs/BUILD_LEDGER.md).
 
 Codex accelerated the workflow by carrying 42 vertical RED-to-GREEN slices and
@@ -186,6 +189,13 @@ review repairs from living specs through tests, implementation, CI, deployment,
 and submission assets. The key architecture decision was to let GPT-5.6
 propose semantics while deterministic TypeScript alone owns evidence
 sufficiency and final ledger states.
+
+Separately from the primary Codex build session, ChatGPT running GPT-5.6 used
+the Devpost Hackathons integration and public project evidence as a second-pass
+adversarial reviewer. It retrieved the live rubric, challenged the project
+against all four criteria, and reconciled the final submission fields. This was
+a separate review surface, not product runtime, authorship proof, or independent
+third-party attestation.
 
 In live mode, GPT-5.6 maps complete instruction lines into typed, source-linked
 proposals, routes ambiguous or conflicting language to human review, and
